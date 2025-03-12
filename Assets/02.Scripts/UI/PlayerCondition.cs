@@ -14,16 +14,21 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     public float NoThristHealthDecay;
     public float staminaRecoverRate;
     public float hungerReduceRate;
+    public float thristReduceRate;
 
     void Update()
     {
         hunger.Subtract(hungerReduceRate * Time.deltaTime);
-
-        if(hunger.curVal > 0)
+        thirst.Subtract(thristReduceRate * Time.deltaTime);
+        if(hunger.curVal > 0 && thirst.curVal > 0)
         {
             stamina.Add(staminaRecoverRate * Time.deltaTime);
         }
-
+        
+        if(thirst.curVal <= 0)
+        {
+            health.Subtract(NoThristHealthDecay * Time.deltaTime);
+        }
         if(hunger.curVal <= 0)
         {
             health.Subtract(noHungerHealthDecay * Time.deltaTime);
