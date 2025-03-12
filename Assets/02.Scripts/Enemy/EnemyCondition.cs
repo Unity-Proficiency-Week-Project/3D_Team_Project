@@ -4,20 +4,30 @@ using UnityEngine;
 
 public class EnemyCondition : Condition
 {
-    Condition health;
+    //public ItemData[] dropOnDeath;  //죽었을 때 드롭 아이템
 
-
-    private void Start()
+    public void TakeDamage(float damage)
     {
-        health = GetComponent<Condition>();
-        if(health == null)
+        Subtract(damage);
+        if(curVal <= 0)
         {
-            Debug.Log("Enemy health is null");
+            Die();
         }
     }
 
-    private void Update()
+    private void Die()
     {
-        health.slider.enabled = true;
+        Debug.Log("적 사망!");
+        Destroy(GetComponentInParent<EnemyAI>().gameObject); //최상위 부모 오브젝트가 사라지도록
     }
+
+    //void Die()
+    //{
+    //    for(int i = 0; i <dropOnDeath.Lengh; i++)
+    //    {
+    //        Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up *2, Quaternion.identity);
+    //    }
+    //    Destroy(gameObject);
+    //}
+
 }

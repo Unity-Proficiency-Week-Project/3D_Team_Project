@@ -9,17 +9,12 @@ public enum AIState
     Wandering,
     Attacking
 }
+
 public class EnemyAI : MonoBehaviour
 {
-    private Animator animator;
-    private SkinnedMeshRenderer[] meshRenderers; //데미지 받을 때 플래시 효과 줄때 사용하는 변수
-    private EnemyCondition condition;
-
     [Header("Stats")]
-    //public float health { get { return condition.health; } }
     public float walkSpeed;
     public float runSpeed;
-    //public ItemData[] dropOnDeath;  //죽었을 때 드롭 아이템
 
 
     [Header("AI")]
@@ -43,6 +38,10 @@ public class EnemyAI : MonoBehaviour
 
     public float fieldOfView = 120f;//시야각
 
+    private Animator animator;
+    private SkinnedMeshRenderer[] meshRenderers; //데미지 받을 때 플래시 효과 줄때 사용하는 변수
+    private EnemyCondition enemyCondition;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -54,7 +53,6 @@ public class EnemyAI : MonoBehaviour
         SetState(AIState.Wandering);
     }
 
-    // Update is called once per frame
     void Update()
     {
         playerDistance = Vector3.Distance(transform.position, PlayerManager.Instance.Player.transform.position);
@@ -179,14 +177,4 @@ public class EnemyAI : MonoBehaviour
         float angle = Vector3.Angle(transform.forward, directionToPlayer);
         return angle < fieldOfView * 0.5f;
     }
-
-    //void Die()
-    //{
-    //    for(int i = 0; i <dropOnDeath.Lengh; i++)
-    //    {
-    //        Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up *2, Quaternion.identity);
-    //    }
-    //    Destroy(gameObject);
-    //}
-
 }
