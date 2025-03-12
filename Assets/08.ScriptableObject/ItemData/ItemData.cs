@@ -23,6 +23,7 @@ public class ItemDataConsumable
     public float value;
 }
 
+[CreateAssetMenu(fileName = "Item", menuName = "New Item")]
 public class ItemData : ScriptableObject
 {
     [Header("Info")]
@@ -30,6 +31,7 @@ public class ItemData : ScriptableObject
     public string description;
     public ItemType itemType;
     public Sprite icon;
+    public GameObject dropPrefab;
     
     [Header("Stacking")]
     public bool Stackable;
