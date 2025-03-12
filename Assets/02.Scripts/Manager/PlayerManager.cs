@@ -24,7 +24,6 @@ public class PlayerManager : MonoBehaviour
 
     private Player _player;
 
-
     private void Awake()
     {
         if(_instance == null)

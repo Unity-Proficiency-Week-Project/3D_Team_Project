@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class PlayerCondition : Condition, IDamageable
 {
-    Condition health;
-    Condition hunger;
-    Condition thirst;
-    Condition stamina;
+    Condition health { get { return uiCondition.health; } }
+    Condition hunger { get { return uiCondition.hunger; } }
+    Condition thirst { get { return uiCondition.thrist; } }
+    Condition stamina { get { return uiCondition.stamina; } }
 
-    private void Start()
-    {
-        if (health == null || hunger == null || thirst == null || stamina == null)
-        {
-            Debug.LogError("PlayerCondition: Condition 컴포넌트가 설정되지 않았습니다.");
-        }
-    }
+    public float noHungerHealthDecay;
+    public float NoThristHealthDecay;
+    public float staminaRecover;
 
     /// <summary>
     /// 사망 시 처리
@@ -57,11 +53,16 @@ public class PlayerCondition : Condition, IDamageable
     /// <param name="damage"></param>
     public void TakePhysicalDamage(int damage)
     {
-        health.curVal -= damage;
+        health.Subtract(damage);
 
-        if(health.curVal == 0)
+        if (health.curVal == 0)
         {
             Die();
         }
+    }
+
+    public void RecoverStamina()
+    {
+        stamina.Add(Time.deltaTime * staminaRecover);
     }
 }
