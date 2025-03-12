@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,37 +11,49 @@ public class Condition : MonoBehaviour
     public Image bar;
 
     /// <summary>
-    /// ½ÃÀÛ °ª ÃÊ±âÈ­
+    /// ì‹œì‘ ê°’ ì´ˆê¸°í™”
     /// </summary>
     void Start()
     {
-        curVal = startVal;   
+        curVal = startVal;
+        UpdateUI();
     }
 
     /// <summary>
-    /// °ª Áõ°¡ ÇÔ¼ö, max ÀÌ»ó Áõ°¡ X
+    /// ê°’ ì¦ê°€ í•¨ìˆ˜, max ì´ìƒ ì¦ê°€ X
     /// </summary>
-    /// <param name="value">Áõ°¡ °ª</param>
+    /// <param name="value">ì¦ê°€ ê°’</param>
     public void Add(float value)
     {
         curVal = Mathf.Min(curVal + value, maxVal);
     }
 
     /// <summary>
-    /// °ª °¨¼Ò ÇÔ¼ö, 0 ÀÌÇÏ °¨¼Ò X
+    /// ê°’ ê°ì†Œ í•¨ìˆ˜, 0 ì´í•˜ ê°ì†Œ X
     /// </summary>
-    /// <param name="value">°¨¼Ò °ª</param>
+    /// <param name="value">ê°ì†Œ ê°’</param>
     public void Subtract(float value)
     {
         curVal = Mathf.Max(curVal - value, 0);
     }
 
     /// <summary>
-    /// ÇöÀç °ªÀÌ ÃÖ´ë °ª ´ëºñ ¾ó¸¶³ª ³²¾ÆÀÖ´ÂÁö È®ÀÎ
+    /// í˜„ì¬ ê°’ì´ ìµœëŒ€ ê°’ ëŒ€ë¹„ ì–¼ë§ˆë‚˜ ë‚¨ì•„ìˆëŠ”ì§€ í™•ì¸
     /// </summary>
     /// <returns></returns>
     public float GetPercentage()
     {
         return curVal / maxVal;
+    }
+
+    /// <summary>
+    /// UI ì—…ë°ì´íŠ¸
+    /// </summary>
+    private void UpdateUI()
+    {
+        if (bar != null)
+        {
+            bar.fillAmount = GetPercentage();
+        }
     }
 }
