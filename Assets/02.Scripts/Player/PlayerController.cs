@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private bool isMoving = false;
 
     [Header("Jump")]
-    private int currentJumps = 0;       //현재 점프 횟수 
+    public int currentJumps = 0;       //현재 점프 횟수 
     public int maxJumps = 1;            //최대 점프 횟수
     private bool isJumpBoosted = false; //점프 횟수가 늘어났는지 확인
     public float jumpPower;             //점프 거리
