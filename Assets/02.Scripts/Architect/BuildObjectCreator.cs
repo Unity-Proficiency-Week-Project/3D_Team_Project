@@ -5,55 +5,62 @@ using UnityEngine;
 public class BuildObjectCreator : MonoBehaviour
 {
     [SerializeField] private GameObject buildPrefab;
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask buildableLayer;
 
     private bool canBuild;
     private GameObject previewObj;
+    private Transform cameraContainer;
+
+
+    private Quaternion additionalRotation = Quaternion.identity;
+
+    private void Start()
+    {
+        cameraContainer = PlayerManager.Instance.Player.controller.cameraContainer;
+    }
 
     private void Update()
     {
         // Input 함수들 나중에 InputAction으로 수정 예정
 
-        if(Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && previewObj == null)
         {
             CreatePreviewObject(buildPrefab);
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             CancelPreview();
         }
 
 
-        if(canBuild&&Input.GetKeyDown(KeyCode.V))
+        if (canBuild && Input.GetKeyDown(KeyCode.V))
         {
             GameObject go = Instantiate(previewObj);
             go.transform.position = previewObj.transform.position;
             go.GetComponent<MeshRenderer>().material.color = Color.white;
+            go.layer = LayerMask.NameToLayer("BuildObject");
         }
 
-        if(previewObj != null)
+        if (previewObj != null)
         {
-            Vector3 cameraPosition = Camera.main.transform.position;
-            Vector3 cameraForward = Camera.main.transform.forward;
-
-            // 카메라 앞 3m 지점에 프리뷰 오브젝트 배치
-            previewObj.transform.position = cameraPosition + cameraForward * 3f;
+            previewObj.transform.position = cameraContainer.position + (cameraContainer.forward * 3f) + (cameraContainer.up * 1.5f);
 
             float x = previewObj.transform.eulerAngles.x;
 
-            // 수평 유지 및 Y축 회전만 허용
-            previewObj.transform.rotation = Quaternion.Euler(x, previewObj.transform.eulerAngles.y, previewObj.transform.eulerAngles.z);
 
-            if (Input.GetKey(KeyCode.Q))
+            Quaternion cameraRotation = Quaternion.Euler(x, cameraContainer.eulerAngles.y, 0);
+
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                previewObj.transform.Rotate(0, 0, 0.1f);
+                additionalRotation *= Quaternion.Euler(0, -90f, 0);
             }
-            
-            else if(Input.GetKey(KeyCode.E))
+            else if (Input.GetKeyDown(KeyCode.E))
             {
-                previewObj.transform.Rotate(0, 0, -0.1f);
+                additionalRotation *= Quaternion.Euler(0, 90f, 0);
             }
+
+            previewObj.transform.rotation = cameraRotation * additionalRotation;
         }
     }
 
@@ -81,6 +88,8 @@ public class BuildObjectCreator : MonoBehaviour
             yield break;
         }
 
+        previewObj.layer = 0;
+
         while (previewObj != null)
         {
             Vector3 bottomPoint = renderer.bounds.center;
@@ -89,18 +98,32 @@ public class BuildObjectCreator : MonoBehaviour
             if (CheckForObstacles(renderer))
             {
                 Debug.DrawRay(bottomPoint, Vector3.down, Color.red, 1f);
-                if (Physics.Raycast(bottomPoint, Vector3.down, out RaycastHit hitInfo, 1f, groundLayer))
+                if (Physics.Raycast(bottomPoint, Vector3.down, out RaycastHit hitInfo, 1f, buildableLayer))
                 {
                     canBuild = true;
                     renderer.material.color = Color.green;
 
-                    float objectHeightOffset = renderer.bounds.extents.y;
+                    if(hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("BuildObject"))
+                    {
+                        Transform closestPivot = FindClosestPivot(previewObj.transform.position, hitInfo.collider.gameObject);
 
-                    previewObj.transform.position = new Vector3(
-                        previewObj.transform.position.x,
-                        hitInfo.point.y + objectHeightOffset,
-                        previewObj.transform.position.z
-                    );
+                        if (closestPivot != null)
+                        {
+                            previewObj.transform.position = closestPivot.position;
+                            yield return null;
+                            continue;
+                        }
+                    }
+                    else if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                    {
+                        float objectHeightOffset = renderer.bounds.extents.y;
+
+                        previewObj.transform.position = new Vector3(
+                            previewObj.transform.position.x,
+                            hitInfo.point.y + objectHeightOffset,
+                            previewObj.transform.position.z
+                        );
+                    }
                 }
                 else
                 {
@@ -127,13 +150,36 @@ public class BuildObjectCreator : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if(collider.gameObject == previewObj) continue;
+            if (collider.gameObject == previewObj) continue;
 
-            if (collider.gameObject.layer != groundLayer)
+            // collider의 레이어가 buildableLayer에 포함되지 않는다면 false 반환
+            if ((buildableLayer & (1 << collider.gameObject.layer)) == 0)
                 return false;
         }
 
         return true;
+    }
+
+    private Transform FindClosestPivot(Vector3 previewPosition, GameObject targetObject)
+    {
+        Transform closestPivot = null;
+        float closestDistance = Mathf.Infinity;
+
+        // 모든 자식 중 "Pivot" 태그가 있는 Transform 탐색
+        foreach (Transform child in targetObject.transform)
+        {
+            if (child.CompareTag("Pivot"))
+            {
+                float distance = Vector3.Distance(previewPosition, child.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestPivot = child;
+                }
+            }
+        }
+
+        return closestPivot;
     }
 
     void OnDrawGizmos()
