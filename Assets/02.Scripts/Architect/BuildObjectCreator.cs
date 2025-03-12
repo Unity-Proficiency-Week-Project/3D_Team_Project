@@ -116,13 +116,10 @@ public class BuildObjectCreator : MonoBehaviour
                     }
                     else if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                     {
-                        float objectHeightOffset = renderer.bounds.extents.y;
-
                         previewObj.transform.position = new Vector3(
                             previewObj.transform.position.x,
-                            hitInfo.point.y + objectHeightOffset,
-                            previewObj.transform.position.z
-                        );
+                            hitInfo.point.y,
+                            previewObj.transform.position.z);
                     }
                 }
                 else
