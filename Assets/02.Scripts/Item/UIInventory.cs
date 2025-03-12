@@ -34,12 +34,12 @@ public class UIInventory : MonoBehaviour
 
     void Start()
     {
-        controller = CharacterManager.Instance.Player.controller;
-        condition = CharacterManager.Instance.Player.condition;
-        dropPosition = CharacterManager.Instance.Player.dropPosition;
+        controller = PlayerManager.Instance.Player.controller;
+        condition = PlayerManager.Instance.Player.condition;
+        dropPosition = PlayerManager.Instance.Player.dropPosition;
 
         controller.inventory += Toggle;
-        CharacterManager.Instance.Player.addItem += AddItem;
+        PlayerManager.Instance.Player.addItem += AddItem;
 
         inventoryWindow.SetActive(false);
         slots = new ItemSlot[slotPanel.childCount];
@@ -87,7 +87,7 @@ public class UIInventory : MonoBehaviour
     
     public void AddItem()
     {
-        ItemData data = CharacterManager.Instance.Player.itemData;
+        ItemData data = PlayerManager.Instance.Player.itemData;
 
         if (data.Stackable)
         {
@@ -96,7 +96,7 @@ public class UIInventory : MonoBehaviour
             {
                 slot.quantity++;
                 UpdateUI();
-                CharacterManager.Instance.Player.itemData = null;
+                PlayerManager.Instance.Player.itemData = null;
                 return;
             }
         }
@@ -108,12 +108,12 @@ public class UIInventory : MonoBehaviour
             emptySlot.itemData = data;
             emptySlot.quantity = 1;
             UpdateUI();
-            CharacterManager.Instance.Player.itemData = null;
+            PlayerManager.Instance.Player.itemData = null;
             return;
         }
 
         ThrowItem(data);
-        CharacterManager.Instance.Player.itemData = null;
+        PlayerManager.Instance.Player.itemData = null;
     }
 
     public void UpdateUI()
