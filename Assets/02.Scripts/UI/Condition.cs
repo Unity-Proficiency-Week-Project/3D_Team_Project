@@ -8,15 +8,19 @@ public class Condition : MonoBehaviour
     public float curVal;
     public float maxVal;
     public float startVal;
-    public Image bar;
+    public Slider slider;
 
     /// <summary>
     /// 시작 값 초기화
     /// </summary>
-    void Start()
+    private void Start()
     {
         curVal = startVal;
-        UpdateUI();
+        if (slider != null)
+        {
+            slider.maxValue = 1; // 최대 체력 설정
+            slider.value = 1; // 초기 체력 설정
+        }
     }
 
     /// <summary>
@@ -26,6 +30,7 @@ public class Condition : MonoBehaviour
     public void Add(float value)
     {
         curVal = Mathf.Min(curVal + value, maxVal);
+        UpdateUI();
     }
 
     /// <summary>
@@ -35,6 +40,7 @@ public class Condition : MonoBehaviour
     public void Subtract(float value)
     {
         curVal = Mathf.Max(curVal - value, 0);
+        UpdateUI();
     }
 
     /// <summary>
@@ -51,9 +57,9 @@ public class Condition : MonoBehaviour
     /// </summary>
     private void UpdateUI()
     {
-        if (bar != null)
+        if (slider != null)
         {
-            bar.fillAmount = GetPercentage();
+            slider.value = GetPercentage();
         }
     }
 }

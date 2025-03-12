@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public PlayerController controller;
-    //public PlayerCondition condition;
+    public PlayerCondition condition;
 
     /// <summary>
     /// PlayerManager의 player 항목과 할당된 컴포넌트를 설정함
@@ -14,6 +14,6 @@ public class Player : MonoBehaviour
     {
         PlayerManager.Instance.Player = this;
         controller = GetComponent<PlayerController>();
-        //condition = GetComponent<PlayerCondition>();
+        condition = GetComponent<PlayerCondition>();
     }
 }
