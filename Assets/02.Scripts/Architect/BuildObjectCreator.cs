@@ -34,6 +34,16 @@ public class BuildObjectCreator : MonoBehaviour
 
         if(previewObj != null)
         {
+            Vector3 cameraPosition = Camera.main.transform.position;
+            Vector3 cameraForward = Camera.main.transform.forward;
+
+            // 카메라 앞 3m 지점에 프리뷰 오브젝트 배치
+            previewObj.transform.position = cameraPosition + cameraForward * 3f;
+
+            float x = previewObj.transform.eulerAngles.x;
+
+            // 수평 유지 및 Y축 회전만 허용
+            previewObj.transform.rotation = Quaternion.Euler(x, previewObj.transform.eulerAngles.y, previewObj.transform.eulerAngles.z);
 
             if (Input.GetKey(KeyCode.Q))
             {
@@ -53,12 +63,6 @@ public class BuildObjectCreator : MonoBehaviour
             Destroy(previewObj);
 
         previewObj = Instantiate(obj);
-
-        previewObj.transform.position = transform.position + transform.forward * 3f;
-
-        previewObj.GetComponent<MeshRenderer>().material.color = new Color(0, 1, 0, 0f);
-
-        previewObj.transform.parent = transform;
 
         StartCoroutine(CanBuildRayCheck());
     }

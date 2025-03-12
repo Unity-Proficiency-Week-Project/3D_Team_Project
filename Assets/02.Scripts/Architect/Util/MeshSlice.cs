@@ -17,5 +17,9 @@ public class MeshSlice : MonoBehaviour
         gameObjects = MeshCut.Cut(gameObject, slicePivots[1].position, Vector3.right, GetComponent<MeshRenderer>().material);
 
         Destroy(gameObjects[1]);
+
+        Destroy(gameObject.GetComponent<MeshCollider>());
+
+        gameObject.AddComponent<MeshCollider>();
     }
 }
