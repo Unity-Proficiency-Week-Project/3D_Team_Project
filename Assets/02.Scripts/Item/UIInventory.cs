@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class UIInventory : MonoBehaviour
 {
@@ -18,13 +19,16 @@ public class UIInventory : MonoBehaviour
     public TextMeshProUGUI selectedItemDescription;
     public TextMeshProUGUI selectedItemStatName;
     public TextMeshProUGUI selectedItemStatValue;
-    public GameObject useButton;
-    public GameObject equipButton;
-    public GameObject unEquipButton;
+    
+    [Header("Button")]
+    public GameObject actionButton;
+    public TextMeshProUGUI actionButtonText;
     public GameObject dropButton;
 
     private int curEquipIndex;
 
+    private UnityAction currentAction;
+    
     private PlayerController controller;
     private PlayerCondition condition;
 
@@ -60,9 +64,7 @@ public class UIInventory : MonoBehaviour
         selectedItemStatName.text = string.Empty;
         selectedItemStatValue.text = string.Empty;
 
-        useButton.SetActive(false);
-        equipButton.SetActive(false);
-        unEquipButton.SetActive(false);
+        actionButton.SetActive(false);
         dropButton.SetActive(false);
     }
 
@@ -82,9 +84,7 @@ public class UIInventory : MonoBehaviour
     {
         return inventoryWindow.activeInHierarchy;
     }
-
-		// PlayerController 먼저 수정
-
+    
     public void AddItem()
     {
         ItemData data = CharacterManager.Instance.Player.itemData;
@@ -155,36 +155,59 @@ public class UIInventory : MonoBehaviour
         return null;
     }
 
-		// Player 스크립트 먼저 수정
 		public void ThrowItem(ItemData data)
     {
         Instantiate(data.dropPrefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
     }
 
 
-		// ItemSlot 스크립트 먼저 수정
     public void SelectItem(int index)
     {
-        if (slots[index].itemData == null) return;
-
+        if (slots[index].itemData == null)
+        {
+            ClearSelectedItemWindow();
+            return;
+        }
+        
         selectedItem = slots[index];
         selectedItemIndex = index;
-
+        
         selectedItemName.text = selectedItem.itemData.displayName;
         selectedItemDescription.text = selectedItem.itemData.description;
-
         selectedItemStatName.text = string.Empty;
         selectedItemStatValue.text = string.Empty;
-
+        
         for(int i = 0; i< selectedItem.itemData.consumables.Length; i++)
         {
             selectedItemStatName.text += selectedItem.itemData.consumables[i].consumableType.ToString() + "\n";
             selectedItemStatValue.text += selectedItem.itemData.consumables[i].value.ToString() + "\n";
         }
 
-        useButton.SetActive(selectedItem.itemData.itemType == ItemType.Consumable);
-        equipButton.SetActive(selectedItem.itemData.itemType == ItemType.Equipable && !slots[index].equipped);
-        unEquipButton.SetActive(selectedItem.itemData.itemType == ItemType.Equipable && slots[index].equipped);
+        actionButton.SetActive(true);
+        if (selectedItem.itemData.itemType == ItemType.Consumable)
+        {
+            actionButtonText.text = "사용";
+            currentAction = OnUseButton;
+        }
+        else if (selectedItem.itemData.itemType == ItemType.Equipable)
+        {
+            if (!slots[index].equipped)
+            {
+                actionButtonText.text = "장착";
+                currentAction = () => OnEquipButton(index);
+            }
+            else
+            {
+                actionButtonText.text = "해제";
+                currentAction = () => UnEquip(index);
+            }
+        }
+        else
+        {
+            actionButtonText.text = string.Empty;
+            currentAction = null;
+        }
+
         dropButton.SetActive(true);
     }
 
@@ -199,20 +222,35 @@ public class UIInventory : MonoBehaviour
                     case ConsumableType.Health:
                         condition.Heal(selectedItem.itemData.consumables[i].value); break;
                     case ConsumableType.Hunger:
-                        condition.Eat(selectedItem.itemData.consumables[i].value);break;
+                        condition.Eat(selectedItem.itemData.consumables[i].value); break;
+                    case ConsumableType.Thirst:
+                        condition.Drink(selectedItem.itemData.consumables[i].value); break;
                 }
             }
-            RemoveSelctedItem();
+            RemoveSelectedItem();
         }
     }
 
+    public void OnEquipButton(int index)
+    {
+        slots[index].equipped = true;
+        UpdateUI();
+    }
+
+    public void UnEquip(int index)
+    {
+        slots[index].equipped = false;
+        UpdateUI();
+    }
+    
+    
     public void OnDropButton()
     {
         ThrowItem(selectedItem.itemData);
-        RemoveSelctedItem();
+        RemoveSelectedItem();
     }
 
-    void RemoveSelctedItem()
+    void RemoveSelectedItem()
     {
         selectedItem.quantity--;
 
