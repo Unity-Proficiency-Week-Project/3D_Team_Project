@@ -2,20 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCondition : Condition, IDamageable
+public class PlayerCondition : MonoBehaviour, IDamageable
 {
-    Condition health;
-    Condition hunger;
-    Condition thirst;
-    Condition stamina;
+    public UICondition uiCondition;
+    Condition health { get { return uiCondition.health; } }
+    Condition hunger { get { return uiCondition.hunger; } }
+    Condition thirst { get { return uiCondition.thrist; } }
+    Condition stamina { get { return uiCondition.stamina; } }
 
-    private void Start()
+    public float noHungerHealthDecay;
+    public float NoThristHealthDecay;
+    public float staminaRecoverRate;
+    public float hungerReduceRate;
+    public float thristReduceRate;
+
+    void Update()
     {
-        if (health == null || hunger == null || thirst == null || stamina == null)
+        hunger.Subtract(hungerReduceRate * Time.deltaTime);
+        thirst.Subtract(thristReduceRate * Time.deltaTime);
+        if(hunger.curVal > 0 && thirst.curVal > 0)
         {
-            Debug.LogError("PlayerCondition: Condition 컴포넌트가 설정되지 않았습니다.");
+            stamina.Add(staminaRecoverRate * Time.deltaTime);
+        }
+        
+        if(thirst.curVal <= 0)
+        {
+            health.Subtract(NoThristHealthDecay * Time.deltaTime);
+        }
+        if(hunger.curVal <= 0)
+        {
+            health.Subtract(noHungerHealthDecay * Time.deltaTime);
+        }
+
+        if (health.curVal <= 0f)
+        {
+            Die();
         }
     }
+
 
     /// <summary>
     /// 사망 시 처리
@@ -25,6 +49,7 @@ public class PlayerCondition : Condition, IDamageable
         Debug.Log("플레이어가 사망했습니다.");
         // TODO: 게임 오버 처리, 리스폰 기능 추가
     }
+
     /// <summary>
     /// 캐릭터 힐
     /// </summary>
@@ -57,11 +82,16 @@ public class PlayerCondition : Condition, IDamageable
     /// <param name="damage"></param>
     public void TakePhysicalDamage(int damage)
     {
-        health.curVal -= damage;
+        health.Subtract(damage);
 
-        if(health.curVal == 0)
+        if (health.curVal == 0)
         {
             Die();
         }
+    }
+
+    public void RecoverStamina()
+    {
+        stamina.Add(Time.deltaTime * staminaRecoverRate);
     }
 }
