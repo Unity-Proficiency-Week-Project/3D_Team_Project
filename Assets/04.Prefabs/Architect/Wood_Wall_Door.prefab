@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2583027362232816024}
   - component: {fileID: 6528339390842208441}
   - component: {fileID: 4172452947608378860}
+  - component: {fileID: -7451762694653326924}
   m_Layer: 0
   m_Name: Wood_Wall_Door
   m_TagString: Untagged
@@ -101,6 +102,28 @@ MonoBehaviour:
   slicePivots:
   - {fileID: 1822105645061525590}
   - {fileID: 2859077357919546870}
+--- !u!64 &-7451762694653326924
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157806173233040636}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: a641b02027f71604bb8c51c8104b3b7d, type: 3}
 --- !u!1 &5095871831297850477
 GameObject:
   m_ObjectHideFlags: 0

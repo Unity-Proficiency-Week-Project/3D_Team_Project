@@ -10,7 +10,6 @@ public class MeshSlice : MonoBehaviour
 
     void Start()
     {
-
         GameObject[] gameObjects = MeshCut.Cut(gameObject, slicePivots[0].position, Vector3.left, GetComponent<MeshRenderer>().material);
 
         Destroy(gameObjects[1]);
@@ -18,10 +17,5 @@ public class MeshSlice : MonoBehaviour
         gameObjects = MeshCut.Cut(gameObject, slicePivots[1].position, Vector3.right, GetComponent<MeshRenderer>().material);
 
         Destroy(gameObjects[1]);
-    }
-
-    void Update()
-    {
-
     }
 }

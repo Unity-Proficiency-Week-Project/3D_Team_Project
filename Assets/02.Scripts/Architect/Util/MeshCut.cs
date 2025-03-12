@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class MeshCut
 {
-
     private static Plane blade;
     private static Transform victim_transform;
     private static Mesh victim_mesh;
