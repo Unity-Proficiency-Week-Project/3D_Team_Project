@@ -12,7 +12,29 @@ public class PlayerCondition : MonoBehaviour, IDamageable
 
     public float noHungerHealthDecay;
     public float NoThristHealthDecay;
-    public float staminaRecover;
+    public float staminaRecoverRate;
+    public float hungerReduceRate;
+
+    void Update()
+    {
+        hunger.Subtract(hungerReduceRate * Time.deltaTime);
+
+        if(hunger.curVal > 0)
+        {
+            stamina.Add(staminaRecoverRate * Time.deltaTime);
+        }
+
+        if(hunger.curVal <= 0)
+        {
+            health.Subtract(noHungerHealthDecay * Time.deltaTime);
+        }
+
+        if (health.curVal <= 0f)
+        {
+            Die();
+        }
+    }
+
 
     /// <summary>
     /// 사망 시 처리
@@ -22,6 +44,7 @@ public class PlayerCondition : MonoBehaviour, IDamageable
         Debug.Log("플레이어가 사망했습니다.");
         // TODO: 게임 오버 처리, 리스폰 기능 추가
     }
+
     /// <summary>
     /// 캐릭터 힐
     /// </summary>
@@ -64,6 +87,6 @@ public class PlayerCondition : MonoBehaviour, IDamageable
 
     public void RecoverStamina()
     {
-        stamina.Add(Time.deltaTime * staminaRecover);
+        stamina.Add(Time.deltaTime * staminaRecoverRate);
     }
 }

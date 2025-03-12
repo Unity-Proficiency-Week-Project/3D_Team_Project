@@ -18,8 +18,8 @@ public class Condition : MonoBehaviour
         curVal = startVal;
         if (slider != null)
         {
-            slider.maxValue = maxVal; // 최대 체력 설정
-            slider.value = curVal; // 초기 체력 설정
+            slider.maxValue = 1; // 최대 체력 설정
+            slider.value = 1; // 초기 체력 설정
         }
     }
 

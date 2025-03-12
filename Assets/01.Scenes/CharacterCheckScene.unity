@@ -3052,7 +3052,8 @@ MonoBehaviour:
   uiCondition: {fileID: 0}
   noHungerHealthDecay: 0
   NoThristHealthDecay: 0
-  staminaRecover: 0
+  staminaRecoverRate: 0
+  hungerReduceRate: 0
 --- !u!1001 &310194547
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5196,7 +5197,7 @@ MonoBehaviour:
   curVal: 100
   maxVal: 100
   startVal: 100
-  slider: {fileID: 0}
+  slider: {fileID: 600248129}
 --- !u!1001 &600496800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8801,7 +8802,7 @@ MonoBehaviour:
   curVal: 100
   maxVal: 100
   startVal: 100
-  slider: {fileID: 0}
+  slider: {fileID: 1082360504}
 --- !u!1001 &1083691685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11232,7 +11233,7 @@ MonoBehaviour:
   curVal: 100
   maxVal: 100
   startVal: 100
-  slider: {fileID: 0}
+  slider: {fileID: 1447879008}
 --- !u!1 &1449189316
 GameObject:
   m_ObjectHideFlags: 0
@@ -13651,7 +13652,7 @@ MonoBehaviour:
   curVal: 100
   maxVal: 100
   startVal: 100
-  slider: {fileID: 0}
+  slider: {fileID: 1729598025}
 --- !u!1001 &1736010676
 PrefabInstance:
   m_ObjectHideFlags: 0
