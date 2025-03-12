@@ -11,7 +11,7 @@ public class PlayerManager : MonoBehaviour
         {
             if(_instance == null)
             {
-                Debug.Log("객체 없음");
+                _instance = new GameObject("PlayerManager").AddComponent<PlayerManager>();
             }
             return _instance;
         }
