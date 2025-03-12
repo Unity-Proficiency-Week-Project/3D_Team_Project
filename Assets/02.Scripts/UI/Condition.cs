@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class Condition : MonoBehaviour
 {
-    public UICondition uiCondition;
-
     public float curVal;
     public float maxVal;
     public float startVal;

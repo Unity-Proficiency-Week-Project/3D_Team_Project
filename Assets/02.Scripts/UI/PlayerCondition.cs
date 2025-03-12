@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCondition : Condition, IDamageable
+public class PlayerCondition : MonoBehaviour, IDamageable
 {
+    public UICondition uiCondition;
     Condition health { get { return uiCondition.health; } }
     Condition hunger { get { return uiCondition.hunger; } }
     Condition thirst { get { return uiCondition.thrist; } }
