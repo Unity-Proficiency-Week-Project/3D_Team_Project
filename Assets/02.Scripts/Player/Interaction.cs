@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class Interaction : MonoBehaviour
@@ -14,10 +15,12 @@ public class Interaction : MonoBehaviour
 
     public TextMeshProUGUI promptText;
     public Camera camera;
+    public CrossHairUI crosshair;
 
     private void Start()
     {
         camera = Camera.main;
+        crosshair = FindObjectOfType<CrossHairUI>();
     }
 
     public void Update()
@@ -25,6 +28,16 @@ public class Interaction : MonoBehaviour
         if (Time.time - lastCheckTime > checkRate)
         {
             lastCheckTime = Time.time;
+
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                if (crosshair != null) crosshair.HideCrosshair();
+            }
+            else
+            {
+                if (crosshair != null) crosshair.ShowCrosshair();
+            }
+
 
             Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit;
@@ -36,6 +49,8 @@ public class Interaction : MonoBehaviour
                     curInteractGameObj = hit.collider.gameObject;
                     curInteractable = hit.collider.GetComponent<IInteractable>();
                     SetPromptText();
+
+                    if (crosshair != null) crosshair.SetCrosshairColor(Color.blue);
                 }
             }
             else
@@ -43,6 +58,8 @@ public class Interaction : MonoBehaviour
                 curInteractGameObj = null;
                 curInteractable = null;
                 promptText.gameObject.SetActive(false);
+
+                if (crosshair != null) crosshair.SetCrosshairColor(Color.white);
             }
         }
     }
