@@ -1,9 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class CraftingRecipe
+[CreateAssetMenu(fileName = "Crafting Recipe", menuName = "Crafting Recipe")]
+    public class CraftingRecipe : ScriptableObject
 {
-    public List<ItemData> requiredItems;  
-    public ItemData resultItem;          
+    [System.Serializable]
+    public struct Ingredient // 재료 및 수량
+    {
+        public ItemData itemData;
+        public int quantity;
+    }
+    
+    public List<Ingredient> ingredients = new List<Ingredient>();
+    public ItemData resultItem;
+    public int resultAmount = 1;
 }

@@ -315,4 +315,34 @@ public class UIInventory : MonoBehaviour
         }
         return false;
     }
+
+    public void RemoveItem(ItemData item, int quantity)
+    {
+        foreach (ItemSlot slot in slots)
+        {
+            if (slot.itemData == item)
+            {
+                slot.quantity -= quantity;
+
+                if (slot.quantity <= 0)
+                {
+                    slot.itemData = null;
+                    slot.quantity = 0;
+                }
+                UpdateUI();
+                return;
+            }
+        }
+    }
+
+    public void AddItem(ItemData item, int quantity)
+    {
+        ItemSlot emptySlot = GetEmptySlot();
+        if(emptySlot != null)
+        {
+            emptySlot.itemData = item;
+            emptySlot.quantity = 1;
+        }
+        UpdateUI();
+    }
 }
