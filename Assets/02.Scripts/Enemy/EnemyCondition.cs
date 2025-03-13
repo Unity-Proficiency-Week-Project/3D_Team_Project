@@ -1,33 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyCondition : Condition
 {
-    //public ItemData[] dropOnDeath;  //죽었을 때 드롭 아이템
+    public ItemData[] dropOnDeath;  //죽었을 때 드롭 아이템
+    private Slider Healthbarslider;
+    public Camera _camera;
+
+    public Action DamageFlash;
+
+    private void Start()
+    {
+        Healthbarslider = slider;
+    }
+
+    private void LateUpdate()
+    {
+        Vector3 lookDirection = _camera.transform.forward;
+        lookDirection.y = 0; // 수직 방향 변화를 막아 체력바가 뒤집히는 걸 방지
+        Healthbarslider.transform.rotation = Quaternion.LookRotation(lookDirection);
+    }
 
     public void TakeDamage(float damage)
     {
         Subtract(damage);
-        if(curVal <= 0)
+        if (curVal <= 0)
         {
             Die();
         }
+        DamageFlash.Invoke();
     }
 
-    private void Die()
+    public void Die()
     {
         Debug.Log("적 사망!");
-        Destroy(GetComponentInParent<EnemyAI>().gameObject); //최상위 부모 오브젝트가 사라지도록
+        
+        for (int i = 0; i < dropOnDeath.Length; i++)
+        {
+            Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+        
+        }
+        Destroy(gameObject);
     }
-
-    //void Die()
-    //{
-    //    for(int i = 0; i <dropOnDeath.Lengh; i++)
-    //    {
-    //        Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up *2, Quaternion.identity);
-    //    }
-    //    Destroy(gameObject);
-    //}
-
 }
