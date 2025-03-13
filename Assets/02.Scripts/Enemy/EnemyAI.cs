@@ -142,12 +142,7 @@ public class EnemyAI : MonoBehaviour
             {
                 lastAttackTime = Time.time;
 
-                //Vector3 lookDirection = PlayerManager.Instance.Player.transform.forward;
-                //lookDirection.y = 0; // 수직 방향 변화를 막아 체력바가 뒤집히는 걸 방지
-                //transform.rotation = Quaternion.LookRotation(lookDirection);
-
-                //PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(damage);
-                //animator.speed = 0;
+                animator.speed = 1;
                 animator.SetTrigger("Attack");
                 Debug.Log($"플레이어에게 공격을 입혔습니다. 현재시간 : {lastAttackTime}, 대미지: {damage}");
             }
