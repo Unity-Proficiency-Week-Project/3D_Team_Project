@@ -21,8 +21,6 @@ public class BuildObjectCreator : MonoBehaviour
     private GameObject previewObj;
     private Transform cameraContainer;
 
-    private Quaternion additionalRotation = Quaternion.identity; // 플레이어 입력 회전값 저장
-
     private void Start()
     {
         cameraContainer = PlayerManager.Instance.Player.controller.cameraContainer;
@@ -59,18 +57,18 @@ public class BuildObjectCreator : MonoBehaviour
             // 카메라의 Y축 회전값 계산
             Quaternion cameraRotation = Quaternion.Euler(0, cameraContainer.eulerAngles.y, 0);
 
-            // 키 입력에 따른 Y축 회전값 계산
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                additionalRotation *= Quaternion.Euler(0, -90f, 0);
-            }
-            else if (Input.GetKeyDown(KeyCode.E))
-            {
-                additionalRotation *= Quaternion.Euler(0, 90f, 0);
-            }
+            //// 키 입력에 따른 Y축 회전값 계산
+            //if (Input.GetKeyDown(KeyCode.Q))
+            //{
+            //    additionalRotation *= Quaternion.Euler(0, -90f, 0);
+            //}
+            //else if (Input.GetKeyDown(KeyCode.E))
+            //{
+            //    additionalRotation *= Quaternion.Euler(0, 90f, 0);
+            //}
 
             // 최종적으로 X축 고정 및 Y축 회전 적용
-            previewObj.transform.rotation = Quaternion.Euler(fixedXRotation, (cameraRotation * additionalRotation).eulerAngles.y, 0);
+            previewObj.transform.rotation = Quaternion.Euler(fixedXRotation, cameraRotation.eulerAngles.y, 0);
         }
     }
 
@@ -123,22 +121,12 @@ public class BuildObjectCreator : MonoBehaviour
         {
             if (CheckForObstacles(renderer))
             {
-                // 피벗 위치별로 디버그용 Ray 생성
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Up].position, Vector3.up, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Down].position, Vector3.down, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Left].position, -previewObjPivots[(int)PivotDirection.Left].right, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Right].position, previewObjPivots[(int)PivotDirection.Right].right, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Left].position, previewObjPivots[(int)PivotDirection.Left].forward, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Left].position, -previewObjPivots[(int)PivotDirection.Left].forward, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Right].position, previewObjPivots[(int)PivotDirection.Right].forward, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Right].position, -previewObjPivots[(int)PivotDirection.Right].forward, Color.red, 1f);
-
                 Vector3[] directions = new Vector3[]
                 {
-                    Vector3.up,
-                    Vector3.down,
-                    -previewObjPivots[(int)PivotDirection.Left].right,
-                    previewObjPivots[(int)PivotDirection.Right].right,
+                    previewObj.transform.TransformDirection(Vector3.up),
+                    previewObj.transform.TransformDirection(Vector3.down),
+                    previewObj.transform.TransformDirection(Vector3.left),
+                    previewObj.transform.TransformDirection(Vector3.right)
                 };
 
                 // 피벗별로 Ray 검사
@@ -233,23 +221,20 @@ public class BuildObjectCreator : MonoBehaviour
     /// <returns>주변에 오브젝트가 있다면 false, 없다면 true</returns>
     private bool CheckForObstacles(MeshRenderer renderer)
     {
-        // 메쉬 크기에 맞춰 OverapBox 검사
         Vector3 boxCenter = renderer.bounds.center;
-
         Vector3 boxSize = new Vector3(renderer.bounds.size.x, renderer.bounds.size.y, renderer.bounds.size.z);
 
         Collider[] colliders = Physics.OverlapBox(boxCenter, boxSize / 2.1f, Quaternion.identity);
 
-        // 박스에 충돌한 콜라이더의 레이어가 BuildObject인지 검사
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject == previewObj) continue;
 
             if (collider.gameObject.layer == LayerMask.NameToLayer("BuildObject"))
-                return false;
+                return false; // 다른 건축물과 겹침
         }
 
-        return true;
+        return true; // 장애물 없음
     }
 
     /// <summary>
@@ -263,11 +248,8 @@ public class BuildObjectCreator : MonoBehaviour
         Transform nearPivot = null;
         float nearDistance = Mathf.Infinity;
 
-        // 모든 자식 중 Pivot 태그를 가지고 있는 오브젝트 중 가장 가까운 피벗 찾기
         foreach (Transform child in targetObject.transform)
         {
-            Debug.Log("find pivot");
-            
             if (child.CompareTag("Pivot"))
             {
                 float distance = Vector3.Distance(previewPosition, child.position);
@@ -294,19 +276,5 @@ public class BuildObjectCreator : MonoBehaviour
 
         go.GetComponent<MeshRenderer>().material.color = Color.white;
         go.layer = LayerMask.NameToLayer("BuildObject");
-    }
-
-    private void OnDrawGizmos()
-    {
-        //if (previewObj != null && previewObjPivots != null)
-        //{
-        //    Gizmos.color = Color.blue;
-        //    Vector3 boxSize = new Vector3(1f, 1f, 1f); // OverlapBox 크기와 동일하게 설정
-
-        //    foreach (Transform pivot in previewObjPivots)
-        //    {
-        //        Gizmos.DrawWireCube(pivot.position, boxSize);
-        //    }
-        //}
     }
 }
