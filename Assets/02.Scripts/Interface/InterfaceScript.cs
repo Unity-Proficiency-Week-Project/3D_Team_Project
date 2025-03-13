@@ -1,9 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public interface IDamageable
 {
     void TakePhysicalDamage(int damage);
 }
+
 
 public class InterfaceScript : MonoBehaviour
 {
