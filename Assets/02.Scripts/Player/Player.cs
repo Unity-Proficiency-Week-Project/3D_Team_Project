@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,6 +7,9 @@ public class Player : MonoBehaviour
     public PlayerCondition condition;
 
     public ItemData itemData;
+    public Action addItem;
+
+    public Transform dropPosition;
 
     /// <summary>
     /// PlayerManager의 player 항목과 할당된 컴포넌트를 설정함

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
@@ -46,6 +47,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public bool canLook = true;
     private Rigidbody _rigidbody;
+    public Action inventory;
+
 
     private void Awake()
     {
@@ -224,6 +227,21 @@ public class PlayerController : MonoBehaviour
         }
 
         return grounded;
+    }
+
+    public void OnInventoryButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started)
+        {
+            inventory?.Invoke();
+            ToggleCursor();
+        }
+    }
+    void ToggleCursor()
+    {
+        bool toggle = Cursor.lockState == CursorLockMode.Locked;
+        Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
+        canLook = !toggle;
     }
 
     public void ToggleCursor(bool toggle)
