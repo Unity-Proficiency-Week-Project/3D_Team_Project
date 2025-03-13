@@ -6,7 +6,8 @@ public enum ItemType
 {
     Resource,
     Equipable,
-    Consumable
+    Consumable,
+    Architecture
 }
 
 public enum ConsumableType
