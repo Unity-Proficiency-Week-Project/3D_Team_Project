@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -47,9 +46,12 @@ public class EnemyAI : MonoBehaviour
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        enemyCondition = GetComponent<EnemyCondition>();
     }
+
     void Start()
     {
+        enemyCondition.DamageFlash = () => { StartCoroutine(DamageFlash()); };
         SetState(AIState.Wandering);
     }
 
@@ -138,11 +140,16 @@ public class EnemyAI : MonoBehaviour
             agent.isStopped = true;
             if (Time.time - lastAttackTime > attackRate)
             {
-                Debug.Log($"플레이어에게 공격을 입혔습니다. 현재시간 : {lastAttackTime}, 대미지: {damage}");
                 lastAttackTime = Time.time;
-                PlayerManager.Instance.Player.GetComponent<IDamageable>().TakePhysicalDamage(damage);
-                animator.speed = 1;
+
+                //Vector3 lookDirection = PlayerManager.Instance.Player.transform.forward;
+                //lookDirection.y = 0; // 수직 방향 변화를 막아 체력바가 뒤집히는 걸 방지
+                //transform.rotation = Quaternion.LookRotation(lookDirection);
+
+                //PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(damage);
+                //animator.speed = 0;
                 animator.SetTrigger("Attack");
+                Debug.Log($"플레이어에게 공격을 입혔습니다. 현재시간 : {lastAttackTime}, 대미지: {damage}");
             }
         }
         else
@@ -176,5 +183,15 @@ public class EnemyAI : MonoBehaviour
         Vector3 directionToPlayer = PlayerManager.Instance.Player.transform.position - transform.position;
         float angle = Vector3.Angle(transform.forward, directionToPlayer);
         return angle < fieldOfView * 0.5f;
+    }
+
+    IEnumerator DamageFlash()
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+            meshRenderers[i].material.color = new Color(1.0f, 0.6f, 0.6f);
+
+        yield return new WaitForSeconds(0.1f);
+        for (int i = 0; i < meshRenderers.Length; i++)
+            meshRenderers[i].material.color = Color.white;
     }
 }
