@@ -66,7 +66,9 @@ public abstract class BasePreview : MonoBehaviour
         if (objCollider == null) return false;
 
         Vector3 boxCenter = objCollider.bounds.center;
-        Vector3 boxSize = new Vector3(objCollider.bounds.size.x, objCollider.bounds.size.y, objCollider.bounds.size.z);
+        Vector3 boxSize = new Vector3(objCollider.bounds.size.x * 0.95f, objCollider.bounds.size.y, objCollider.bounds.size.z * 0.95f);
+
+        Debug.Log($"boxCenter: {boxCenter}");
 
         Collider[] colliders = Physics.OverlapBox(boxCenter, boxSize / 2f, transform.rotation);
 

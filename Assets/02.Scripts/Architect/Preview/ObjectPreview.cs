@@ -59,17 +59,12 @@ public class ObjectPreview : BasePreview
     void OnDrawGizmos()
     {
         MeshRenderer renderer = GetComponent<MeshRenderer>();
-        if (renderer != null)
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
         {
-            // 박스 중심과 크기 계산
-            Vector3 boxCenter = renderer.bounds.center;
-            Vector3 boxSize = new Vector3(renderer.bounds.size.x, renderer.bounds.size.y, renderer.bounds.size.z);
-
-            // Gizmos 색상 설정 (건설 가능 여부에 따라 초록색 또는 빨간색)
-            Gizmos.color = Color.blue;
-
-            // 박스 그리기
-            Gizmos.DrawCube(boxCenter, boxSize);
+            Gizmos.color = Color.red;
+            Gizmos.matrix = Matrix4x4.TRS(collider.bounds.center, transform.rotation, Vector3.one); // 회전 적용
+            Gizmos.DrawWireCube(Vector3.zero, collider.bounds.size);
         }
     }
 }
