@@ -11,7 +11,7 @@ public class BuildObjectCreator : MonoBehaviour
     private GameObject previewObj;
     private Transform cameraContainer;
 
-    private Quaternion additionalRotation; // 플레이어 입력 회전값 저장
+    private Quaternion additionalRotation = Quaternion.identity; // 플레이어 입력 회전값 저장
 
     private void Start()
     {
@@ -40,13 +40,16 @@ public class BuildObjectCreator : MonoBehaviour
 
         if (previewObj != null)
         {
-            // 프리뷰오브젝트의 위치를 카메라 위치 기준으로 조정
+            // 프리뷰 오브젝트의 위치를 카메라 기준으로 조정
             previewObj.transform.position = cameraContainer.position + (cameraContainer.forward * 3f) + (cameraContainer.up * 1.5f);
 
-            float x = previewObj.transform.eulerAngles.x;
+            // 프리뷰 오브젝트의 초기 X축 회전값 고정
+            float fixedXRotation = previewObj.transform.eulerAngles.x;
 
-            Quaternion cameraRotation = Quaternion.Euler(x, cameraContainer.eulerAngles.y, 0);
+            // 카메라의 Y축 회전값 계산
+            Quaternion cameraRotation = Quaternion.Euler(0, cameraContainer.eulerAngles.y, 0);
 
+            // 키 입력에 따른 Y축 회전값 계산
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 additionalRotation *= Quaternion.Euler(0, -90f, 0);
@@ -56,7 +59,8 @@ public class BuildObjectCreator : MonoBehaviour
                 additionalRotation *= Quaternion.Euler(0, 90f, 0);
             }
 
-            previewObj.transform.rotation = cameraRotation * additionalRotation;
+            // 최종적으로 X축 고정 및 Y축 회전 적용
+            previewObj.transform.rotation = Quaternion.Euler(fixedXRotation, (cameraRotation * additionalRotation).eulerAngles.y, 0);
         }
     }
 
