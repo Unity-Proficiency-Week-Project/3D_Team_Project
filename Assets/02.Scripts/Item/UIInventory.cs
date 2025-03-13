@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,8 +7,7 @@ using UnityEngine.UI;
 
 public class UIInventory : MonoBehaviour
 {
-    public ItemSlot[] slots;
-
+    public List<ItemSlot> slots = new List<ItemSlot>();
     public GameObject inventoryWindow;
     public Transform slotPanel;
     public Transform dropPosition;
@@ -30,29 +30,42 @@ public class UIInventory : MonoBehaviour
     private PlayerController controller;
     private PlayerCondition condition;
 
+    private Player player;
     void Start()
     {
-        controller = PlayerManager.Instance.Player.controller;
-        condition = PlayerManager.Instance.Player.condition;
-        dropPosition = PlayerManager.Instance.Player.dropPosition;
+        player = PlayerManager.Instance.Player;
+        
+        controller = player.controller;
+        condition = player.condition;
+        dropPosition = player.dropPosition;
 
         controller.inventory += Toggle;
-        PlayerManager.Instance.Player.addItem += AddItem;
+        player.addItem += AddItem;
 
         inventoryWindow.SetActive(false);
-        slots = new ItemSlot[slotPanel.childCount];
-
-        for (int i = 0; i < slots.Length; i++)
+        slots.Clear();
+        
+        for (int i = 0; i < slotPanel.childCount; i++)
         {
-            slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
-            slots[i].index = i;
-            slots[i].inventory = this;
-            slots[i].Clear();
+            ItemSlot slot = slotPanel.GetChild(i).GetComponent<ItemSlot>();
+            slot.index = i;
+            slot.inventory = this;
+            slot.Clear();
+            slots.Add(slot);
         }
-
+    
         ClearSelectedItemWindow();
+        
+        InitButton();
     }
 
+    private void InitButton()
+    {
+        var button = actionButton.GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => { currentAction?.Invoke(); });
+    }
+    
     void ClearSelectedItemWindow()
     {
         selectedItem = null;
@@ -68,14 +81,7 @@ public class UIInventory : MonoBehaviour
 
     public void Toggle()
     {
-        if (IsOpen())
-        {
-            inventoryWindow.SetActive(false);
-        }
-        else
-        {
-            inventoryWindow.SetActive(true);
-        }
+        inventoryWindow.SetActive(!IsOpen());
     }
 
     public bool IsOpen()
@@ -85,7 +91,7 @@ public class UIInventory : MonoBehaviour
 
     public void AddItem()
     {
-        ItemData data = PlayerManager.Instance.Player.itemData;
+        ItemData data = player.itemData;
 
         if (data.Stackable)
         {
@@ -94,7 +100,7 @@ public class UIInventory : MonoBehaviour
             {
                 slot.quantity++;
                 UpdateUI();
-                PlayerManager.Instance.Player.itemData = null;
+                player.itemData = null;
                 return;
             }
         }
@@ -106,36 +112,36 @@ public class UIInventory : MonoBehaviour
             emptySlot.itemData = data;
             emptySlot.quantity = 1;
             UpdateUI();
-            PlayerManager.Instance.Player.itemData = null;
+            player.itemData = null;
             return;
         }
 
         ThrowItem(data);
-        PlayerManager.Instance.Player.itemData = null;
+        player.itemData = null;
     }
 
     public void UpdateUI()
     {
-        for (int i = 0; i < slots.Length; i++)
+        foreach (ItemSlot slot in slots)
         {
-            if (slots[i].itemData != null)
+            if (slot.itemData != null)
             {
-                slots[i].Set();
+                slot.Set();
             }
             else
             {
-                slots[i].Clear();
+                slot.Clear();
             }
         }
     }
 
     ItemSlot GetItemStack(ItemData data)
     {
-        for (int i = 0; i < slots.Length; i++)
+        foreach (ItemSlot slot in slots)
         {
-            if (slots[i].itemData == data && slots[i].quantity < data.maxStackAmount)
+            if (slot.itemData == data && slot.quantity < data.maxStackAmount)
             {
-                return slots[i];
+                return slot;
             }
         }
 
@@ -144,11 +150,11 @@ public class UIInventory : MonoBehaviour
 
     ItemSlot GetEmptySlot()
     {
-        for (int i = 0; i < slots.Length; i++)
+        foreach (ItemSlot slot in slots)
         {
-            if (slots[i].itemData == null)
+            if (slot.itemData == null)
             {
-                return slots[i];
+                return slot;
             }
         }
 
@@ -215,16 +221,16 @@ public class UIInventory : MonoBehaviour
     {
         if (selectedItem.itemData.itemType == ItemType.Consumable)
         {
-            for (int i = 0; i < selectedItem.itemData.consumables.Length; i++)
+            foreach (var consumable in selectedItem.itemData.consumables)
             {
-                switch (selectedItem.itemData.consumables[i].consumableType)
+                switch (consumable.consumableType)
                 {
                     case ConsumableType.Health:
-                        condition.Heal(selectedItem.itemData.consumables[i].value); break;
+                        condition.Heal(consumable.value); break;
                     case ConsumableType.Hunger:
-                        condition.Eat(selectedItem.itemData.consumables[i].value); break;
+                        condition.Eat(consumable.value); break;
                     case ConsumableType.Thirst:
-                        condition.Drink(selectedItem.itemData.consumables[i].value); break;
+                        condition.Drink(consumable.value); break;
                 }
             }
 
@@ -271,6 +277,13 @@ public class UIInventory : MonoBehaviour
 
     public bool HasItem(ItemData item, int quantity)
     {
+        foreach (ItemSlot slot in slots)
+        {
+            if (slot.itemData == item && slot.quantity >= quantity)
+            {
+                return true;
+            }
+        }
         return false;
     }
 }

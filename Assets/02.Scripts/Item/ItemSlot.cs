@@ -20,8 +20,6 @@ public class ItemSlot : MonoBehaviour
     public TextMeshProUGUI quantityText;
     private Outline outline;
 
-   
-
     private void Awake()
     {
         outline = GetComponent<Outline>();

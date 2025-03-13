@@ -5,9 +5,11 @@ public class Player : MonoBehaviour
 {
     public PlayerController controller;
     public PlayerCondition condition;
+    public PlayerTemperature temp;
 
     public ItemData itemData;
     public Action addItem;
+    public CrossHairUI crosshair;
 
     public Transform dropPosition;
 
@@ -19,5 +21,6 @@ public class Player : MonoBehaviour
         PlayerManager.Instance.Player = this;
         controller = GetComponent<PlayerController>();
         condition = GetComponent<PlayerCondition>();
+        temp = GetComponent<PlayerTemperature>();
     }
 }
