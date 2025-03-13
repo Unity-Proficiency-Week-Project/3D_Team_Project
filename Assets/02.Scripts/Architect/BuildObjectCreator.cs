@@ -8,7 +8,7 @@ public enum PivotDirection
     Up,
     Down,
     Left,
-    Right
+    Right,
 }
 
 public class BuildObjectCreator : MonoBehaviour
@@ -126,15 +126,19 @@ public class BuildObjectCreator : MonoBehaviour
                 // 피벗 위치별로 디버그용 Ray 생성
                 Debug.DrawRay(previewObjPivots[(int)PivotDirection.Up].position, Vector3.up, Color.red, 1f);
                 Debug.DrawRay(previewObjPivots[(int)PivotDirection.Down].position, Vector3.down, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Left].position, Vector3.left, Color.red, 1f);
-                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Right].position, Vector3.right, Color.red, 1f);
+                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Left].position, -previewObjPivots[(int)PivotDirection.Left].right, Color.red, 1f);
+                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Right].position, previewObjPivots[(int)PivotDirection.Right].right, Color.red, 1f);
+                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Left].position, previewObjPivots[(int)PivotDirection.Left].forward, Color.red, 1f);
+                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Left].position, -previewObjPivots[(int)PivotDirection.Left].forward, Color.red, 1f);
+                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Right].position, previewObjPivots[(int)PivotDirection.Right].forward, Color.red, 1f);
+                Debug.DrawRay(previewObjPivots[(int)PivotDirection.Right].position, -previewObjPivots[(int)PivotDirection.Right].forward, Color.red, 1f);
 
                 Vector3[] directions = new Vector3[]
                 {
                     Vector3.up,
                     Vector3.down,
-                    Vector3.left,
-                    Vector3.right,
+                    -previewObjPivots[(int)PivotDirection.Left].right,
+                    previewObjPivots[(int)PivotDirection.Right].right,
                 };
 
                 // 피벗별로 Ray 검사
@@ -153,25 +157,22 @@ public class BuildObjectCreator : MonoBehaviour
                             {
                                 if (directions[i] == Vector3.up)
                                 {
-                                    Debug.Log($"{nearPivot.name} direction = up");
                                     previewObj.transform.position = hitInfo.collider.transform.position + (Vector3.down * 2f);
                                 }
 
                                 else if (directions[i] == Vector3.down)
                                 {
-                                    Debug.Log($"{nearPivot.name} direction = down");
                                     previewObj.transform.position = nearPivot.position;
                                 }
 
-                                else if (directions[i] == Vector3.left)
+                                else if (directions[i] == -previewObjPivots[(int)PivotDirection.Left].right)
                                 {
                                     previewObj.transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.right * 2f);
                                 }
 
-                                else if (directions[i] == Vector3.right)
+                                else if (directions[i] == previewObjPivots[(int)PivotDirection.Right].right)
                                 {
                                     previewObj.transform.position = hitInfo.collider.transform.position + (-hitInfo.collider.transform.right * 2f);
-
                                 }
 
 
@@ -290,15 +291,15 @@ public class BuildObjectCreator : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (previewObj != null && previewObjPivots != null)
-        {
-            Gizmos.color = Color.blue;
-            Vector3 boxSize = new Vector3(1f, 1f, 1f); // OverlapBox 크기와 동일하게 설정
+        //if (previewObj != null && previewObjPivots != null)
+        //{
+        //    Gizmos.color = Color.blue;
+        //    Vector3 boxSize = new Vector3(1f, 1f, 1f); // OverlapBox 크기와 동일하게 설정
 
-            foreach (Transform pivot in previewObjPivots)
-            {
-                Gizmos.DrawWireCube(pivot.position, boxSize);
-            }
-        }
+        //    foreach (Transform pivot in previewObjPivots)
+        //    {
+        //        Gizmos.DrawWireCube(pivot.position, boxSize);
+        //    }
+        //}
     }
 }
