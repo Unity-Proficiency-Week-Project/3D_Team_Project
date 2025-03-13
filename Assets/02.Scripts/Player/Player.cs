@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 
     public ItemData itemData;
     public Action addItem;
+    public CrossHairUI crosshair;
 
     public Transform dropPosition;
 
