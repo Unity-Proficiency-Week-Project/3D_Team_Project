@@ -3030,6 +3030,7 @@ MonoBehaviour:
   dashSpeedMultiplier: 2.5
   dashDuration: 0.2
   dashCooldown: 1
+  dahsStamina: 10
   staminaDrain: 10
   staminaRecovery: 5
   cameraContainer: {fileID: 737233164}
@@ -3050,10 +3051,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiCondition: {fileID: 0}
-  noHungerHealthDecay: 0
-  NoThristHealthDecay: 0
-  staminaRecoverRate: 0
-  hungerReduceRate: 0
+  noHungerHealthDecay: 5
+  NoThristHealthDecay: 5
+  staminaRecoverRate: 5
+  hungerReduceRate: 5
+  thristReduceRate: 5
 --- !u!1001 &310194547
 PrefabInstance:
   m_ObjectHideFlags: 0

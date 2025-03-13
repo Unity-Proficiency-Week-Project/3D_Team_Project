@@ -94,4 +94,13 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     {
         stamina.Add(Time.deltaTime * staminaRecoverRate);
     }
+
+    public bool IsUsableStamina(float value)
+    {
+        return stamina.curVal >= value;
+    }
+    public void UseStamina(float value)
+    {
+        stamina.Subtract(value);
+    }
 }
