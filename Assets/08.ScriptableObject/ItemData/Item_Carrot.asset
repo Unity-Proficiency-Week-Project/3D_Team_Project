@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda66955deea2474ebb7177be77c9bcb, type: 3}
   m_Name: Item_Carrot
   m_EditorClassIdentifier: 
-  displayName: 
-  description: 
-  itemType: 0
-  icon: {fileID: 0}
-  dropPrefab: {fileID: 0}
-  Stackable: 0
-  maxStackAmount: 0
-  consumables: []
+  displayName: "\uB2F9\uADFC"
+  description: "\uBC30\uACE0\uD514\uACFC \uCCB4\uB825\uC744 \uD68C\uBCF5\uC2DC\uD0AC
+    \uC218 \uC788\uC2B5\uB2C8\uB2E4"
+  itemType: 2
+  icon: {fileID: 21300000, guid: b53822ec75d701e49b9947d1d09fd81e, type: 3}
+  dropPrefab: {fileID: 8274602344764364941, guid: 2dc25105fd5cc4546982e269158e44a2, type: 3}
+  Stackable: 1
+  maxStackAmount: 20
+  consumables:
+  - consumableType: 0
+    value: 15
+  - consumableType: 1
+    value: 20
+  craftingRecipes: []
