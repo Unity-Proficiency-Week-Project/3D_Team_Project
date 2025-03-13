@@ -16,25 +16,7 @@ public abstract class BasePreview : MonoBehaviour
     {
         this.buildableLayer = buildableLayer;
 
-        if (PlayerManager.Instance == null)
-        {
-            Debug.LogError("PlayerManager.Instance is null");
-            return;
-        }
-
-        if (PlayerManager.Instance.Player == null || PlayerManager.Instance.Player.controller == null)
-        {
-            Debug.LogError("Player or controller is null");
-            return;
-        }
-
         cameraContainer = PlayerManager.Instance.Player.controller.cameraContainer;
-
-        if (cameraContainer == null)
-        {
-            Debug.LogError("cameraContainer is null");
-            return;
-        }
 
         StartCoroutine(CanBuildCheckCoroutine());
     }
