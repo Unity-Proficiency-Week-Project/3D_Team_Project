@@ -175,15 +175,22 @@ public class BuildObjectCreator : MonoBehaviour
                                     previewObj.transform.position = hitInfo.collider.transform.position + (-hitInfo.collider.transform.right * 2f);
                                 }
 
+                                if (CheckForObstacles(renderer))
+                                {
+                                    // 회전값을 같게 만들어줌
+                                    previewObj.transform.rotation = nearPivot.rotation;
 
-                                // 회전값을 같게 만들어줌
-                                previewObj.transform.rotation = nearPivot.rotation;
+                                    // 프리뷰 오브젝트의 색을 초록색으로 변경하여 건설 가능 지점임을 알려줌
+                                    canBuild = true;
+                                    renderer.material.color = Color.green;
 
-                                // 프리뷰 오브젝트의 색을 초록색으로 변경하여 건설 가능 지점임을 알려줌
-                                canBuild = true;
-                                renderer.material.color = Color.green;
-
-                                break;
+                                    break;
+                                }
+                                else
+                                {
+                                    renderer.material.color = Color.red;
+                                    canBuild = false;
+                                }
                             }
                         }
                         // 오브젝트의 레이어가 Ground라면 y값을 충돌한 오브젝트와 맞춤
