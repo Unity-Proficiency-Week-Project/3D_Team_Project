@@ -16,20 +16,18 @@ public class WallPreview : BasePreview
 
     public override void Initialize(LayerMask buildableLayer)
     {
-        base.Initialize(buildableLayer);
-
         // 피벗 초기화
         previewObjPivots = new List<Transform>(gameObject.GetComponentsInChildren<Transform>());
         previewObjPivots.Remove(transform); // 자신은 제외
 
-        StartCoroutine(CanBuildRayCheck());
+        base.Initialize(buildableLayer);
     }
 
     /// <summary>
     /// 건축 가능 여부 체크 코루틴
     /// </summary>
     /// <returns></returns>
-    private IEnumerator CanBuildRayCheck()
+    public override IEnumerator CanBuildCheckCoroutine()
     {
         MeshRenderer renderer = GetComponent<MeshRenderer>();
         if (renderer == null)
