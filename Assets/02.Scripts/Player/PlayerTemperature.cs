@@ -27,7 +27,6 @@ public class PlayerTemperature : MonoBehaviour
         playerCondition = PlayerManager.Instance.Player.condition;
 
         UpdateTemp();
-        effectCoroutine = StartCoroutine(AffectLoop());
 
         WeatherSystem.Instance.OnWeatherChanged += UpdateTemp;
     }
