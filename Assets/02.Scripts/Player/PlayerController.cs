@@ -9,7 +9,7 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 5f;        
+    public float moveSpeed;        
     public float defaultSpeed;      //속도 일시적 증가 후 되돌릴 값
     private bool isSpeedBoosted = false;    //속도가 증가했는지 판단하는 값
     private Vector2 curMovementInput;       //현재 움직임 벡터
@@ -42,8 +42,13 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot;
     public float lookSensitivity;
 
+
+
+
     private Vector2 mouseDelta;
     
+
+
     [HideInInspector]
     public bool canLook = true;
     private Rigidbody _rigidbody;
