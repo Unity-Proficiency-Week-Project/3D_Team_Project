@@ -75,6 +75,11 @@ public class PlayerCondition : MonoBehaviour, IDamageable
         thirst.Add(value);
     }
 
+    public void SubtrackThirst(float value)
+    {
+        thirst.Subtract(value);
+    }
+
 
     /// <summary>
     /// 적으로부터 데미지를 받았을 시 처리
@@ -90,6 +95,16 @@ public class PlayerCondition : MonoBehaviour, IDamageable
         }
     }
 
+    public void ColdDamage(float damage)
+    {
+        health.Subtract(damage);
+
+        if(health.curVal == 0)
+        {
+            Die();
+        }
+    }
+
     public void RecoverStamina()
     {
         stamina.Add(Time.deltaTime * staminaRecoverRate);
@@ -99,6 +114,7 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     {
         return stamina.curVal >= value;
     }
+
     public void UseStamina(float value)
     {
         stamina.Subtract(value);
