@@ -18,8 +18,9 @@ public class PlayerController : MonoBehaviour
     public int currentJumps = 0;       //현재 점프 횟수 
     public int maxJumps = 1;            //최대 점프 횟수
     private bool isJumpBoosted = false; //점프 횟수가 늘어났는지 확인
-    public float jumpPower;             //점프 거리
+    public float jumpPower = 80f;             //점프 거리
     public LayerMask groundLayerMask;   //어떤 레이어에 닿았는지 확인 위한 변수
+    public float jumpStamina = 5f;
 
     [Header("Dash")]
     public float dashSpeedMultiplier = 2.5f; // 대쉬 속도 배율
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     public float dashCooldown = 1.0f; // 대쉬 쿨타임
     private bool isDashing = false;
     private bool canDash = true;
+    public float dashStamina = 10f;
 
     [Header("Stamina")]
     public float staminaDrain = 10f;        //특정 행동 시 스태미나 감소량
@@ -106,7 +108,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="context"></param>
     public void OnJumpInput(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if(context.phase == InputActionPhase.Started && PlayerManager.Instance.Player.condition.IsUsableStamina(jumpStamina))
         {
             if (IsGrounded())
             {
@@ -117,6 +119,7 @@ public class PlayerController : MonoBehaviour
             {
                 currentJumps++;  // 점프 횟수 증가
                 _rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+                PlayerManager.Instance.Player.condition.UseStamina(jumpStamina);
             }
         }
     }
@@ -148,35 +151,38 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Dash()
     {
-        canDash = false;
-        isDashing = true;
-
-        Vector3 dashDirection;
-
-        if(isMoving)
+        if(PlayerManager.Instance.Player.condition.IsUsableStamina(dashStamina))
         {
-            dashDirection = (transform.forward * curMovementInput.y + transform.right * curMovementInput.x).normalized;
+            canDash = false;
+            isDashing = true;
+
+            Vector3 dashDirection;
+            PlayerManager.Instance.Player.condition.UseStamina(dashStamina);
+            if (isMoving)
+            {
+                dashDirection = (transform.forward * curMovementInput.y + transform.right * curMovementInput.x).normalized;
+            }
+            else
+            {
+                dashDirection = transform.forward;
+            }
+
+            moveSpeed *= dashSpeedMultiplier;
+
+            float elapsedTime = 0f;
+            while (elapsedTime < dashDuration)
+            {
+                _rigidbody.velocity = dashDirection * moveSpeed; // 대쉬 방향으로 이동
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            moveSpeed = defaultSpeed;
+            isDashing = false;
+
+            yield return new WaitForSeconds(dashCooldown); // 대쉬 쿨타임 대기
+            canDash = true;
         }
-        else
-        {
-            dashDirection = transform.forward;
-        }
-
-        moveSpeed *= dashSpeedMultiplier;
-
-        float elapsedTime = 0f;
-        while (elapsedTime < dashDuration)
-        {
-            _rigidbody.velocity = dashDirection * moveSpeed; // 대쉬 방향으로 이동
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        moveSpeed = defaultSpeed;
-        isDashing = false;
-
-        yield return new WaitForSeconds(dashCooldown); // 대쉬 쿨타임 대기
-        canDash = true;
     }
 
     void CameraLook()
