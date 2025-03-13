@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class BuildObjectCreator : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class BuildObjectCreator : MonoBehaviour
 
     private void Update()
     {
-        // Input ÇÔ¼öµé ³ªÁß¿¡ InputActionÀ¸·Î ¼öÁ¤ ¿¹Á¤
+        // Input í•¨ìˆ˜ë“¤ ë‚˜ì¤‘ì— InputActionìœ¼ë¡œ ìˆ˜ì • ì˜ˆì •
 
         if (Input.GetKeyDown(KeyCode.F) && previewObj == null)
         {
@@ -32,9 +32,9 @@ public class BuildObjectCreator : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇÁ¸®ºä ¿ÀºêÁ§Æ® »ı¼º ÇÔ¼ö
+    /// í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ ìƒì„± í•¨ìˆ˜
     /// </summary>
-    /// <param name="obj">»ı¼ºÇÒ ¿ÀºêÁ§Æ® ÇÁ¸®ÆÕ1</param>
+    /// <param name="obj">ìƒì„±í•  ì˜¤ë¸Œì íŠ¸ í”„ë¦¬íŒ¹1</param>
     public void CreatePreviewObject(GameObject obj)
     {
         if (previewObj != null)
@@ -46,7 +46,7 @@ public class BuildObjectCreator : MonoBehaviour
     }
 
     /// <summary>
-    /// °ÇÃà ÇÁ¸®ºä Ãë¼Ò ÇÔ¼ö
+    /// ê±´ì¶• í”„ë¦¬ë·° ì·¨ì†Œ í•¨ìˆ˜
     /// </summary>
     public void CancelPreview()
     {
@@ -58,7 +58,7 @@ public class BuildObjectCreator : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇÁ¸®ºä °ÇÃà¹° ¹èÄ¡(»ı¼º)
+    /// í”„ë¦¬ë·° ê±´ì¶•ë¬¼ ë°°ì¹˜(ìƒì„±)
     /// </summary>
     private void PlaceObject()
     {

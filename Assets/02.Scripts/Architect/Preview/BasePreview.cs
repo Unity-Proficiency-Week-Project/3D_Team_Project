@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public abstract class BasePreview : MonoBehaviour
 {
@@ -20,16 +20,16 @@ public abstract class BasePreview : MonoBehaviour
 
     public virtual void UpdatePreview()
     {
-        // ÇÁ¸®ºä ¿ÀºêÁ§Æ®ÀÇ À§Ä¡¸¦ Ä«¸Ş¶ó ±âÁØÀ¸·Î Á¶Á¤
+        // í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ì˜ ìœ„ì¹˜ë¥¼ ì¹´ë©”ë¼ ê¸°ì¤€ìœ¼ë¡œ ì¡°ì •
         transform.position = cameraContainer.position + (cameraContainer.forward * 3f) + (cameraContainer.up * 1.5f);
 
-        // ÇÁ¸®ºä ¿ÀºêÁ§Æ®ÀÇ ÃÊ±â XÃà È¸Àü°ª °íÁ¤
+        // í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ì˜ ì´ˆê¸° Xì¶• íšŒì „ê°’ ê³ ì •
         float fixedXRotation = transform.eulerAngles.x;
 
-        // Ä«¸Ş¶óÀÇ YÃà È¸Àü°ª °è»ê
+        // ì¹´ë©”ë¼ì˜ Yì¶• íšŒì „ê°’ ê³„ì‚°
         Quaternion cameraRotation = Quaternion.Euler(0, cameraContainer.eulerAngles.y, 0);
 
-        // ÃÖÁ¾ÀûÀ¸·Î XÃà °íÁ¤ ¹× YÃà È¸Àü Àû¿ë
+        // ìµœì¢…ì ìœ¼ë¡œ Xì¶• ê³ ì • ë° Yì¶• íšŒì „ ì ìš©
         transform.rotation = Quaternion.Euler(fixedXRotation, cameraRotation.eulerAngles.y, 0);
     }
 
@@ -39,10 +39,10 @@ public abstract class BasePreview : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇÁ¸®ºä ¿ÀºêÁ§Æ® ÁÖº¯ ¿ÀºêÁ§Æ® Á¸Àç ¿©ºÎ È®ÀÎ
+    /// í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ ì£¼ë³€ ì˜¤ë¸Œì íŠ¸ ì¡´ì¬ ì—¬ë¶€ í™•ì¸
     /// </summary>
-    /// <param name="renderer">ÇÁ¸®ºä ¿ÀºêÁ§Æ® ¸Ş½¬·»´õ·¯</param>
-    /// <returns>ÁÖº¯¿¡ ¿ÀºêÁ§Æ®°¡ ÀÖ´Ù¸é false, ¾ø´Ù¸é true</returns>
+    /// <param name="renderer">í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ ë©”ì‰¬ë Œë”ëŸ¬</param>
+    /// <returns>ì£¼ë³€ì— ì˜¤ë¸Œì íŠ¸ê°€ ìˆë‹¤ë©´ false, ì—†ë‹¤ë©´ true</returns>
     protected virtual bool CheckForObstacles()
     {
         MeshRenderer renderer = GetComponent<MeshRenderer>();
@@ -58,9 +58,9 @@ public abstract class BasePreview : MonoBehaviour
             if (collider.gameObject == gameObject) continue;
 
             if (collider.gameObject.layer == LayerMask.NameToLayer("BuildObject"))
-                return false; // Àå¾Ö¹° ÀÖÀ½
+                return false; // ì¥ì• ë¬¼ ìˆìŒ
         }
 
-        return true; // Àå¾Ö¹° ¾øÀ½
+        return true; // ì¥ì• ë¬¼ ì—†ìŒ
     }
 }

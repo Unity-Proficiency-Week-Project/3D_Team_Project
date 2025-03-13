@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,15 +18,15 @@ public class WallPreview : BasePreview
     {
         base.Initialize(buildableLayer);
 
-        // ÇÇ¹ş ÃÊ±âÈ­
+        // í”¼ë²— ì´ˆê¸°í™”
         previewObjPivots = new List<Transform>(gameObject.GetComponentsInChildren<Transform>());
-        previewObjPivots.Remove(transform); // ÀÚ½ÅÀº Á¦¿Ü
+        previewObjPivots.Remove(transform); // ìì‹ ì€ ì œì™¸
 
         StartCoroutine(CanBuildRayCheck());
     }
 
     /// <summary>
-    /// °ÇÃà °¡´É ¿©ºÎ Ã¼Å© ÄÚ·çÆ¾
+    /// ê±´ì¶• ê°€ëŠ¥ ì—¬ë¶€ ì²´í¬ ì½”ë£¨í‹´
     /// </summary>
     /// <returns></returns>
     private IEnumerator CanBuildRayCheck()
@@ -34,11 +34,11 @@ public class WallPreview : BasePreview
         MeshRenderer renderer = GetComponent<MeshRenderer>();
         if (renderer == null)
         {
-            Debug.LogError("MeshRenderer°¡ ¾ø½À´Ï´Ù");
+            Debug.LogError("MeshRendererê°€ ì—†ìŠµë‹ˆë‹¤");
             yield break;
         }
 
-        // Ray¿¡ ÀÚ½ÅÀÌ °¨ÁöµÇ´Â°É ¹æÁöÇÏ±â À§ÇØ ÇÁ¸®ºä ¿ÀºêÁ§Æ®ÀÇ ·¹ÀÌ¾î¸¦ µğÆúÆ®·Î º¯°æ
+        // Rayì— ìì‹ ì´ ê°ì§€ë˜ëŠ”ê±¸ ë°©ì§€í•˜ê¸° ìœ„í•´ í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ì˜ ë ˆì´ì–´ë¥¼ ë””í´íŠ¸ë¡œ ë³€ê²½
         gameObject.layer = 0;
 
         RaycastHit hitInfo;
@@ -55,16 +55,16 @@ public class WallPreview : BasePreview
                     transform.TransformDirection(Vector3.right)
                 };
 
-                // ÇÇ¹şº°·Î Ray °Ë»ç
+                // í”¼ë²—ë³„ë¡œ Ray ê²€ì‚¬
                 for (int i = 0; i < previewObjPivots.Count; i++)
                 {
-                    // ÇöÀç ÇÇ¹ş¿¡¼­ Á¤ÇØµĞ ¹æÇâÀ¸·Î Ray¸¦ ¹ß»ç, buildableLayer¿¡ Æ÷ÇÔµÇ´Â ¿ÀºêÁ§Æ®°¡ Ãæµ¹ÇÏ¸é hitInfo¿¡ ¿ÀºêÁ§Æ® ³ÖÀº ÈÄ true ¹İÈ¯
+                    // í˜„ì¬ í”¼ë²—ì—ì„œ ì •í•´ë‘” ë°©í–¥ìœ¼ë¡œ Rayë¥¼ ë°œì‚¬, buildableLayerì— í¬í•¨ë˜ëŠ” ì˜¤ë¸Œì íŠ¸ê°€ ì¶©ëŒí•˜ë©´ hitInfoì— ì˜¤ë¸Œì íŠ¸ ë„£ì€ í›„ true ë°˜í™˜
                     if (Physics.Raycast(previewObjPivots[i].position, directions[i], out hitInfo, 1f, buildableLayer))
                     {
-                        // ¿ÀºêÁ§Æ®ÀÇ ·¹ÀÌ¾î°¡ BuildObject¶ó¸é
+                        // ì˜¤ë¸Œì íŠ¸ì˜ ë ˆì´ì–´ê°€ BuildObjectë¼ë©´
                         if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("BuildObject"))
                         {
-                            // ÇÁ¸®ºä ¿ÀºêÁ§Æ® ±âÁØ °¡Àå ±ÙÃ³¿¡ ÀÖ´Â ÇÇ¹şÀ» Ã£À½
+                            // í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ ê¸°ì¤€ ê°€ì¥ ê·¼ì²˜ì— ìˆëŠ” í”¼ë²—ì„ ì°¾ìŒ
                             Transform nearPivot = FindNearPivot(transform.position, hitInfo.collider.gameObject);
 
                             if (nearPivot != null)
@@ -91,10 +91,10 @@ public class WallPreview : BasePreview
 
                                 if (CheckForObstacles())
                                 {
-                                    // È¸Àü°ªÀ» °°°Ô ¸¸µé¾îÁÜ
+                                    // íšŒì „ê°’ì„ ê°™ê²Œ ë§Œë“¤ì–´ì¤Œ
                                     transform.rotation = nearPivot.rotation;
 
-                                    // ÇÁ¸®ºä ¿ÀºêÁ§Æ®ÀÇ »öÀ» ÃÊ·Ï»öÀ¸·Î º¯°æÇÏ¿© °Ç¼³ °¡´É ÁöÁ¡ÀÓÀ» ¾Ë·ÁÁÜ
+                                    // í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ì˜ ìƒ‰ì„ ì´ˆë¡ìƒ‰ìœ¼ë¡œ ë³€ê²½í•˜ì—¬ ê±´ì„¤ ê°€ëŠ¥ ì§€ì ì„ì„ ì•Œë ¤ì¤Œ
                                     canBuild = true;
                                     renderer.material.color = Color.green;
 
@@ -107,7 +107,7 @@ public class WallPreview : BasePreview
                                 }
                             }
                         }
-                        // ¿ÀºêÁ§Æ®ÀÇ ·¹ÀÌ¾î°¡ Ground¶ó¸é y°ªÀ» Ãæµ¹ÇÑ ¿ÀºêÁ§Æ®¿Í ¸ÂÃã
+                        // ì˜¤ë¸Œì íŠ¸ì˜ ë ˆì´ì–´ê°€ Groundë¼ë©´ yê°’ì„ ì¶©ëŒí•œ ì˜¤ë¸Œì íŠ¸ì™€ ë§ì¶¤
                         else if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                         {
                             transform.position = new Vector3(
@@ -121,7 +121,7 @@ public class WallPreview : BasePreview
                             break;
                         }
                     }
-                    // Ray°¡ ¿ÀºêÁ§Æ®¿Í Ãæµ¹ÇÏÁö ¾Ê¾ÒÀ» °æ¿ì
+                    // Rayê°€ ì˜¤ë¸Œì íŠ¸ì™€ ì¶©ëŒí•˜ì§€ ì•Šì•˜ì„ ê²½ìš°
                     else
                     {
                         renderer.material.color = Color.red;
@@ -130,7 +130,7 @@ public class WallPreview : BasePreview
                 }
             }
 
-            // ÇÁ¸®ºä ¿ÀºêÁ§Æ® À§Ä¡¿¡ Àå¾Ö¹°ÀÌ ÀÖÀ» °æ¿ì
+            // í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ì— ì¥ì• ë¬¼ì´ ìˆì„ ê²½ìš°
             else
             {
                 renderer.material.color = Color.red;
@@ -141,11 +141,11 @@ public class WallPreview : BasePreview
     }
 
     /// <summary>
-    /// ÁÖº¯¿¡ ´Ù¸¥ °ÇÃà¹°ÀÇ ÇÇ¹şÀÌ Á¸ÀçÇÏ´ÂÁö Ã¼Å©
+    /// ì£¼ë³€ì— ë‹¤ë¥¸ ê±´ì¶•ë¬¼ì˜ í”¼ë²—ì´ ì¡´ì¬í•˜ëŠ”ì§€ ì²´í¬
     /// </summary>
-    /// <param name="previewPosition">ÇÁ¸®ºä ¿ÀºêÁ§Æ® À§Ä¡°ª</param>
-    /// <param name="targetObject">Ray¸¦ ÅëÇØ °¨ÁöµÈ °ÇÃà¹° ¿ÀºêÁ§Æ®</param>
-    /// <returns>ÇÁ¸®ºä ¿ÀºêÁ§Æ®¿Í °¡Àå °¡±î¿î À§Ä¡¿¡ ÀÖ´Â ÇÇ¹şÀÇ Transform</returns>
+    /// <param name="previewPosition">í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ê°’</param>
+    /// <param name="targetObject">Rayë¥¼ í†µí•´ ê°ì§€ëœ ê±´ì¶•ë¬¼ ì˜¤ë¸Œì íŠ¸</param>
+    /// <returns>í”„ë¦¬ë·° ì˜¤ë¸Œì íŠ¸ì™€ ê°€ì¥ ê°€ê¹Œìš´ ìœ„ì¹˜ì— ìˆëŠ” í”¼ë²—ì˜ Transform</returns>
     private Transform FindNearPivot(Vector3 previewPosition, GameObject targetObject)
     {
         Transform nearPivot = null;
