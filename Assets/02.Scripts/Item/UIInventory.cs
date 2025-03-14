@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -127,6 +127,7 @@ public class UIInventory : MonoBehaviour
             if (slot.itemData != null)
             {
                 slot.Set();
+                InitButton();
             }
             else
             {
@@ -190,66 +191,102 @@ public class UIInventory : MonoBehaviour
         }
 
         actionButton.SetActive(true);
-        if (selectedItem.itemData.itemType == ItemType.Consumable)
-        {
-            actionButtonText.text = "사용";
-            currentAction = OnUseButton;
-        }
-        else if (selectedItem.itemData.itemType == ItemType.Equipable)
-        {
-            if (!slots[index].equipped)
-            {
-                actionButtonText.text = "장착";
-                currentAction = () => OnEquipButton(index);
-            }
-            else
-            {
-                actionButtonText.text = "해제";
-                currentAction = () => UnEquip(index);
-            }
-        }
-        else
-        {
-            actionButtonText.text = string.Empty;
-            currentAction = null;
-        }
-
         dropButton.SetActive(true);
-    }
+        
+        switch (selectedItem.itemData.itemType)
+        {
+            case ItemType.Consumable:
+                actionButtonText.text = "사용";
+                currentAction = () => OnUseButton();
+                break;
 
+            case ItemType.Equipable:
+                if (!slots[index].equipped)
+                {
+                    actionButtonText.text = "장착";
+                    currentAction = () => OnEquipButton(index);
+                }
+                else
+                {
+                    actionButtonText.text = "해제";
+                    currentAction = () => UnEquip(index);
+                }
+                actionButton.SetActive(true); // 👉 버튼 활성화
+                break;
+
+            default:
+                // 🛠️ 아이템 타입이 Consumable/Equipable이 아니면 버튼 숨김
+                actionButtonText.text = string.Empty;
+                currentAction = null;
+                actionButton.SetActive(false);
+                break;
+        }
+
+
+        InitButton();
+        
+    }
     public void OnUseButton()
     {
-        if (selectedItem.itemData.itemType == ItemType.Consumable)
+        if ( selectedItem.itemData == null)
         {
-            foreach (var consumable in selectedItem.itemData.consumables)
-            {
-                switch (consumable.consumableType)
-                {
-                    case ConsumableType.Health:
-                        condition.Heal(consumable.value); break;
-                    case ConsumableType.Hunger:
-                        condition.Eat(consumable.value); break;
-                    case ConsumableType.Thirst:
-                        condition.Drink(consumable.value); break;
-                }
-            }
-
-            RemoveSelectedItem();
+            Debug.LogWarning("아이템이 선택되지 않았습니다.");
+            return;
         }
+    
+        if (condition == null)
+        {
+            Debug.LogError("PlayerCondition이 할당되지 않았습니다.");
+            return;
+        }
+
+        if (selectedItem.itemData.itemType != ItemType.Consumable)
+        {
+            Debug.LogWarning("이 아이템은 소비할 수 없습니다: " + selectedItem.itemData.displayName);
+            return;
+        }
+
+        if (selectedItem.itemData.consumables == null || selectedItem.itemData.consumables.Length == 0)
+        {
+            Debug.LogWarning("Consumables 배열이 null이거나 비어 있습니다.");
+            return;
+        }
+
+        foreach (var consumable in selectedItem.itemData.consumables)
+        {
+            switch (consumable.consumableType)
+            {
+                case ConsumableType.Health:
+                    condition.Heal(consumable.value); break;
+                case ConsumableType.Hunger:
+                    condition.Eat(consumable.value); break;
+            }
+        }
+
+        RemoveSelectedItem();
+        actionButton.SetActive(false);
     }
 
     public void OnEquipButton(int index)
     {
-        slots[index].equipped = true;
+        if (slots[curEquipIndex].equipped)
+        {
+            UnEquip(curEquipIndex);
+        }
+        slots[curEquipIndex].equipped = true;
+        curEquipIndex = selectedItemIndex;
+        PlayerManager.Instance.Player.equip.EquipNew(selectedItem.itemData);
         UpdateUI();
+
+        SelectItem(selectedItemIndex);
     }
 
     public void UnEquip(int index)
     {
         slots[index].equipped = false;
+        PlayerManager.Instance.Player.equip.Unequip();
         UpdateUI();
     }
-
 
     public void OnDropButton()
     {
@@ -265,7 +302,7 @@ public class UIInventory : MonoBehaviour
         {
             if (slots[selectedItemIndex].equipped)
             {
-                //UnEquip(selectedItemIndex);
+                UnEquip(selectedItemIndex);
             }
 
             selectedItem.itemData = null;
@@ -285,5 +322,35 @@ public class UIInventory : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void RemoveItem(ItemData item, int quantity)
+    {
+        foreach (ItemSlot slot in slots)
+        {
+            if (slot.itemData == item)
+            {
+                slot.quantity -= quantity;
+
+                if (slot.quantity <= 0)
+                {
+                    slot.itemData = null;
+                    slot.quantity = 0;
+                }
+                UpdateUI();
+                return;
+            }
+        }
+    }
+
+    public void AddItem(ItemData item, int quantity)
+    {
+        ItemSlot emptySlot = GetEmptySlot();
+        if(emptySlot != null)
+        {
+            emptySlot.itemData = item;
+            emptySlot.quantity = 1;
+        }
+        UpdateUI();
     }
 }

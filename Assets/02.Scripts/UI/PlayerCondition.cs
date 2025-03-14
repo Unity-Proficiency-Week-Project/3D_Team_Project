@@ -10,6 +10,9 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     Condition thirst { get { return uiCondition.thrist; } }
     Condition stamina { get { return uiCondition.stamina; } }
 
+    public float baseAtk = 10f;
+    public float baseDef = 0f;
+
     public float noHungerHealthDecay;
     public float NoThristHealthDecay;
     public float staminaRecoverRate;
@@ -46,7 +49,6 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     /// </summary>
     public void Die()
     {
-        Debug.Log("플레이어가 사망했습니다.");
         // TODO: 게임 오버 처리, 리스폰 기능 추가
     }
 
