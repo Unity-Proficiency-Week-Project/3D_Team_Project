@@ -14,6 +14,10 @@ public class WeatherManager : MonoBehaviour
     public float globalTemp = 18f;
     public float weatherChangeInterval = 60f;
 
+    [Header("ParticleSys")]
+    public ParticleSystem snow;
+    public ParticleSystem rain;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
