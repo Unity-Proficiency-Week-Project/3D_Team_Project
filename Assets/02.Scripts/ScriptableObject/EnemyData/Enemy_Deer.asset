@@ -23,7 +23,6 @@ MonoBehaviour:
   attackRate: 2
   attackDistance: 2
   detectDistance: 5
-  moveSpeed: 0.8
-  attackSpeed: 0.8
+  animationSpeedMultiplier: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
