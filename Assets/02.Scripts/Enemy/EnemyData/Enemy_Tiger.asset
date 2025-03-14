@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c40289b0c16db48aad2949276c7c1b, type: 3}
+  m_Name: Enemy_Tiger
+  m_EditorClassIdentifier: 
+  enemyName: "\uD638\uB791\uC774"
+  discription: "\uCCB4\uB825\uC774 \uB192\uC740 \uADFC\uAC70\uB9AC \uD0C0\uC785\uC785\uB2C8\uB2E4."
+  enemyType: 0
+  dropOnDeath: {fileID: 8274602344764364941, guid: 2dc25105fd5cc4546982e269158e44a2, type: 3}
+  attacks:
+  - type: 0
+    health: 30
+    damage: 2
+    attackRate: 2
+    attackDistance: 2
+    detectDistance: 5
