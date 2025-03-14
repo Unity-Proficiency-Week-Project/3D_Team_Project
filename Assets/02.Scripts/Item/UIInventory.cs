@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -269,16 +269,24 @@ public class UIInventory : MonoBehaviour
 
     public void OnEquipButton(int index)
     {
-        slots[index].equipped = true;
+        if (slots[curEquipIndex].equipped)
+        {
+            UnEquip(curEquipIndex);
+        }
+        slots[curEquipIndex].equipped = true;
+        curEquipIndex = selectedItemIndex;
+        PlayerManager.Instance.Player.equip.EquipNew(selectedItem.itemData);
         UpdateUI();
+
+        SelectItem(selectedItemIndex);
     }
 
     public void UnEquip(int index)
     {
         slots[index].equipped = false;
+        PlayerManager.Instance.Player.equip.Unequip();
         UpdateUI();
     }
-
 
     public void OnDropButton()
     {
