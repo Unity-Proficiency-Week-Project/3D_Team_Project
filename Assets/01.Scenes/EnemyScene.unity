@@ -1829,7 +1829,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -1875,7 +1875,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 49c61f7d98b36a6438e5deb41f0f7207, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1914,7 +1914,7 @@ Transform:
   m_GameObject: {fileID: 385669745}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 168.21, y: 1.65, z: 7.51}
+  m_LocalPosition: {x: 168.21, y: 0.89, z: 7.51}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7983,6 +7983,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiCondition: {fileID: 0}
+  baseAtk: 10
+  baseAtkSpeed: 1
+  baseStaminaCost: 2
+  baseDef: 0
   noHungerHealthDecay: 5
   NoThristHealthDecay: 5
   staminaRecoverRate: 5
@@ -8157,6 +8161,7 @@ MonoBehaviour:
   controller: {fileID: 0}
   condition: {fileID: 0}
   temp: {fileID: 0}
+  equip: {fileID: 0}
   itemData: {fileID: 0}
   crosshair: {fileID: 0}
   dropPosition: {fileID: 1221523603}
@@ -11156,10 +11161,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1107823938234233628, guid: 6d72c54770657494caa452dfa49a036b, type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 11400000, guid: 8a0c0c72a4b70f04b9aabf6954b3bf89, type: 2}
     - target: {fileID: 1298898332335909507, guid: 6d72c54770657494caa452dfa49a036b, type: 3}
       propertyPath: _camera
       value: 
@@ -11237,10 +11238,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kitty
       objectReference: {fileID: 0}
-    - target: {fileID: 8709888856585866798, guid: ffcb266148fe93d4fa6febdba649f3d3, type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 11400000, guid: 50e8d0de2e2108a48821750065f5f7f2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11254,18 +11251,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 920609364739929359, guid: 7b266d3166790dd49b428629dc1ed8ca, type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 11400000, guid: cb007a7df40ffc145811880bf98ca148, type: 2}
-    - target: {fileID: 3188732047923273158, guid: 7b266d3166790dd49b428629dc1ed8ca, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3250259597278932805, guid: 7b266d3166790dd49b428629dc1ed8ca, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.3
-      objectReference: {fileID: 0}
     - target: {fileID: 4556170205481336284, guid: 7b266d3166790dd49b428629dc1ed8ca, type: 3}
       propertyPath: m_LocalPosition.x
       value: 141.05
@@ -11339,10 +11324,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Deer
       objectReference: {fileID: 0}
-    - target: {fileID: 1208952876200236597, guid: 1fe089488c436824bb992a6f5560cd8e, type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 11400000, guid: 927ffa452fdcb464385549fcf3aa5c9c, type: 2}
     - target: {fileID: 1494892144021676788, guid: 1fe089488c436824bb992a6f5560cd8e, type: 3}
       propertyPath: _camera
       value: 
@@ -11412,10 +11393,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Horse
       objectReference: {fileID: 0}
-    - target: {fileID: 1648014707867270082, guid: d30dba78dfcd271479625fa4c1b68647, type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 11400000, guid: 61a9a2b1699883742919eea09ec77ac2, type: 2}
     - target: {fileID: 2372927282097545971, guid: d30dba78dfcd271479625fa4c1b68647, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
