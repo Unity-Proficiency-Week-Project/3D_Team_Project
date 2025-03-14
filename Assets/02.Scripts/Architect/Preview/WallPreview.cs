@@ -79,14 +79,16 @@ public class WallPreview : BasePreview
                             // 프리뷰 오브젝트 기준 가장 근처에 있는 피벗을 찾음
                             Transform nearPivot = FindNearPivot(transform.position, hitInfo.collider.gameObject);
 
+
                             if (nearPivot != null)
                             {
-                                if (directions[i] == transform.TransformDirection(Vector3.up))
+                                Debug.Log(nearPivot.name);
+                                if (nearPivot.name.Contains("Down"))
                                 {
                                     transform.position = hitInfo.collider.transform.position + (-hitInfo.collider.transform.up * 2.001f);
                                 }
 
-                                else if (directions[i] == transform.TransformDirection(Vector3.down))
+                                else if (nearPivot.name.Contains("Up"))
                                 {
                                     if (transform.name.Contains("Roof"))
                                     {
@@ -99,14 +101,19 @@ public class WallPreview : BasePreview
                                     Debug.Log(transform.position);
                                 }
 
-                                else if (directions[i] == transform.TransformDirection(Vector3.left))
+                                else if (nearPivot.name.Contains("Right"))
                                 {
                                     transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.right * 2f);
                                 }
 
-                                else if (directions[i] == transform.TransformDirection(Vector3.right))
+                                else if (nearPivot.name.Contains("Left"))
                                 {
                                     transform.position = hitInfo.collider.transform.position + (-hitInfo.collider.transform.right * 2f);
+                                }
+
+                                else
+                                {
+                                    Debug.LogError("피벗의 이름이 잘못 설정되었습니다.");
                                 }
 
                                 if (CheckForObstacles())
