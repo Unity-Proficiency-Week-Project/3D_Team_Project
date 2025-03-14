@@ -9,17 +9,6 @@ public enum EnemyType
     //범위 공격..?
 }
 
-[System.Serializable]
-public class AttackType //적 타입에 따라 체력, 대미지, 공격속도, 공격범위 달라짐
-{
-    public EnemyType type;
-    public float health;
-    public int damage;
-    public float attackRate;
-    public float attackDistance;
-    public float detectDistance;
-}
-
 [CreateAssetMenu(fileName = "Enemy", menuName = "New Enemy")]
 public class EnemyData : ScriptableObject
 {
@@ -28,7 +17,22 @@ public class EnemyData : ScriptableObject
     public string discription;
     public EnemyType enemyType;
     //public Sprite Icon;
-    public GameObject dropOnDeath;
+    public GameObject dropOnDeath; //나중에 처치했을 때 여러개 떨구고 싶다면 배열로 선언해주기
 
-    public AttackType[] attacks;
+    [Header("Stats")]
+    public float health;
+    public int damage;
+    public float walkSpeed;
+    public float runSpeed;
+    public float attackRate; //공격속도
+    public float attackDistance; //공격범위
+    public float detectDistance; //감지범위
+
+    [Header("Animation")]
+    public float moveSpeed; //애니메이션 속도, enemy의 이동속도에 따라 조절 가능
+    public float attackSpeed; //공격 애니메이션 속도
+
+    [Header("Projectile Settings")] //원거리 타입일 때 
+    public GameObject projectilePrefab;  // 투사체 프리팹
+    public float projectileSpeed;        // 투사체 속도
 }

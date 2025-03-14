@@ -17,10 +17,14 @@ MonoBehaviour:
     \uD0C0\uC785\uC785\uB2C8\uB2E4. "
   enemyType: 1
   dropOnDeath: {fileID: 8274602344764364941, guid: 2dc25105fd5cc4546982e269158e44a2, type: 3}
-  attacks:
-  - type: 1
-    health: 10
-    damage: 4
-    attackRate: 3
-    attackDistance: 5
-    detectDistance: 8
+  health: 10
+  damage: 5
+  walkSpeed: 0
+  runSpeed: 0
+  attackRate: 3
+  attackDistance: 5
+  detectDistance: 8
+  moveSpeed: 1.2
+  attackSpeed: 1.2
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0

@@ -16,10 +16,14 @@ MonoBehaviour:
   discription: "\uCCB4\uB825\uC774 \uB192\uC740 \uADFC\uAC70\uB9AC \uD0C0\uC785\uC785\uB2C8\uB2E4."
   enemyType: 0
   dropOnDeath: {fileID: 5780557026505099585, guid: ab81ec42b8c7d4a5ea81b15f1583129d, type: 3}
-  attacks:
-  - type: 0
-    health: 30
-    damage: 2
-    attackRate: 2
-    attackDistance: 2
-    detectDistance: 5
+  health: 30
+  damage: 2
+  walkSpeed: 1
+  runSpeed: 4
+  attackRate: 2
+  attackDistance: 2
+  detectDistance: 5
+  moveSpeed: 0.8
+  attackSpeed: 0.8
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0
