@@ -282,5 +282,60 @@ public class PlayerController : MonoBehaviour
             Attack();
         }
     }
+    
+    private void Attack()
+    {
+        float attackPower = condition.GetAtk();
+        float attackSpeed = condition.GetAtkSpd();
+        float staminaCost = condition.GetStamina();
+
+        if(condition.IsUsableStamina(staminaCost))
+        {
+            condition.UseStamina(staminaCost);
+
+            if(PlayerManager.Instance.Player.equip.curEquip != null)
+            {
+                EquipTool equipTool = PlayerManager.Instance.Player.equip.curEquip as EquipTool;
+                if (equipTool != null)
+                {
+                    equipTool.OnAttackInput();
+                    return;
+                }
+            }
+        }
+    }
+
+    private void UseItem()
+    {
+        ItemData item = PlayerManager.Instance.Player.itemData;
+
+        if (item == null || item.itemType != ItemType.Consumable)
+        {
+            Debug.LogWarning("사용할 소비 아이템이 없습니다!");
+            return;
+        }
+
+        Debug.Log($"{item.displayName} 사용!");
+
+        foreach (var consumable in item.consumables)
+        {
+            switch (consumable.consumableType)
+            {
+                case ConsumableType.Health:
+                    condition.Heal(consumable.value);
+                    break;
+
+                case ConsumableType.Hunger:
+                    condition.Eat(consumable.value);
+                    break;
+
+                case ConsumableType.Thirst:
+                    condition.Drink(consumable.value);
+                    break;
+            }
+        }
+
+        PlayerManager.Instance.Player.itemData = null;
+    }
 
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4589997116406058612}
   - component: {fileID: -361038309109734441}
+  - component: {fileID: -9097532069491861793}
   m_Layer: 0
   m_Name: Equip_Sword
   m_TagString: Untagged
@@ -51,6 +52,27 @@ MonoBehaviour:
   doesDealDamage: 0
   Atk: 1
   Def: 0
+--- !u!95 &-9097532069491861793
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6325031817110532917}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &7378781870482386745
 PrefabInstance:
   m_ObjectHideFlags: 0
