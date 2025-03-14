@@ -67,7 +67,7 @@ public class WallPreview : BasePreview
                 };
 
                 // 피벗별로 Ray 검사
-                for (int i = 0; i < previewObjPivots.Count; i++)
+                for (int i = 0; i < directions.Length; i++)
                 {
                     // 현재 피벗에서 정해둔 방향으로 Ray를 발사, buildableLayer에 포함되는 오브젝트가 충돌하면 hitInfo에 오브젝트 넣은 후 true 반환
                     if (Physics.Raycast(previewObjPivots[i].position, directions[i], out hitInfo, 1f, buildableLayer))
