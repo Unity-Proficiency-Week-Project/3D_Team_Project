@@ -43,7 +43,6 @@ public abstract class BasePreview : MonoBehaviour
     /// </summary>
     public virtual void UpdatePreview()
     {
-        
         if (cameraContainer == null)
             Debug.LogError("카메라 찾지 못함");
 
