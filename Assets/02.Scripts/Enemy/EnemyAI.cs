@@ -6,19 +6,14 @@ public enum AIState
 {
     Idle,
     Wandering,
+    Chasing,
     Attacking
 }
 
 public class EnemyAI : MonoBehaviour
 {
-    [Header("Stats")]
-    public float walkSpeed;
-    public float runSpeed;
-
-
     [Header("AI")]
     private NavMeshAgent agent;
-    public float detectDistance; //플레이어를 감지하는 거리
     private AIState aiState; //현재 AI 상태
 
     [Header("Wandering")]
@@ -28,15 +23,13 @@ public class EnemyAI : MonoBehaviour
     public float maxWanderWaitTime; //최대 방황 대기시간
 
     [Header("Combat")]
-    public int damage;
     public float attackRate;
     private float lastAttackTime;
-    public float attackDistance;
-
     private float playerDistance; //플레이어와의 거리
+    public float fieldOfView = 60f;//시야각
+    private Transform firePoint;
 
-    public float fieldOfView = 120f;//시야각
-
+    public EnemyData data;
     private Animator animator;
     private SkinnedMeshRenderer[] meshRenderers; //데미지 받을 때 플래시 효과 줄때 사용하는 변수
     private EnemyCondition enemyCondition;
@@ -82,19 +75,19 @@ public class EnemyAI : MonoBehaviour
         switch (aiState)
         {
             case AIState.Idle:
-                agent.speed = walkSpeed;
+                agent.speed = data.walkSpeed;
                 agent.isStopped = true;
                 break;
             case AIState.Wandering:
-                agent.speed = walkSpeed;
+                agent.speed = data.walkSpeed;
                 agent.isStopped = false;
                 break;
             case AIState.Attacking:
-                agent.speed = runSpeed;
+                agent.speed = data.runSpeed;
                 agent.isStopped = false;
                 break;
         }
-        animator.speed = agent.speed / walkSpeed;
+        animator.speed = agent.speed / data.walkSpeed;
     }
 
     void PassiveUpdate()
@@ -104,7 +97,7 @@ public class EnemyAI : MonoBehaviour
             SetState(AIState.Idle);
             Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
         }
-        if (playerDistance < detectDistance)
+        if (playerDistance < data.detectDistance)
         {
             SetState(AIState.Attacking);
         }
@@ -126,7 +119,7 @@ public class EnemyAI : MonoBehaviour
 
         int i = 0;
 
-        while (Vector3.Distance(transform.position, hit.position) < detectDistance)
+        while (Vector3.Distance(transform.position, hit.position) < data.detectDistance)
         {
             NavMesh.SamplePosition(transform.position + (Random.onUnitSphere * Random.Range(minWanderingDistance, maxWanderingDistance)), out hit, maxWanderingDistance, NavMesh.AllAreas);
             i++;
@@ -137,26 +130,26 @@ public class EnemyAI : MonoBehaviour
 
     void AttackingUpdate()
     {
-        if (playerDistance < attackDistance && IsPlayerInFieldOfView()) //공격범위 안에 있고 시야각 안에 있을 때 공격
+        if (playerDistance < data.attackDistance && IsPlayerInFieldOfView()) //공격범위 안에 있고 시야각 안에 있을 때 공격
         {
             agent.isStopped = true;
             if (Time.time - lastAttackTime > attackRate)
             {
                 lastAttackTime = Time.time;
 
-                PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(damage);
+                PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(data.damage);
                 animator.speed = 1;
                 animator.SetTrigger("Attack");
                 Debug.Log("플레이어에게 공격을 입혔습니다.");
             }
         }
-        else if (playerDistance < attackDistance && !IsPlayerInFieldOfView()) // 공격범위 안에 있지만 시야각 밖에 있을 때 회전
+        else if (playerDistance < data.attackDistance && !IsPlayerInFieldOfView()) // 공격범위 안에 있지만 시야각 밖에 있을 때 회전
         {
             Vector3 dir = PlayerManager.Instance.Player.transform.position - transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10f * Time.deltaTime);
         }
 
-        else if (playerDistance < detectDistance) // 감지거리 안에 있을 때 추적
+        else if (playerDistance < data.detectDistance) // 감지거리 안에 있을 때 추적
         {
             agent.isStopped = false;
 
@@ -195,5 +188,21 @@ public class EnemyAI : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         for (int i = 0; i < meshRenderers.Length; i++)
             meshRenderers[i].material.color = Color.white;
+    }
+
+    private void ShootProjectile() //원거리 타입일 때 공격
+    {
+        if (data.projectilePrefab == null || data.enemyType != EnemyType.Far) return; //투사체 프리팹이 없거나, 원거리 타입이 아니라면 반환
+
+        GameObject projectile = Instantiate(data.projectilePrefab, firePoint.position, Quaternion.identity);
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+
+        if(rb == null) return;
+
+        if(rb != null)
+        {
+            Vector3 dir = (PlayerManager.Instance.Player.transform.position - firePoint.position).normalized;
+            rb.velocity = dir * data.projectileSpeed;
+        }
     }
 }
