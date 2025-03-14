@@ -15303,7 +15303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8af39eb5c958ab4b94849a9368d6ff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildPrefab: {fileID: 4073732293923989891, guid: 13d96f7334ffdc2499331b2345078ebe, type: 3}
+  buildPrefab: {fileID: 5153939647786489949, guid: 038678a556d1d9f46a560816759c98e4, type: 3}
   buildableLayer:
     serializedVersion: 2
     m_Bits: 192

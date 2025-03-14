@@ -17,13 +17,7 @@ public class RoofPreview : BasePreview
 
     public override void UpdatePreview()
     {
-        mesh.material.color = canBuild ? Color.green : Color.red;
-
-        if (!isSnap || Vector3.Distance(transform.position, PlayerManager.Instance.Player.controller.cameraContainer.position) > 3.5f)
-        {
-            isSnap = false;
-            base.UpdatePreview();
-        }
+        base.UpdatePreview();
     }
 
     public override IEnumerator CanBuildCheckCoroutine()
@@ -52,53 +46,41 @@ public class RoofPreview : BasePreview
             {
                 if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 2f, buildableLayer))
                 {
-                    if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("BuildObject"))
+                    if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("BuildObject") && hitInfo.collider.name.Contains("Wall"))
                     {
-                        Collider wallCollider = hitInfo.collider;
-                        if (wallCollider != null)
-                        {
-                            float roofLeft = roofCollider.bounds.min.x;
-                            float wallLeft = wallCollider.bounds.min.x;
-                            float xOffset = wallLeft - roofLeft;
+                        Transform hitTransform = hitInfo.collider.transform;
 
-                            float wallTop = wallCollider.bounds.max.y;
-                            float roofBottom = roofCollider.bounds.min.y;
-                            float yOffset = wallTop - roofBottom + 0.01f; 
+                        Vector3 upPos = hitTransform.TransformDirection(Vector3.up) * 2.75f;
+                        Vector3 forwardPos = hitTransform.TransformDirection(Vector3.forward);
+                        Vector3 leftPos = transform.name.Contains("Right") ? -hitTransform.TransformDirection(Vector3.left) * 0.1f : hitTransform.TransformDirection(Vector3.left) * 0.1f;
 
-                            transform.position = new Vector3(transform.position.x + xOffset, hitInfo.point.y + yOffset, transform.position.z);
-                            canBuild = true;
-                            isSnap = true;
+                        transform.rotation = hitTransform.rotation * originRotation;
+                        transform.position = hitTransform.position + upPos + forwardPos + leftPos;
+                        canBuild = true;
+                        isSnap = true;
 
-                            yield return null;
-                            continue;
-                        }
+                        yield return null;
+                        continue;
                     }
                     else
                     {
                         isSnap = false;
                         canBuild = false;
-
-                        yield return null;
-                        continue;
                     }
                 }
                 else
                 {
                     isSnap = false;
                     canBuild = false;
-
-                    yield return null;
-                    continue;
                 }
             }
             else
             {
                 isSnap = false;
                 canBuild = false;
-
-                yield return null;
-                continue;
             }
+
+            yield return null;
         }
     }
 }
