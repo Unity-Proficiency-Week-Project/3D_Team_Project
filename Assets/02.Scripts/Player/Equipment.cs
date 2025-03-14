@@ -25,6 +25,7 @@ public class Equipment : MonoBehaviour
         {
             Debug.Log("무기 장비 실패");
         }
+        PlayerManager.Instance.Player.condition.ApplyEquipStats(curEquip);
     }
 
     public void Unequip()
@@ -33,6 +34,8 @@ public class Equipment : MonoBehaviour
         {
             Destroy(curEquip.gameObject);
             curEquip = null;
+
+            PlayerManager.Instance.Player.condition.ResetStats();
         }
     }
 }

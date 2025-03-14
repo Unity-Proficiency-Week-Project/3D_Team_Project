@@ -15,4 +15,26 @@ public class EquipTool : Equip
     public bool doesDealDamage;
     public float Atk;
     public float Def;
+
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    public override void OnAttackInput()
+    {
+        if(!attacking)
+        {
+            attacking = true;
+            animator.SetTrigger("Attack");
+            Invoke("OnCanAttack", attackRate);
+        }
+    }
+
+    void OnCanAttack()
+    {
+        attacking = false;
+    }
 }

@@ -42,12 +42,8 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot;
     public float lookSensitivity;
 
-
-
-
     private Vector2 mouseDelta;
-    
-
+    PlayerCondition condition;
 
     [HideInInspector]
     public bool canLook = true;
@@ -57,11 +53,13 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        
         _rigidbody = GetComponent<Rigidbody>();
     }
 
     void Start()
     {
+        condition = PlayerManager.Instance.Player.condition;
         defaultSpeed = moveSpeed;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -116,7 +114,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="context"></param>
     public void OnJumpInput(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started && PlayerManager.Instance.Player.condition.IsUsableStamina(jumpStamina))
+        if(context.phase == InputActionPhase.Started && condition.IsUsableStamina(jumpStamina))
         {
             if (IsGrounded())
             {
@@ -127,7 +125,7 @@ public class PlayerController : MonoBehaviour
             {
                 currentJumps++;  // 점프 횟수 증가
                 _rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-                PlayerManager.Instance.Player.condition.UseStamina(jumpStamina);
+                condition.UseStamina(jumpStamina);
             }
         }
     }
@@ -159,13 +157,13 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Dash()
     {
-        if(PlayerManager.Instance.Player.condition.IsUsableStamina(dashStamina))
+        if(condition.IsUsableStamina(dashStamina))
         {
             canDash = false;
             isDashing = true;
 
             Vector3 dashDirection;
-            PlayerManager.Instance.Player.condition.UseStamina(dashStamina);
+            condition.UseStamina(dashStamina);
             if (isMoving)
             {
                 dashDirection = (transform.forward * curMovementInput.y + transform.right * curMovementInput.x).normalized;
@@ -253,6 +251,36 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
+    }
+
+    public void OnActionInput(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            StartCoroutine(HandleActionInput());
+        }
+    }
+
+    private IEnumerator HandleActionInput()
+    {
+        float holdTime = 0f;
+
+        while(true)
+        {
+            if (!Input.GetMouseButton(0)) break;
+
+            holdTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if(holdTime >= 0.5f && PlayerManager.Instance.Player.equip.curEquip == null)
+        {
+            UseItem();
+        }
+        else
+        {
+            Attack();
+        }
     }
 
 }
