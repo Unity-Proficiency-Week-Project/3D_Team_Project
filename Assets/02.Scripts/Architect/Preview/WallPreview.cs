@@ -69,6 +69,7 @@ public class WallPreview : BasePreview
                 // 피벗별로 Ray 검사
                 for (int i = 0; i < directions.Length; i++)
                 {
+                    Debug.DrawRay(previewObjPivots[i].position, directions[i], Color.blue, 1f);
                     // 현재 피벗에서 정해둔 방향으로 Ray를 발사, buildableLayer에 포함되는 오브젝트가 충돌하면 hitInfo에 오브젝트 넣은 후 true 반환
                     if (Physics.Raycast(previewObjPivots[i].position, directions[i], out hitInfo, 1f, buildableLayer))
                     {
@@ -87,7 +88,15 @@ public class WallPreview : BasePreview
 
                                 else if (directions[i] == transform.TransformDirection(Vector3.down))
                                 {
-                                    transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.up * 2.001f);
+                                    if (transform.name.Contains("Roof"))
+                                    {
+                                        transform.rotation = hitInfo.collider.transform.rotation;
+                                        transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.up * 2.75f) + (hitInfo.collider.transform.forward);
+                                    }
+
+                                    else
+                                        transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.up * 2.001f);
+                                    Debug.Log(transform.position);
                                 }
 
                                 else if (directions[i] == transform.TransformDirection(Vector3.left))

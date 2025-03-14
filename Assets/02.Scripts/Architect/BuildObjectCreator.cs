@@ -67,11 +67,23 @@ public class BuildObjectCreator : MonoBehaviour
     {
         if (previewObj == null) return;
 
+        Debug.Log("배치");
+
         GameObject go = Instantiate(previewObj);
         Destroy(go.GetComponent<BasePreview>());
         go.transform.position = previewObj.transform.position;
 
         go.GetComponent<MeshRenderer>().material.color = Color.white;
+
+        MeshRenderer[] meshes = go.GetComponentsInChildren<MeshRenderer>();
+
+        if(meshes != null)
+        {
+            foreach (var mesh in meshes)
+            {
+                mesh.material.color = Color.white;
+            }
+        }
         go.layer = previewOriginLayer;
     }
 }

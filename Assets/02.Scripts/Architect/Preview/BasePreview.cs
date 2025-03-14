@@ -7,9 +7,17 @@ public abstract class BasePreview : MonoBehaviour
     protected bool canBuild;
 
     protected MeshRenderer mesh;
+    protected MeshRenderer[] childrenMeshes;
 
     protected Transform cameraContainer;
     protected Quaternion originRotation;
+
+    protected virtual void Awake()
+    {
+        mesh = GetComponent<MeshRenderer>();
+        childrenMeshes = GetComponentsInChildren<MeshRenderer>();
+        cameraContainer = PlayerManager.Instance.Player.controller.cameraContainer;
+    }
 
     /// <summary>
     /// 프리뷰 오브젝트 초기화
@@ -17,16 +25,11 @@ public abstract class BasePreview : MonoBehaviour
     /// <param name="buildableLayer">건설 가능한 레이어</param>
     public virtual void Initialize(LayerMask buildableLayer)
     {
-        mesh = GetComponent<MeshRenderer>();
-
         this.buildableLayer = buildableLayer;
 
         originRotation = transform.localRotation;
 
-        cameraContainer = PlayerManager.Instance.Player.controller.cameraContainer;
-
         StartCoroutine(CanBuildCheckCoroutine());
-
 
     }
 
@@ -34,6 +37,8 @@ public abstract class BasePreview : MonoBehaviour
     {
         if (cameraContainer != null)
             UpdatePreview();
+        else
+            Debug.Log("카메라를 찾지 못했습니다.");
     }
 
     public abstract IEnumerator CanBuildCheckCoroutine();
@@ -49,13 +54,21 @@ public abstract class BasePreview : MonoBehaviour
         if (transform == null)
             Debug.LogError("transform 찾지 못함");
 
-        transform.position = cameraContainer.position + (cameraContainer.forward * 3f) + (cameraContainer.up * 1.5f);
+        transform.position = cameraContainer.position + (cameraContainer.forward * 4.5f) + (cameraContainer.up * 2f);
 
         Quaternion cameraYRotation = Quaternion.Euler(0, cameraContainer.eulerAngles.y, 0);
 
         transform.rotation = cameraYRotation * originRotation;
 
         mesh.material.color = canBuild ? Color.green : Color.red;
+
+        if (childrenMeshes != null)
+        {
+            foreach (MeshRenderer mesh in childrenMeshes)
+            {
+                mesh.material.color = canBuild ? Color.green : Color.red;
+            }
+        }
     }
 
     /// <summary>
@@ -84,7 +97,7 @@ public abstract class BasePreview : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if (collider.gameObject == gameObject) continue;
+            if (collider.gameObject == gameObject ||  gameObject.name.Contains("Roof") && (collider.name.Contains("Wall") || collider.name.Contains("Roof"))) continue;
 
             if (collider.gameObject.layer == LayerMask.NameToLayer("BuildObject") || collider.gameObject.layer == LayerMask.NameToLayer("Default"))
             {
