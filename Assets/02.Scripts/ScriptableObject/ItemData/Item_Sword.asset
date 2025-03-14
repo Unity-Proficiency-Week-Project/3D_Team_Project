@@ -20,4 +20,5 @@ MonoBehaviour:
   Stackable: 0
   maxStackAmount: 0
   consumables: []
+  equipPrefab: {fileID: 6325031817110532917, guid: db58cc6aec40aed48895393867a710b1, type: 3}
   craftingRecipes: []

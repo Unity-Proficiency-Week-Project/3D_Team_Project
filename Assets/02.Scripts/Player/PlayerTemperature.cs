@@ -28,7 +28,7 @@ public class PlayerTemperature : MonoBehaviour
 
         UpdateTemp();
 
-        WeatherSystem.Instance.OnWeatherChanged += UpdateTemp;
+        WeatherManager.Instance.OnWeatherChanged += UpdateTemp;
     }
 
     public void EnterTempZone(TemperatureZone zone)
@@ -60,7 +60,7 @@ public class PlayerTemperature : MonoBehaviour
 
         float extraHeat = CheckNearbyHeatSources();
         // float coldResistance = playerEquipment?.coldResistance ?? 0f;
-        float weatherEffect = WeatherSystem.Instance.globalTemp;
+        float weatherEffect = WeatherManager.Instance.globalTemp;
         currentTemp = Mathf.Lerp(nearestTemp, nearestTemp * (1 + weatherEffect), 0.5f) + extraHeat; // + coldResistance
 
         Debug.Log($"현재 온도 갱신: {currentTemp}°C (지역: {nearestTemp}°C, 날씨 영향: {weatherEffect})");

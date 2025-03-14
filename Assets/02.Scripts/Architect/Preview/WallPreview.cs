@@ -14,6 +14,8 @@ public class WallPreview : BasePreview
 {
     protected List<Transform> previewObjPivots;
 
+    protected bool isSnap;
+
     public override void Initialize(LayerMask buildableLayer)
     {
         // 피벗 초기화
@@ -21,6 +23,17 @@ public class WallPreview : BasePreview
         previewObjPivots.Remove(transform); // 자신은 제외
 
         base.Initialize(buildableLayer);
+    }
+
+    public override void UpdatePreview()
+    {
+        mesh.material.color = canBuild ? Color.green : Color.red;
+
+        if (!isSnap || Vector3.Distance(transform.position, PlayerManager.Instance.Player.controller.cameraContainer.position) > 3.5f)
+        {
+            isSnap = false;
+            base.UpdatePreview();
+        }
     }
 
     /// <summary>
@@ -67,40 +80,43 @@ public class WallPreview : BasePreview
 
                             if (nearPivot != null)
                             {
-                                if (directions[i] == Vector3.up)
+                                if (directions[i] == transform.TransformDirection(Vector3.up))
                                 {
-                                    transform.position = hitInfo.collider.transform.position + (Vector3.down * 2f);
+                                    transform.position = hitInfo.collider.transform.position + (-hitInfo.collider.transform.up * 2.001f);
                                 }
 
-                                else if (directions[i] == Vector3.down)
+                                else if (directions[i] == transform.TransformDirection(Vector3.down))
                                 {
-                                    transform.position = nearPivot.position;
+                                    transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.up * 2.001f);
                                 }
 
-                                else if (directions[i] == -previewObjPivots[(int)PivotDirection.Left].right)
+                                else if (directions[i] == transform.TransformDirection(Vector3.left))
                                 {
                                     transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.right * 2f);
                                 }
 
-                                else if (directions[i] == previewObjPivots[(int)PivotDirection.Right].right)
+                                else if (directions[i] == transform.TransformDirection(Vector3.right))
                                 {
                                     transform.position = hitInfo.collider.transform.position + (-hitInfo.collider.transform.right * 2f);
                                 }
 
                                 if (CheckForObstacles())
                                 {
+                                    Debug.Log("장애물 겹침 없음");
+
                                     // 회전값을 같게 만들어줌
                                     transform.rotation = nearPivot.rotation;
 
                                     // 프리뷰 오브젝트의 색을 초록색으로 변경하여 건설 가능 지점임을 알려줌
                                     canBuild = true;
-                                    renderer.material.color = Color.green;
+
+                                    isSnap = true;
 
                                     break;
                                 }
                                 else
                                 {
-                                    renderer.material.color = Color.red;
+                                    Debug.Log("장애물 겹침");
                                     canBuild = false;
                                 }
                             }
@@ -114,7 +130,6 @@ public class WallPreview : BasePreview
                                 transform.position.z);
 
                             canBuild = true;
-                            renderer.material.color = Color.green;
 
                             break;
                         }
@@ -122,8 +137,8 @@ public class WallPreview : BasePreview
                     // Ray가 오브젝트와 충돌하지 않았을 경우
                     else
                     {
-                        renderer.material.color = Color.red;
-                        canBuild = false;
+                        if (!isSnap)
+                            canBuild = false;
                     }
                 }
             }
@@ -131,7 +146,6 @@ public class WallPreview : BasePreview
             // 프리뷰 오브젝트 위치에 장애물이 있을 경우
             else
             {
-                renderer.material.color = Color.red;
                 canBuild = false;
             }
             yield return null;
@@ -163,5 +177,17 @@ public class WallPreview : BasePreview
         }
 
         return nearPivot;
+    }
+
+    void OnDrawGizmos()
+    {
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.matrix = Matrix4x4.TRS(collider.bounds.center, transform.rotation, Vector3.one); // 회전 적용
+            Gizmos.DrawWireCube(Vector3.zero, collider.bounds.size);
+        }
     }
 }
