@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -41,16 +40,21 @@ public class EnemyAI : MonoBehaviour
     private Animator animator;
     private SkinnedMeshRenderer[] meshRenderers; //데미지 받을 때 플래시 효과 줄때 사용하는 변수
     private EnemyCondition enemyCondition;
+    private NavMeshPath path;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        enemyCondition = GetComponent<EnemyCondition>();
     }
+
     void Start()
     {
+        enemyCondition.DamageFlash = () => { StartCoroutine(DamageFlash()); };
         SetState(AIState.Wandering);
+        path = new NavMeshPath();
     }
 
     void Update()
@@ -75,7 +79,7 @@ public class EnemyAI : MonoBehaviour
     {
         aiState = state;
 
-        switch(aiState)
+        switch (aiState)
         {
             case AIState.Idle:
                 agent.speed = walkSpeed;
@@ -95,12 +99,12 @@ public class EnemyAI : MonoBehaviour
 
     void PassiveUpdate()
     {
-        if(aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
+        if (aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
         {
             SetState(AIState.Idle);
             Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
         }
-        if(playerDistance < detectDistance)
+        if (playerDistance < detectDistance)
         {
             SetState(AIState.Attacking);
         }
@@ -122,7 +126,7 @@ public class EnemyAI : MonoBehaviour
 
         int i = 0;
 
-        while(Vector3.Distance(transform.position, hit.position) < detectDistance)
+        while (Vector3.Distance(transform.position, hit.position) < detectDistance)
         {
             NavMesh.SamplePosition(transform.position + (Random.onUnitSphere * Random.Range(minWanderingDistance, maxWanderingDistance)), out hit, maxWanderingDistance, NavMesh.AllAreas);
             i++;
@@ -133,34 +137,32 @@ public class EnemyAI : MonoBehaviour
 
     void AttackingUpdate()
     {
-        if (playerDistance < attackDistance && IsPlayerInFieldOfView())
+        if (playerDistance < attackDistance && IsPlayerInFieldOfView()) //공격범위 안에 있고 시야각 안에 있을 때 공격
         {
             agent.isStopped = true;
             if (Time.time - lastAttackTime > attackRate)
             {
-                Debug.Log($"플레이어에게 공격을 입혔습니다. 현재시간 : {lastAttackTime}, 대미지: {damage}");
                 lastAttackTime = Time.time;
-                PlayerManager.Instance.Player.GetComponent<IDamageable>().TakePhysicalDamage(damage);
+
+                PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(damage);
                 animator.speed = 1;
                 animator.SetTrigger("Attack");
+                Debug.Log("플레이어에게 공격을 입혔습니다.");
             }
         }
-        else
+        else if (playerDistance < attackDistance && !IsPlayerInFieldOfView()) // 공격범위 안에 있지만 시야각 밖에 있을 때 회전
         {
-            if (playerDistance < detectDistance)
+            Vector3 dir = PlayerManager.Instance.Player.transform.position - transform.position;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10f * Time.deltaTime);
+        }
+
+        else if (playerDistance < detectDistance) // 감지거리 안에 있을 때 추적
+        {
+            agent.isStopped = false;
+
+            if (agent.CalculatePath(PlayerManager.Instance.Player.transform.position, path))
             {
-                agent.isStopped = false;
-                NavMeshPath path = new NavMeshPath();
-                if (agent.CalculatePath(PlayerManager.Instance.Player.transform.position, path))
-                {
-                    agent.SetDestination(PlayerManager.Instance.Player.transform.position);
-                }
-                else
-                {
-                    agent.SetDestination(transform.position);
-                    agent.isStopped = true;
-                    SetState(AIState.Wandering);
-                }
+                agent.SetDestination(PlayerManager.Instance.Player.transform.position);
             }
             else
             {
@@ -169,6 +171,13 @@ public class EnemyAI : MonoBehaviour
                 SetState(AIState.Wandering);
             }
         }
+        else //감지거리 밖에 있을 때 
+        {
+            agent.SetDestination(transform.position);
+            agent.isStopped = true;
+            SetState(AIState.Wandering);
+        }
+
     }
 
     bool IsPlayerInFieldOfView()
@@ -176,5 +185,15 @@ public class EnemyAI : MonoBehaviour
         Vector3 directionToPlayer = PlayerManager.Instance.Player.transform.position - transform.position;
         float angle = Vector3.Angle(transform.forward, directionToPlayer);
         return angle < fieldOfView * 0.5f;
+    }
+
+    IEnumerator DamageFlash()
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+            meshRenderers[i].material.color = new Color(1.0f, 0.6f, 0.6f);
+
+        yield return new WaitForSeconds(0.1f);
+        for (int i = 0; i < meshRenderers.Length; i++)
+            meshRenderers[i].material.color = Color.white;
     }
 }
