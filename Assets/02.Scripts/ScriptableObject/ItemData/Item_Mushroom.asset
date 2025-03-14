@@ -17,7 +17,9 @@ MonoBehaviour:
   itemType: 2
   icon: {fileID: 0}
   dropPrefab: {fileID: 5780557026505099585, guid: ab81ec42b8c7d4a5ea81b15f1583129d, type: 3}
-  Stackable: 0
-  maxStackAmount: 0
-  consumables: []
+  Stackable: 1
+  maxStackAmount: 20
+  consumables:
+  - consumableType: 1
+    value: 10
   craftingRecipes: []
