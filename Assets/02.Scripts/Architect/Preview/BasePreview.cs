@@ -9,6 +9,7 @@ public abstract class BasePreview : MonoBehaviour
     protected MeshRenderer mesh;
 
     protected Transform cameraContainer;
+    protected Quaternion originRotation;
 
     /// <summary>
     /// 프리뷰 오브젝트 초기화
@@ -20,9 +21,13 @@ public abstract class BasePreview : MonoBehaviour
 
         this.buildableLayer = buildableLayer;
 
+        originRotation = transform.localRotation;
+
         cameraContainer = PlayerManager.Instance.Player.controller.cameraContainer;
 
         StartCoroutine(CanBuildCheckCoroutine());
+
+
     }
 
     protected virtual void Update()
@@ -38,7 +43,7 @@ public abstract class BasePreview : MonoBehaviour
     /// </summary>
     public virtual void UpdatePreview()
     {
-        // 프리뷰 오브젝트의 위치를 카메라 기준으로 조정
+        
         if (cameraContainer == null)
             Debug.LogError("카메라 찾지 못함");
 
@@ -47,14 +52,9 @@ public abstract class BasePreview : MonoBehaviour
 
         transform.position = cameraContainer.position + (cameraContainer.forward * 3f) + (cameraContainer.up * 1.5f);
 
-        // 프리뷰 오브젝트의 초기 X축 회전값 고정
-        //float fixedXRotation = transform.eulerAngles.x;
+        Quaternion cameraYRotation = Quaternion.Euler(0, cameraContainer.eulerAngles.y, 0);
 
-        // 카메라의 Y축 회전값 계산
-        Quaternion cameraRotation = Quaternion.Euler(0, cameraContainer.eulerAngles.y, 0);
-
-        // 최종적으로 X축 고정 및 Y축 회전 적용
-        transform.rotation = Quaternion.Euler(0, cameraRotation.eulerAngles.y, 0);
+        transform.rotation = cameraYRotation * originRotation;
 
         mesh.material.color = canBuild ? Color.green : Color.red;
     }

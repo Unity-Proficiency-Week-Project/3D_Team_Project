@@ -146,7 +146,6 @@ public class WallPreview : BasePreview
             // 프리뷰 오브젝트 위치에 장애물이 있을 경우
             else
             {
-                Debug.Log("else");
                 canBuild = false;
             }
             yield return null;

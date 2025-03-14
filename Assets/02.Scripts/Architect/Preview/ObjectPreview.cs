@@ -57,12 +57,10 @@ public class ObjectPreview : BasePreview
 
             if (onGround && CheckForObstacles()) // 땅에 붙었고, 장애물도 없다면 건축 가능
             {
-                Debug.Log("canBuild");
                 canBuild = true;
             }
             else
             {
-                Debug.Log("!canBuild");
                 canBuild = false;
             }
 
