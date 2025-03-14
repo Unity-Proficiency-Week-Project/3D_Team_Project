@@ -65,41 +65,40 @@ public class RoofPreview : BasePreview
                             float roofBottom = roofCollider.bounds.min.y;
                             float yOffset = wallTop - roofBottom + 0.01f; 
 
-                            // 새로운 위치 설정
                             transform.position = new Vector3(transform.position.x + xOffset, hitInfo.point.y + yOffset, transform.position.z);
                             canBuild = true;
                             isSnap = true;
-                            break; 
-                        }
-                    }
-                    else if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
-                    {
-                        transform.position = new Vector3(transform.position.x, hitInfo.point.y + (roofCollider.bounds.size.y / 2f), transform.position.z);
-                        if (CheckForObstacles())
-                        {
-                            canBuild = true;
-                            isSnap = true;
+
+                            yield return null;
+                            continue;
                         }
                     }
                     else
                     {
                         isSnap = false;
                         canBuild = false;
+
+                        yield return null;
+                        continue;
                     }
                 }
                 else
                 {
                     isSnap = false;
                     canBuild = false;
+
+                    yield return null;
+                    continue;
                 }
             }
             else
             {
                 isSnap = false;
                 canBuild = false;
-            }
 
-            yield return null;
+                yield return null;
+                continue;
+            }
         }
     }
 }
