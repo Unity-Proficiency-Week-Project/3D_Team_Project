@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeatherSystem : MonoBehaviour
+public class WeatherManager : MonoBehaviour
 {
-    public static WeatherSystem Instance;
+    public static WeatherManager Instance;
     public event Action OnWeatherChanged;
 
     public enum WeatherType { Sunny, Cloudy, Rainy, Snowy}
