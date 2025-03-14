@@ -10,6 +10,9 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     Condition thirst { get { return uiCondition.thrist; } }
     Condition stamina { get { return uiCondition.stamina; } }
 
+    public float baseAtk = 10f;
+    public float baseDef = 0f;
+
     public float noHungerHealthDecay;
     public float NoThristHealthDecay;
     public float staminaRecoverRate;

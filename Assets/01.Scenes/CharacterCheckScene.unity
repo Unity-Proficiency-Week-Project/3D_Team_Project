@@ -12607,6 +12607,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 972500760528115264, guid: a7c109601ef5f4d77bb1c3102a2553d6, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4010853404171167478, guid: a7c109601ef5f4d77bb1c3102a2553d6, type: 3}
       propertyPath: m_Name
       value: Item_Sword
@@ -14615,6 +14619,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 872676672471272578, guid: d4f091f287f1b4c439f492d9863e859e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 872676672471272578, guid: d4f091f287f1b4c439f492d9863e859e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1188300229151925839, guid: d4f091f287f1b4c439f492d9863e859e, type: 3}
       propertyPath: camera
       value: 
@@ -18692,7 +18704,7 @@ GameObject:
   - component: {fileID: 1933418142}
   - component: {fileID: 1933418141}
   m_Layer: 0
-  m_Name: WeatherSystem
+  m_Name: WeatherManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18712,7 +18724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentWeather: 0
   globalTemp: 18
-  weatherChangeInterval: 60
+  weatherChangeInterval: 1
 --- !u!4 &1933418142
 Transform:
   m_ObjectHideFlags: 0
