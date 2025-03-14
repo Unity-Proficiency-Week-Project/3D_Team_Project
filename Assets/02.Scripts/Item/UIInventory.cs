@@ -13,7 +13,7 @@ public class UIInventory : MonoBehaviour
     public Transform dropPosition;
 
     [Header("Selected Item")] private ItemSlot selectedItem;
-    private int selectedItemIndex;
+    public int selectedItemIndex;
     public TextMeshProUGUI selectedItemName;
     public TextMeshProUGUI selectedItemDescription;
     public TextMeshProUGUI selectedItemStatName;
@@ -23,7 +23,7 @@ public class UIInventory : MonoBehaviour
     public TextMeshProUGUI actionButtonText;
     public GameObject dropButton;
 
-    private int curEquipIndex;
+    public int curEquipIndex;
 
     private UnityAction currentAction;
 
@@ -273,7 +273,7 @@ public class UIInventory : MonoBehaviour
         {
             UnEquip(curEquipIndex);
         }
-        slots[curEquipIndex].equipped = true;
+        slots[selectedItemIndex].equipped = true;
         curEquipIndex = selectedItemIndex;
         PlayerManager.Instance.Player.equip.EquipNew(selectedItem.itemData);
         UpdateUI();
@@ -285,6 +285,11 @@ public class UIInventory : MonoBehaviour
     {
         slots[index].equipped = false;
         PlayerManager.Instance.Player.equip.Unequip();
+
+        if (selectedItemIndex == index)
+        {
+            SelectItem(selectedItemIndex);
+        }
         UpdateUI();
     }
 
