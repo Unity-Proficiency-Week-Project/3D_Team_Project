@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +15,7 @@ public class BuildSlot : MonoBehaviour
     [SerializeField] private Button buildButton;
 
     private BuildObjectCreator creator;
+    private BuildUI buildUI;
 
     private void Start()
     {
@@ -26,6 +26,7 @@ public class BuildSlot : MonoBehaviour
         buildButton.onClick.AddListener(OnClickBuildButton);
 
         creator = FindObjectOfType<BuildObjectCreator>();
+        buildUI = FindObjectOfType<BuildUI>();
 
         SetSlot();
     }
@@ -48,6 +49,7 @@ public class BuildSlot : MonoBehaviour
         }
 
         go.transform.localPosition = buildingData.uiPosOffset;
+        go.transform.localEulerAngles += buildingData.uiRotOffset;
         go.transform.localScale = buildingData.uiScaleOffset;
 
         nameText.text = buildingData.displayName;
@@ -71,12 +73,13 @@ public class BuildSlot : MonoBehaviour
 
     private void OnClickBuildButton()
     {
-        foreach (var ingredient in buildingData.ingredients)
-        {
-            if (!creator.inventory.HasItem(ingredient.itemData, ingredient.quantity))
-                return;
-        }
+        //foreach (var ingredient in buildingData.ingredients)
+        //{
+        //    if (!creator.inventory.HasItem(ingredient.itemData, ingredient.quantity))
+        //        return;
+        //}  UI 테스트를 위해 소지 아이템 검사 비활성화
 
         creator.CreatePreviewObject(buildingData);
+        buildUI.ChangeUIActive();
     }
 }

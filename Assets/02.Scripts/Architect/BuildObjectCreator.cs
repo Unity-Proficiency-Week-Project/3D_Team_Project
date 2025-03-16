@@ -12,7 +12,7 @@ public class BuildObjectCreator : MonoBehaviour
 
     private void Start()
     {
-        inventory = FindObjectOfType<UIInventory>();
+        inventory = FindObjectOfType<UIInventory>(true);
     }
 
     private void Update()
@@ -31,6 +31,12 @@ public class BuildObjectCreator : MonoBehaviour
             {
                 PlaceObject();
             }
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            FindObjectOfType<BuildUI>(true).ChangeUIActive();
         }
     }
 
