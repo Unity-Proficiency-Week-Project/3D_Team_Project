@@ -73,7 +73,7 @@ public class BuildSlot : MonoBehaviour
     {
         foreach (var ingredient in buildingData.ingredients)
         {
-            if (creator.inventory.HasItem(ingredient.itemData, ingredient.quantity))
+            if (!creator.inventory.HasItem(ingredient.itemData, ingredient.quantity))
                 return;
         }
 
