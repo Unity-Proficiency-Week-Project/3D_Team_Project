@@ -2,20 +2,22 @@
 
 public class BuildObjectCreator : MonoBehaviour
 {
-    [SerializeField] private GameObject buildPrefab;
+    [SerializeField] private BuildingData buildingData;
     [SerializeField] private LayerMask buildableLayer;
 
     private LayerMask previewOriginLayer;
     private GameObject previewObj;
 
+    public UIInventory inventory;
+
+    private void Start()
+    {
+        inventory = FindObjectOfType<UIInventory>();
+    }
+
     private void Update()
     {
         // Input 함수들 나중에 InputAction으로 수정 예정
-
-        if (Input.GetKeyDown(KeyCode.F) && previewObj == null)
-        {
-            CreatePreviewObject(buildPrefab);
-        }
 
         if (previewObj != null)
         {
@@ -36,12 +38,14 @@ public class BuildObjectCreator : MonoBehaviour
     /// 프리뷰 오브젝트 생성 함수
     /// </summary>
     /// <param name="obj">생성할 오브젝트 프리팹1</param>
-    public void CreatePreviewObject(GameObject obj)
+    public void CreatePreviewObject(BuildingData data)
     {
         if (previewObj != null)
             Destroy(previewObj);
 
-        previewObj = Instantiate(obj);
+        buildingData = data;
+
+        previewObj = Instantiate(data.objPrefab);
 
         previewOriginLayer = previewObj.layer;
 
