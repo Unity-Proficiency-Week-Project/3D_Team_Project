@@ -60,7 +60,8 @@ public abstract class BasePreview : MonoBehaviour
 
         transform.rotation = cameraYRotation * originRotation;
 
-        mesh.material.color = canBuild ? Color.green : Color.red;
+        if (mesh != null)
+            mesh.material.color = canBuild ? Color.green : Color.red;
 
         if (childrenMeshes != null)
         {
@@ -97,7 +98,9 @@ public abstract class BasePreview : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if (collider.gameObject == gameObject ||  gameObject.name.Contains("Roof") && (collider.name.Contains("Wall") || collider.name.Contains("Roof"))) continue;
+            if (collider.gameObject == gameObject || gameObject.name.Contains("Roof") && (collider.name.Contains("Wall") || collider.name.Contains("Roof"))) continue;
+
+            if (collider.transform.parent == gameObject) continue;
 
             if (collider.gameObject.layer == LayerMask.NameToLayer("BuildObject") || collider.gameObject.layer == LayerMask.NameToLayer("Default"))
             {

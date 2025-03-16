@@ -73,17 +73,36 @@ public class BuildObjectCreator : MonoBehaviour
         Destroy(go.GetComponent<BasePreview>());
         go.transform.position = previewObj.transform.position;
 
-        go.GetComponent<MeshRenderer>().material.color = Color.white;
+        MeshRenderer renderer = go.GetComponent<MeshRenderer>();
 
-        MeshRenderer[] meshes = go.GetComponentsInChildren<MeshRenderer>();
+        if (renderer != null)
+            renderer.material.color = Color.white;
 
-        if(meshes != null)
+        MeshRenderer[] renderers = go.GetComponentsInChildren<MeshRenderer>();
+
+        if (renderers != null)
         {
-            foreach (var mesh in meshes)
+            foreach (var mesh in renderers)
             {
                 mesh.material.color = Color.white;
             }
         }
+
+        Collider[] colliders = go.GetComponentsInChildren<Collider>();
+
+        if (colliders != null)
+        {
+            foreach (var collider in colliders)
+            {
+                collider.enabled = true;
+            }
+        }
+
+        if(go.name.Contains("House") && go.TryGetComponent(out Collider col))
+        {
+            Destroy(col);
+        }
+
         go.layer = previewOriginLayer;
     }
 }

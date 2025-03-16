@@ -3,6 +3,18 @@ using UnityEngine;
 
 public class ObjectPreview : BasePreview
 {
+    protected override void Awake()
+    {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = false;
+        }
+        base.Awake();
+
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -10,13 +22,6 @@ public class ObjectPreview : BasePreview
 
     public override IEnumerator CanBuildCheckCoroutine()
     {
-        MeshRenderer renderer = GetComponent<MeshRenderer>();
-        if (renderer == null)
-        {
-            Debug.LogError("MeshRenderer가 없습니다");
-            yield break;
-        }
-
         gameObject.layer = 0;
 
         RaycastHit hitInfo;
