@@ -26,11 +26,11 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Combat")]
     private EnemyType type;
-    public float attackRate;
     private float lastAttackTime;
     private float playerDistance; //플레이어와의 거리
     public float fieldOfView = 60f;//시야각
-    private Transform firePoint;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private GameObject projectilePrefab;
 
     public EnemyData data;
     private Animator animator;
@@ -75,9 +75,9 @@ public class EnemyAI : MonoBehaviour
 
     void AnimationSpeedMultiplier()
     {
-        if (type == EnemyType.Close)
+        if (type == EnemyType.Close) //근거리타입
         {
-            if (aiState == AIState.Wandering || aiState == AIState.Chasing)
+            if (aiState == AIState.Wandering || aiState == AIState.Chasing) //방황, 추적 상태일때 
             {
                 moveSpeed = agent.velocity.magnitude;
                 normalizedSpeed = Mathf.InverseLerp(0, data.runSpeed, moveSpeed);
@@ -86,15 +86,15 @@ public class EnemyAI : MonoBehaviour
 
                 animator.speed = 1.0f + (normalizedSpeed * 0.2f); //애니메이션이 walk일때는 1.0배속, run일때 최대 1.2배속
             }
-            else
+            else //멈춤, 공격 상태일때
             {
-                animator.SetFloat("MoveSpeed", 0);
-                animator.speed = 1.0f;
+                animator.SetFloat("MoveSpeed", 0); //멈춤
+                animator.speed = data.animationMoveSpeed;
             }
         }
-        if (type == EnemyType.Far)
+        if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
         {
-            animator.speed = (aiState == AIState.Attacking) ? data.animationSpeedMultiplier : 1.0f;
+            animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
         }
     }
 
@@ -107,22 +107,18 @@ public class EnemyAI : MonoBehaviour
             case AIState.Idle:
                 agent.speed = data.walkSpeed;
                 agent.isStopped = true;
-                animator.SetBool("IsWalking", false);
                 break;
             case AIState.Wandering:
                 agent.speed = data.walkSpeed;
                 agent.isStopped = false;
-                animator.SetBool("IsWalking", true);
                 break;
             case AIState.Chasing:
                 agent.speed = data.runSpeed;
                 agent.isStopped = false;
-                animator.SetBool("IsWalking", true);
                 break;
             case AIState.Attacking:
                 agent.speed = 0f;
                 agent.isStopped = true;
-                animator.SetBool("IsWalking", false);
                 break;
         }
     }
@@ -202,13 +198,21 @@ public class EnemyAI : MonoBehaviour
         if (playerDistance < data.attackDistance && IsPlayerInFieldOfView()) //공격범위 안에 있고 시야각 안에 있을 때 공격
         {
             agent.isStopped = true;
-            if (Time.time - lastAttackTime > attackRate)
+            if (Time.time - lastAttackTime > data.attackRate)
             {
                 lastAttackTime = Time.time;
-
-                PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(data.damage);
-                animator.SetTrigger("Attack");
-                Debug.Log($"플레이어에게 공격을 입혔습니다.");
+                //근거리 원거리에 따라 공격 다르게 
+                if (type == EnemyType.Close)
+                {
+                    PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(data.damage);
+                    animator.SetTrigger("Attack");
+                    Debug.Log($"플레이어에게 공격을 입혔습니다.");
+                }
+                else if (type == EnemyType.Far)
+                {
+                    ShootProjectile();
+                    Debug.Log($"플레이어에게 공격을 입혔습니다. {data.damage}");
+                }
             }
         }
         else if (playerDistance < data.attackDistance && !IsPlayerInFieldOfView()) // 공격범위 안에 있지만 시야각 밖에 있을 때 회전
@@ -242,20 +246,18 @@ public class EnemyAI : MonoBehaviour
         for (int i = 0; i < meshRenderers.Length; i++)
             meshRenderers[i].material.color = Color.white;
     }
-
-    private void ShootProjectile() //원거리 타입일 때 공격
+    public void ShootProjectile() //원거리 타입일 때 공격
     {
         if (data.projectilePrefab == null || data.enemyType != EnemyType.Far) return; //투사체 프리팹이 없거나, 원거리 타입이 아니라면 반환
+        if (firePoint == null) return;
 
-        GameObject projectile = Instantiate(data.projectilePrefab, firePoint.position, Quaternion.identity);
-        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+        projectilePrefab = Instantiate(data.projectilePrefab, firePoint.position, Quaternion.identity);
+        Rigidbody rb = data.projectilePrefab.GetComponent<Rigidbody>();
+        Vector3 dir = PlayerManager.Instance.Player.transform.position - firePoint.position;
 
-        if (rb == null) return;
+        projectilePrefab.GetComponent<Projectile>().startPos = firePoint.position;
+        projectilePrefab.GetComponent<Projectile>().SetDirection(dir);
 
-        if (rb != null)
-        {
-            Vector3 dir = (PlayerManager.Instance.Player.transform.position - firePoint.position).normalized;
-            rb.velocity = dir * data.projectileSpeed;
-        }
+        rb.velocity = dir * data.projectileSpeed;
     }
 }

@@ -16,14 +16,17 @@ MonoBehaviour:
   discription: "\uD22C\uC0AC\uCCB4\uB97C \uBC1C\uC0AC\uD558\uB294 \uC6D0\uAC70\uB9AC
     \uD0C0\uC785\uC785\uB2C8\uB2E4. "
   enemyType: 1
-  dropOnDeath: {fileID: 8274602344764364941, guid: 2dc25105fd5cc4546982e269158e44a2, type: 3}
+  dropOnDeath:
+  - {fileID: 8274602344764364941, guid: 2dc25105fd5cc4546982e269158e44a2, type: 3}
+  - {fileID: 8274602344764364941, guid: 2dc25105fd5cc4546982e269158e44a2, type: 3}
+  - {fileID: 8274602344764364941, guid: 2dc25105fd5cc4546982e269158e44a2, type: 3}
   health: 10
-  damage: 5
+  damage: 2
   walkSpeed: 1
   runSpeed: 3
-  attackRate: 3
-  attackDistance: 5
+  attackRate: 1
+  attackDistance: 6
   detectDistance: 8
-  animationSpeedMultiplier: 1.2
-  projectilePrefab: {fileID: 0}
-  projectileSpeed: 1
+  animationMoveSpeed: 1.2
+  projectilePrefab: {fileID: 1381848222629865392, guid: 6acac43a0fdf7964ea286bdbbf8b7a20, type: 3}
+  projectileSpeed: 3

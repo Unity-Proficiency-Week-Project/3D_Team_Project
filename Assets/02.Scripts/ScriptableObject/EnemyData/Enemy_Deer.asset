@@ -15,14 +15,17 @@ MonoBehaviour:
   enemyName: "\uC0AC\uC2B4"
   discription: "\uCCB4\uB825\uC774 \uB192\uC740 \uADFC\uAC70\uB9AC \uD0C0\uC785\uC785\uB2C8\uB2E4."
   enemyType: 0
-  dropOnDeath: {fileID: 5780557026505099585, guid: ab81ec42b8c7d4a5ea81b15f1583129d, type: 3}
+  dropOnDeath:
+  - {fileID: 8281719358627265281, guid: 3cc725efdd3ab415c97643d581b53e93, type: 3}
+  - {fileID: 8281719358627265281, guid: 3cc725efdd3ab415c97643d581b53e93, type: 3}
+  - {fileID: 8281719358627265281, guid: 3cc725efdd3ab415c97643d581b53e93, type: 3}
   health: 30
   damage: 2
   walkSpeed: 1
   runSpeed: 4
-  attackRate: 2
+  attackRate: 1
   attackDistance: 2
   detectDistance: 5
-  animationSpeedMultiplier: 1
+  animationMoveSpeed: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
