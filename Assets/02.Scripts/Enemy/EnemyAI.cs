@@ -70,6 +70,7 @@ public class EnemyAI : MonoBehaviour
                 AttackingUpdate();
                 break;
         }
+
         AnimationSpeedMultiplier();
     }
 
@@ -77,14 +78,14 @@ public class EnemyAI : MonoBehaviour
     {
         if (animator == null) return;
 
-        //animator.speed = 1.0f;
+        animator.speed = 1.0f;
 
         if (type == EnemyType.Close) //근거리타입
         {
             if (aiState == AIState.Wandering || aiState == AIState.Chasing) //방황, 추적 상태일때 
             {
                 float targetSpeed = agent.velocity.magnitude;
-                moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime *20f);
+                moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime * 20f);
 
                 if (moveSpeed < 0.1f) moveSpeed = 0f;
 
@@ -92,23 +93,23 @@ public class EnemyAI : MonoBehaviour
 
                 animator.SetFloat("MoveSpeed", normalizedSpeed);
 
-                //animator.speed = 1.0f + (normalizedSpeed * 0.2f); //애니메이션이 walk일때는 1.0배속, run일때 최대 1.2배속
+                animator.speed = 1.0f + (normalizedSpeed * 0.2f); //애니메이션이 walk일때는 1.0배속, run일때 최대 1.2배속
             }
             else //멈춤, 공격 상태일때
             {
                 animator.SetFloat("MoveSpeed", 0); //멈춤
-                //animator.speed = data.animationMoveSpeed;
+                animator.speed = data.animationMoveSpeed;
             }
         }
-        //if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
-        //{
-        //    animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
-        //}
+        if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
+        {
+            animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
+        }
 
-        //if(animator.speed < 0.1f)
-        //{
-        //    animator.speed = 1.0f;
-        //}
+        if (animator.speed < 0.1f) //애니메이션 속도가 현저히 낮아질 경우 1배속으로 방어처리
+        {
+            animator.speed = 1.0f;
+        }
     }
 
     public void SetState(AIState state)
@@ -141,6 +142,10 @@ public class EnemyAI : MonoBehaviour
         if (aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
         {
             SetState(AIState.Idle);
+            Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
+        }
+        else if (aiState == AIState.Idle) //Idle 상태일 때도 Wandering으로 돌아가는 로직 추가
+        {
             Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
         }
         if (playerDistance < data.detectDistance)
@@ -195,13 +200,13 @@ public class EnemyAI : MonoBehaviour
             }
             else //경로가 유효하지 않을경우 Wandering 상태 전환
             {
-                agent.isStopped = true;
+                agent.isStopped = false;
                 SetState(AIState.Wandering);
             }
         }
         else //감지범위를 벗어나면 Wandering 상태 전환
         {
-            agent.isStopped = true;
+            agent.isStopped = false;
             SetState(AIState.Wandering);
         }
     }
@@ -235,10 +240,12 @@ public class EnemyAI : MonoBehaviour
         }
         else if (playerDistance < data.detectDistance) // 감지거리 안에 있을 때 추적
         {
+            agent.isStopped = false;
             SetState(AIState.Chasing);
         }
         else //감지거리 밖에 있을 때 
         {
+            agent.isStopped = false;
             SetState(AIState.Wandering);
         }
     }
