@@ -1566,8 +1566,7 @@ MonoBehaviour:
   maxVal: 10
   startVal: 10
   slider: {fileID: 227972508513209549}
-  dropOnDeath: []
-  _camera: {fileID: 0}
+  data: {fileID: 0}
 --- !u!195 &368599742075820770
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1582,7 +1581,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1603,7 +1602,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: b1309c1dbb6002b4ba46b447ee3fd062, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

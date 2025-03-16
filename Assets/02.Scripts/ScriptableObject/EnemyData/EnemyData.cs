@@ -28,9 +28,6 @@ public class EnemyData : ScriptableObject
     public float attackDistance; //공격범위
     public float detectDistance; //감지범위
 
-    [Header("Animation")]
-    public float animationMoveSpeed; //애니메이션 속도, enemy의 이동속도에 따라 조절 가능
-
     [Header("Projectile Settings")] //원거리 타입일 때 
     public GameObject projectilePrefab;  // 투사체 프리팹
     public float projectileSpeed;        // 투사체 속도

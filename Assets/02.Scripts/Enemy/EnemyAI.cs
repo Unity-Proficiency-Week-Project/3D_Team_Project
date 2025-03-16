@@ -77,7 +77,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (animator == null) return;
 
-        animator.speed = 1.0f;
+        //animator.speed = 1.0f;
 
         if (type == EnemyType.Close) //근거리타입
         {
@@ -92,23 +92,23 @@ public class EnemyAI : MonoBehaviour
 
                 animator.SetFloat("MoveSpeed", normalizedSpeed);
 
-                animator.speed = 1.0f + (normalizedSpeed * 0.2f); //애니메이션이 walk일때는 1.0배속, run일때 최대 1.2배속
+                //animator.speed = 1.0f + (normalizedSpeed * 0.2f); //애니메이션이 walk일때는 1.0배속, run일때 최대 1.2배속
             }
             else //멈춤, 공격 상태일때
             {
                 animator.SetFloat("MoveSpeed", 0); //멈춤
-                animator.speed = data.animationMoveSpeed;
+                //animator.speed = data.animationMoveSpeed;
             }
         }
-        if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
-        {
-            animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
-        }
+        //if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
+        //{
+        //    animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
+        //}
 
-        if(animator.speed < 0.1f)
-        {
-            animator.speed = 1.0f;
-        }
+        //if(animator.speed < 0.1f)
+        //{
+        //    animator.speed = 1.0f;
+        //}
     }
 
     public void SetState(AIState state)
