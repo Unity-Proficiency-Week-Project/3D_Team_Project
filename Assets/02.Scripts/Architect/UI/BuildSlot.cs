@@ -71,21 +71,12 @@ public class BuildSlot : MonoBehaviour
 
     private void OnClickBuildButton()
     {
-        bool canBuild = true;
-
         foreach (var ingredient in buildingData.ingredients)
         {
             if (creator.inventory.HasItem(ingredient.itemData, ingredient.quantity))
-            {
-                canBuild = false;
-                break;
-            }
+                return;
         }
 
-        if (canBuild)
-        {
-            creator.CreatePreviewObject(buildingData);
-            // ui ´Ý±â
-        }
+        creator.CreatePreviewObject(buildingData);
     }
 }
