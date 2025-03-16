@@ -23,10 +23,10 @@ MonoBehaviour:
   health: 10
   damage: 2
   walkSpeed: 1
-  runSpeed: 3
-  attackRate: 1
+  runSpeed: 2
+  attackRate: 1.5
   attackDistance: 6
   detectDistance: 8
   animationMoveSpeed: 1.2
   projectilePrefab: {fileID: 602727828977027663, guid: 701b0bac4b4da0e4fb140ae1306b96e0, type: 3}
-  projectileSpeed: 3
+  projectileSpeed: 5

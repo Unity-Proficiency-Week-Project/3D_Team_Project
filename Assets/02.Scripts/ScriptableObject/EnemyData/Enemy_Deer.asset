@@ -22,7 +22,7 @@ MonoBehaviour:
   health: 30
   damage: 2
   walkSpeed: 1
-  runSpeed: 4
+  runSpeed: 3
   attackRate: 1
   attackDistance: 2
   detectDistance: 5

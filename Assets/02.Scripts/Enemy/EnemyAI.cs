@@ -75,11 +75,19 @@ public class EnemyAI : MonoBehaviour
 
     void AnimationSpeedMultiplier()
     {
+        if (animator == null) return;
+
+        animator.speed = 1.0f;
+
         if (type == EnemyType.Close) //근거리타입
         {
             if (aiState == AIState.Wandering || aiState == AIState.Chasing) //방황, 추적 상태일때 
             {
-                moveSpeed = agent.velocity.magnitude;
+                float targetSpeed = agent.velocity.magnitude;
+                moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime *20f);
+
+                if (moveSpeed < 0.1f) moveSpeed = 0f;
+
                 normalizedSpeed = Mathf.InverseLerp(0, data.runSpeed, moveSpeed);
 
                 animator.SetFloat("MoveSpeed", normalizedSpeed);
@@ -95,6 +103,11 @@ public class EnemyAI : MonoBehaviour
         if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
         {
             animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
+        }
+
+        if(animator.speed < 0.1f)
+        {
+            animator.speed = 1.0f;
         }
     }
 

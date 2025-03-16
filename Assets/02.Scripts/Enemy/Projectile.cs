@@ -22,10 +22,6 @@ public class Projectile : MonoBehaviour
     public void SetDirection(Vector3 dir)
     {
         direction = dir.normalized;
-        Debug.Log(startPos == null);
-        Debug.Log($"시작지점 : {startPos}");
-        Debug.Log(transform.position);
-        
     }
 
     void DestroyProjectile()
