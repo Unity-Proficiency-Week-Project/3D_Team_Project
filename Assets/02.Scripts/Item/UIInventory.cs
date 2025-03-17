@@ -323,15 +323,25 @@ public class UIInventory : MonoBehaviour
             }
         }
     }
-
-    public void AddItem(ItemData item, int quantity)
+    
+    public void OnRecipeSelected(Object obj)
     {
-        ItemSlot emptySlot = GetEmptySlot();
-        if(emptySlot != null)
+        var inventory = FindObjectOfType<UIInventory>();
+        if (inventory != null)
         {
-            emptySlot.itemData = item;
-            emptySlot.quantity = 1;
+            inventory.AddItem(obj as ItemData);
+            Debug.Log($"레시피 선택됨: {obj.name}");
+        
+            // 🚀 선택 후, 인벤토리를 열어주는 기능 추가
+            if (!inventory.IsOpen())
+            {
+                inventory.Toggle();
+            }
         }
-        UpdateUI();
+        else
+        {
+            Debug.LogWarning("UIInventory가 씬에 없습니다!");
+        }
     }
+
 }
