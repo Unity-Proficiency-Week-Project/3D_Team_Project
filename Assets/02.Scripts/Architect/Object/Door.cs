@@ -51,6 +51,7 @@ public class Door : MonoBehaviour
         }
 
         isOpen = !isOpen;
+        doorTransform.GetComponent<Collider>().enabled = !isOpen;
         doorCoroutine = null;
     }
 }
