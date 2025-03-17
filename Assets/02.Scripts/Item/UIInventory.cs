@@ -89,7 +89,7 @@ public class UIInventory : MonoBehaviour
         return inventoryWindow.activeInHierarchy;
     }
 
-    public void AddItem(ItemData item)
+    public void AddItem()
     {
         ItemData data = player.itemData;
 
@@ -127,7 +127,6 @@ public class UIInventory : MonoBehaviour
             if (slot.itemData != null)
             {
                 slot.Set();
-                
                 InitButton();
             }
             else
@@ -212,10 +211,11 @@ public class UIInventory : MonoBehaviour
                     actionButtonText.text = "해제";
                     currentAction = () => UnEquip(index);
                 }
-                actionButton.SetActive(true);
+                actionButton.SetActive(true); // 👉 버튼 활성화
                 break;
 
             default:
+                // 🛠️ 아이템 타입이 Consumable/Equipable이 아니면 버튼 숨김
                 actionButtonText.text = string.Empty;
                 currentAction = null;
                 actionButton.SetActive(false);
@@ -228,6 +228,30 @@ public class UIInventory : MonoBehaviour
     }
     public void OnUseButton()
     {
+        if ( selectedItem.itemData == null)
+        {
+            Debug.LogWarning("아이템이 선택되지 않았습니다.");
+            return;
+        }
+    
+        if (condition == null)
+        {
+            Debug.LogError("PlayerCondition이 할당되지 않았습니다.");
+            return;
+        }
+
+        if (selectedItem.itemData.itemType != ItemType.Consumable)
+        {
+            Debug.LogWarning("이 아이템은 소비할 수 없습니다: " + selectedItem.itemData.displayName);
+            return;
+        }
+
+        if (selectedItem.itemData.consumables == null || selectedItem.itemData.consumables.Length == 0)
+        {
+            Debug.LogWarning("Consumables 배열이 null이거나 비어 있습니다.");
+            return;
+        }
+
         foreach (var consumable in selectedItem.itemData.consumables)
         {
             switch (consumable.consumableType)
@@ -323,21 +347,15 @@ public class UIInventory : MonoBehaviour
             }
         }
     }
-    
-    public void OnRecipeSelected(Object obj)
+
+    public void AddItem(ItemData item, int quantity)
     {
-        var inventory = FindObjectOfType<UIInventory>();
-        if (inventory != null)
+        ItemSlot emptySlot = GetEmptySlot();
+        if(emptySlot != null)
         {
-            inventory.AddItem(obj as ItemData);
-            Debug.Log($"레시피 선택됨: {obj.name}");
-        
-            if (!inventory.IsOpen())
-            {
-                inventory.Toggle();
-            }
+            emptySlot.itemData = item;
+            emptySlot.quantity = 1;
         }
-
+        UpdateUI();
     }
-
 }

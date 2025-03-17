@@ -98,12 +98,7 @@
                 {
                     "name": "CancelBuilding",
                     "type": "Button",
-                    "id": "1adec303-2668-48b8-8f56-cbad751a177c"
-                },
-                {
-                    "name": "Craft",
-                    "type": "Button",
-                    "id": "45518d6d-f84f-424d-9b1a-5be61f7088a2",
+                    "id": "1adec303-2668-48b8-8f56-cbad751a177c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -272,15 +267,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "CancelBuilding"
-                },{
-                    "name": "",
-                    "id": "009ba2a9-d725-4191-9ae0-555a929d5ec1",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Craft",
+                    "action": "CancelBuilding",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
