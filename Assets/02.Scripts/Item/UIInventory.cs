@@ -337,7 +337,5 @@ public class UIInventory : MonoBehaviour
                 inventory.Toggle();
             }
         }
-
     }
-
 }
