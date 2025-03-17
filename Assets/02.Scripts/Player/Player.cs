@@ -15,9 +15,6 @@ public class Player : MonoBehaviour
 
     public Transform dropPosition;
 
-    public Action Inventory;
-    public Action Craft;
-
     /// <summary>
     /// PlayerManager의 player 항목과 할당된 컴포넌트를 설정함
     /// </summary>
