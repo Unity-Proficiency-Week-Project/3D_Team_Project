@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6339299364236032908}
   - component: {fileID: 9150461431099910750}
   - component: {fileID: 616512664222031925}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Thread
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,4 +148,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 50e8d0de2e2108a48821750065f5f7f2, type: 2}
   maxDistance: 20
-  startPos: {x: 0, y: 0, z: 0}
+  startPos: {x: -240.06, y: 0.426, z: 0.324}

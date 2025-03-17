@@ -29,4 +29,4 @@ MonoBehaviour:
   detectDistance: 8
   animationMoveSpeed: 1.2
   projectilePrefab: {fileID: 1381848222629865392, guid: 6acac43a0fdf7964ea286bdbbf8b7a20, type: 3}
-  projectileSpeed: 5
+  projectileSpeed: 4
