@@ -10,12 +10,27 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     Condition thirst { get { return uiCondition.thrist; } }
     Condition stamina { get { return uiCondition.stamina; } }
 
+    [Header("Base Stats")]
+    public float baseAtk = 10f;
+    public float baseAtkSpeed = 1f;
+    public float baseStaminaCost = 2f;
+    public float baseDef = 0f;
+
+    private float curAtk;
+    private float curAtkSpeed;
+    private float curStaminaCost;
+    private float curDef;
+
     public float noHungerHealthDecay;
     public float NoThristHealthDecay;
     public float staminaRecoverRate;
     public float hungerReduceRate;
     public float thristReduceRate;
 
+    private void Start()
+    {
+        ResetStats();
+    }
     void Update()
     {
         hunger.Subtract(hungerReduceRate * Time.deltaTime);
@@ -46,7 +61,6 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     /// </summary>
     public void Die()
     {
-        Debug.Log("플레이어가 사망했습니다.");
         // TODO: 게임 오버 처리, 리스폰 기능 추가
     }
 
@@ -119,4 +133,34 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     {
         stamina.Subtract(value);
     }
+
+    public void ResetStats()
+    {
+        curAtk = baseAtk;
+        curAtkSpeed = baseAtkSpeed;
+        curStaminaCost = baseStaminaCost;
+        curDef = baseDef;
+
+        Debug.Log("기본 스탯으로 복귀");
+    }
+
+    public void ApplyEquipStats(Equip equip)
+    {
+        if(equip is EquipTool equipTool)
+        {
+            curAtk = baseAtk + equipTool.Atk;
+            curDef = baseDef + equipTool.Def;
+            curAtkSpeed = baseAtkSpeed * equipTool.attackRate;
+            curStaminaCost = baseStaminaCost * (equipTool.attackRate > 1 ? equipTool.attackRate : 1);
+        }
+        else
+        {
+            ResetStats();
+        }
+    }
+
+    public float GetAtk() => curAtk;
+    public float GetAtkSpd() => curAtkSpeed;
+    public float GetDef() => curDef;
+    public float GetStamina() => curStaminaCost;
 }

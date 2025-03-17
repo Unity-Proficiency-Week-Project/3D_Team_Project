@@ -5,6 +5,7 @@ public class BuildObjectCreator : MonoBehaviour
     [SerializeField] private GameObject buildPrefab;
     [SerializeField] private LayerMask buildableLayer;
 
+    private LayerMask previewOriginLayer;
     private GameObject previewObj;
 
     private void Update()
@@ -42,6 +43,8 @@ public class BuildObjectCreator : MonoBehaviour
 
         previewObj = Instantiate(obj);
 
+        previewOriginLayer = previewObj.layer;
+
         previewObj.GetComponent<BasePreview>().Initialize(buildableLayer);
     }
 
@@ -64,11 +67,23 @@ public class BuildObjectCreator : MonoBehaviour
     {
         if (previewObj == null) return;
 
+        Debug.Log("배치");
+
         GameObject go = Instantiate(previewObj);
         Destroy(go.GetComponent<BasePreview>());
         go.transform.position = previewObj.transform.position;
 
         go.GetComponent<MeshRenderer>().material.color = Color.white;
-        go.layer = LayerMask.NameToLayer("BuildObject");
+
+        MeshRenderer[] meshes = go.GetComponentsInChildren<MeshRenderer>();
+
+        if(meshes != null)
+        {
+            foreach (var mesh in meshes)
+            {
+                mesh.material.color = Color.white;
+            }
+        }
+        go.layer = previewOriginLayer;
     }
 }

@@ -17,10 +17,21 @@ public class ObjectPreview : BasePreview
             yield break;
         }
 
-        gameObject.layer = 0; // Ray에 자신 감지 방지
+        gameObject.layer = 0;
 
         RaycastHit hitInfo;
-        bool onGround = false; // Ground 레이어 위에 있는지 여부
+        bool onGround = false;
+
+        Collider objectCollider = GetComponent<Collider>();
+        if (objectCollider == null)
+        {
+            Debug.LogError("Collider가 없습니다");
+            yield break;
+        }
+
+        float objectHeight = objectCollider.bounds.size.y;
+
+        float yOffset = objectHeight / 2f; 
 
         while (gameObject.activeSelf)
         {
@@ -28,29 +39,28 @@ public class ObjectPreview : BasePreview
             {
                 if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                 {
-                    transform.position = new Vector3(transform.position.x, hitInfo.point.y, transform.position.z);
-                    onGround = true; // Ground 레이어 위에 있음
+                    transform.position = new Vector3(transform.position.x, hitInfo.point.y + yOffset, transform.position.z);
+                    onGround = true; 
                 }
                 else
                 {
-                    onGround = false; // Ground 레이어 위에 없음 (다른 레이어 충돌)
+                    onGround = false;
                 }
             }
             else
             {
-                onGround = false; // Raycast가 아무것과도 충돌하지 않음
+                onGround = false; 
             }
 
-            if (onGround && CheckForObstacles()) // 땅에 붙었고, 장애물도 없다면 건축 가능
+            if (onGround && CheckForObstacles()) 
             {
-                renderer.material.color = Color.green;
                 canBuild = true;
             }
             else
             {
-                renderer.material.color = Color.red;
                 canBuild = false;
             }
+
             yield return null;
         }
     }

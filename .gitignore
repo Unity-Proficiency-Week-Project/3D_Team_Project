@@ -79,3 +79,5 @@ crashlytics-build.properties
 *.ipr
 *.iws
 .DS_Store
+Assets/vFavorites.meta
+/Assets/vFavorites
