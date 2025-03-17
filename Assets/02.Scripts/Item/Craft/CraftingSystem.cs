@@ -54,7 +54,7 @@ public class CraftingSystem : MonoBehaviour
             inventory.RemoveItem(ingredient.item, ingredient.quantity);
         }
 
-        player.addItem?.Invoke(recipe.outputItem); // recipe.outputItem으로 변경
+        //player.addItem?.Invoke(recipe.outputItem); // recipe.outputItem으로 변경
 
         inventory.UpdateUI();
     }
