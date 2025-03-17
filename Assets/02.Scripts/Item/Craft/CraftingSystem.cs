@@ -39,11 +39,12 @@ public class CraftingSystem : MonoBehaviour
         craftingAction.Disable();
     }
 
-    public void CraftItem(CraftRecipe recipe)
+
+    public void CraftItem(CraftRecipe recipe) 
     {
         foreach (var ingredient in recipe.ingredients)
         {
-            if (!inventory.HasItem(ingredient.item, ingredient.quantity))
+            if (!inventory.HasItem(ingredient.item, ingredient.quantity)) 
             {
                 return;
             }
@@ -51,20 +52,20 @@ public class CraftingSystem : MonoBehaviour
 
         foreach (var ingredient in recipe.ingredients)
         {
-            inventory.RemoveItem(ingredient.item, ingredient.quantity);
+
+            inventory.RemoveItem(ingredient.item, ingredient.quantity); 
         }
 
-        player.addItem?.Invoke(recipe.outputItem); // recipe.outputItem으로 변경
-
+        player.addItem?.Invoke(recipe.outputItem);
         inventory.UpdateUI();
     }
-
+    
     private bool isCraftingUIActive = false;
 
     private void ToggleCraftingUI(InputAction.CallbackContext context)
     {
         if (inventory.gameObject.activeSelf) return;
-
+        
         isCraftingUIActive = !isCraftingUIActive;
         craftingWindow.SetActive(isCraftingUIActive);
     }
