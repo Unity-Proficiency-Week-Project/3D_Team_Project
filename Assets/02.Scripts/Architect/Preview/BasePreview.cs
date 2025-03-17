@@ -38,7 +38,7 @@ public abstract class BasePreview : MonoBehaviour
         if (cameraContainer != null)
             UpdatePreview();
         else
-            Debug.Log("카메라를 찾지 못했습니다.");
+            Debug.LogError("카메라를 찾지 못했습니다.");
     }
 
     public abstract IEnumerator CanBuildCheckCoroutine();
@@ -48,12 +48,6 @@ public abstract class BasePreview : MonoBehaviour
     /// </summary>
     public virtual void UpdatePreview()
     {
-        if (cameraContainer == null)
-            Debug.LogError("카메라 찾지 못함");
-
-        if (transform == null)
-            Debug.LogError("transform 찾지 못함");
-
         transform.position = cameraContainer.position + (cameraContainer.forward * 4.5f) + (cameraContainer.up * 2f);
 
         Quaternion cameraYRotation = Quaternion.Euler(0, cameraContainer.eulerAngles.y, 0);
@@ -104,7 +98,6 @@ public abstract class BasePreview : MonoBehaviour
 
             if (collider.gameObject.layer == LayerMask.NameToLayer("BuildObject") || collider.gameObject.layer == LayerMask.NameToLayer("Default"))
             {
-                Debug.Log($"장애물 {collider.gameObject.name}");
                 return false; // 장애물 있음
             }
         }
