@@ -7959,16 +7959,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 205890236}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1059303391}
   - {fileID: 1449561361}
   - {fileID: 1591065924}
   - {fileID: 202155031}
-  m_Father: {fileID: 1079978312}
+  m_Father: {fileID: 1194818517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -25399,7 +25399,6 @@ RectTransform:
   m_Children:
   - {fileID: 1474395305}
   - {fileID: 729719033}
-  - {fileID: 205890237}
   m_Father: {fileID: 1194818517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -27708,7 +27707,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1194818517
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27722,6 +27721,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1079978312}
+  - {fileID: 205890237}
   m_Father: {fileID: 1486789765}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -27754,6 +27754,7 @@ MonoBehaviour:
   confirmUI: {fileID: 205890236}
   noticeText: {fileID: 1449561362}
   confirmButton: {fileID: 1591065925}
+  confrimButtonText: {fileID: 1341097803}
   cancelButton: {fileID: 202155032}
   creator: {fileID: 1427332499}
 --- !u!1 &1194870079 stripped
@@ -31267,7 +31268,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1486789762
 MonoBehaviour:
   m_ObjectHideFlags: 0
