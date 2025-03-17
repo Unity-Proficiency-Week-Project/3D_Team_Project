@@ -27751,6 +27751,10 @@ MonoBehaviour:
   muteCheckImage: {fileID: 1823117662}
   returnButton: {fileID: 795876614}
   volumeSlider: {fileID: 311758319}
+  confirmUI: {fileID: 205890236}
+  noticeText: {fileID: 1449561362}
+  confirmButton: {fileID: 1591065925}
+  cancelButton: {fileID: 202155032}
   creator: {fileID: 1427332499}
 --- !u!1 &1194870079 stripped
 GameObject:
