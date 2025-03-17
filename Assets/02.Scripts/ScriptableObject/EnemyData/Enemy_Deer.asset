@@ -24,8 +24,8 @@ MonoBehaviour:
   walkSpeed: 1
   runSpeed: 3
   attackRate: 1
-  attackDistance: 3
-  detectDistance: 5
+  attackDistance: 4
+  detectDistance: 6
   animationMoveSpeed: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0

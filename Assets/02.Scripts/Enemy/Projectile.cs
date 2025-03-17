@@ -39,9 +39,5 @@ public class Projectile : MonoBehaviour
             PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(data.damage);
             Destroy(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
 }

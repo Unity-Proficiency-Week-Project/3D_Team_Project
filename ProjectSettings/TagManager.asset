@@ -16,8 +16,8 @@ TagManager:
   - BuildObject
   - Equip
   - Weather
-  - 
-  - 
+  - Enemy
+  - Projectile
   - 
   - 
   - 
