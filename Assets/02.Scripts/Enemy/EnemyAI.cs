@@ -53,15 +53,18 @@ public class EnemyAI : MonoBehaviour
         path = new NavMeshPath();
         type = data.enemyType;
 
-        if(type == EnemyType.Far)
-        projectilePrefab = data.projectilePrefab;
+
+        if (type == EnemyType.Far)
+        {
+            projectilePrefab = data.projectilePrefab;
+            projectilePrefab.GetComponent<Projectile>().startPos = firePoint.position;
+        }
 
         if (agent == null)
             Debug.Log("agent == null!!!!");
-        
-        if(!agent.isOnNavMesh)
+
+        if (!agent.isOnNavMesh)
             Debug.LogError($"{gameObject.name} NavMesh에 배치되지 않음!");
-        
     }
 
     void Update()
@@ -89,33 +92,24 @@ public class EnemyAI : MonoBehaviour
     {
         if (animator == null) return;
 
-        animator.speed = 1.0f;
+        if (aiState == AIState.Wandering || aiState == AIState.Chasing) //방황, 추적 상태일때 
+        {
+            float targetSpeed = agent.velocity.magnitude;
+            moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime * 10f);
 
-        //if (type == EnemyType.Close) //근거리타입
-        //{
-            if (aiState == AIState.Wandering || aiState == AIState.Chasing) //방황, 추적 상태일때 
-            {
-                float targetSpeed = agent.velocity.magnitude;
-                moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime * 20f);
+            if (moveSpeed < 0.1f) moveSpeed = 0f;
 
-                if (moveSpeed < 0.1f) moveSpeed = 0f;
+            normalizedSpeed = Mathf.InverseLerp(0, data.runSpeed, moveSpeed);
 
-                normalizedSpeed = Mathf.InverseLerp(0, data.runSpeed, moveSpeed);
+            animator.SetFloat("MoveSpeed", normalizedSpeed);
 
-                animator.SetFloat("MoveSpeed", normalizedSpeed);
-
-                animator.speed = 1.0f + (normalizedSpeed * 0.2f); //애니메이션이 walk일때는 1.0배속, run일때 최대 1.2배속
-            }
-            else //멈춤, 공격 상태일때
-            {
-                animator.SetFloat("MoveSpeed", 0); //멈춤
-                animator.speed = data.animationMoveSpeed;
-            }
-        //}
-        //if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
-        //{
-        //    animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
-        //}
+            animator.speed = 1.0f + (normalizedSpeed * 0.2f); //애니메이션이 walk일때는 1.0배속, run일때 최대 1.2배속
+        }
+        else //멈춤, 공격 상태일때
+        {
+            animator.SetFloat("MoveSpeed", 0); //멈춤
+            animator.speed = data.animationMoveSpeed;
+        }
 
         if (animator.speed < 0.1f) //애니메이션 속도가 현저히 낮아질 경우 1배속으로 방어처리
         {
@@ -150,13 +144,9 @@ public class EnemyAI : MonoBehaviour
 
     void PassiveUpdate()
     {
-        if (aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
+        if (aiState == AIState.Wandering && agent.remainingDistance < agent.stoppingDistance)
         {
             SetState(AIState.Idle);
-            Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
-        }
-        else if (aiState == AIState.Idle) //Idle 상태일 때도 Wandering으로 돌아가는 로직 추가
-        {
             Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
         }
         if (playerDistance < data.detectDistance)
@@ -201,17 +191,17 @@ public class EnemyAI : MonoBehaviour
         {
             SetState(AIState.Attacking);
         }
-        else if (playerDistance < data.detectDistance) //감지범위 안에 있을 때 추적
+
+        if (playerDistance < data.detectDistance) //감지범위 안에 있을 때 추적
         {
-            agent.isStopped = false;
 
             if (agent.CalculatePath(PlayerManager.Instance.Player.transform.position, path)) //경로가 유효하면 추적
             {
+                agent.isStopped = false;
                 agent.SetDestination(PlayerManager.Instance.Player.transform.position);
             }
             else //경로가 유효하지 않을경우 Wandering 상태 전환
             {
-                agent.isStopped = false;
                 SetState(AIState.Wandering);
             }
         }
@@ -286,7 +276,6 @@ public class EnemyAI : MonoBehaviour
         Rigidbody rb = data.projectilePrefab.GetComponent<Rigidbody>();
         Vector3 dir = PlayerManager.Instance.Player.transform.position - firePoint.position;
 
-        projectilePrefab.GetComponent<Projectile>().startPos = firePoint.position;
         projectilePrefab.GetComponent<Projectile>().SetDirection(dir);
 
         rb.velocity = dir * data.projectileSpeed;
