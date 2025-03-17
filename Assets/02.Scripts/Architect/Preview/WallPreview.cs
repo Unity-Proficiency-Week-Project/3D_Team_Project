@@ -111,7 +111,7 @@ public class WallPreview : BasePreview
                                 if (CheckForObstacles())
                                 {
                                     // 회전값을 같게 만들어줌
-                                    transform.rotation = nearPivot.rotation;
+                                    transform.rotation = nearPivot.rotation * originRotation;
 
                                     // 프리뷰 오브젝트의 색을 초록색으로 변경하여 건설 가능 지점임을 알려줌
                                     canBuild = true;

@@ -17,6 +17,16 @@ public abstract class BasePreview : MonoBehaviour
         mesh = GetComponent<MeshRenderer>();
         childrenMeshes = GetComponentsInChildren<MeshRenderer>();
         cameraContainer = PlayerManager.Instance.Player.controller.cameraContainer;
+
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.transform == transform)
+                continue;
+
+            collider.enabled = false;
+        }
     }
 
     /// <summary>

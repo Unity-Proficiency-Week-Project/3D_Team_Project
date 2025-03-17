@@ -3,26 +3,6 @@ using UnityEngine;
 
 public class ObjectPreview : BasePreview
 {
-    protected override void Awake()
-    {
-        Collider[] colliders = GetComponentsInChildren<Collider>();
-
-        foreach (Collider collider in colliders)
-        {
-            if (collider.transform == transform)
-                continue;
-
-            collider.enabled = false;
-        }
-        base.Awake();
-
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-    }
-
     public override IEnumerator CanBuildCheckCoroutine()
     {
         gameObject.layer = 0;
