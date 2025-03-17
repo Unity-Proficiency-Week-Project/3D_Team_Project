@@ -49,7 +49,7 @@ public class EquipTool : Equip
         int enemyLayerMask = LayerMask.GetMask("Enemy");
         int resourceLayerMask = LayerMask.GetMask("Resource");
         int combinedLayerMask = enemyLayerMask | resourceLayerMask;
-        if (Physics.Raycast(ray, out hit, attackDistance, enemyLayerMask))
+        if (Physics.Raycast(ray, out hit, attackDistance, combinedLayerMask))
         {
             Debug.Log("사정거리 내 감지 성공: " + hit.collider.gameObject.name);
 
