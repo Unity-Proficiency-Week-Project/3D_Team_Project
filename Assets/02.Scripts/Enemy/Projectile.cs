@@ -32,9 +32,9 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if(other.CompareTag("Player")) 
+        if (collision.gameObject.CompareTag("Player"))
         {
             PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(data.damage);
             Destroy(gameObject);
