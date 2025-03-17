@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public Equipment equip;
 
     public ItemData itemData;
-    public Action addItem;
+    public Action<ItemData> addItem;
     public CrossHairUI crosshair;
 
     public Transform dropPosition;

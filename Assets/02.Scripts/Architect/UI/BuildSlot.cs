@@ -79,12 +79,12 @@ public class BuildSlot : MonoBehaviour
             for (int i = 0; i < buildingData.ingredients.Count; i++)
             {
                 var ingredient = buildingData.ingredients[i];
-                int currentQuantity = GetItemQuantity(ingredient.itemData);
+                int currentQuantity = GetItemQuantity(ingredient.item);
 
                 string color = currentQuantity >= ingredient.quantity ? "green" : "red";
 
                 ingredientsText.text +=
-                    $"{ingredient.itemData.displayName} " +
+                    $"{ingredient.item.displayName} " +
                     $"<color={color}>{currentQuantity}</color>/{ingredient.quantity}";
 
                 if (i != buildingData.ingredients.Count - 1)
