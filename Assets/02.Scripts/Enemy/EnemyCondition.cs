@@ -4,15 +4,17 @@ using UnityEngine.UI;
 
 public class EnemyCondition : Condition
 {
-    public ItemData[] dropOnDeath;  //죽었을 때 드롭 아이템
+    public EnemyData data;  //죽었을 때 드롭 아이템
     private Slider Healthbarslider;
-    public Camera _camera;
+    private Camera _camera;
 
     public Action DamageFlash;
 
     private void Start()
     {
         Healthbarslider = slider;
+        _camera = PlayerManager.Instance.Player.GetComponentInChildren<Camera>();
+        data = GetComponent<EnemyAI>().data;
     }
 
     private void LateUpdate()
@@ -36,10 +38,9 @@ public class EnemyCondition : Condition
     {
         Debug.Log("적 사망!");
         
-        for (int i = 0; i < dropOnDeath.Length; i++)
+        for (int i = 0; i < data.dropOnDeath.Length; i++)
         {
-            Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
-        
+            Instantiate(data.dropOnDeath[i], transform.position + Vector3.up * 2, Quaternion.identity);
         }
         Destroy(gameObject);
     }
