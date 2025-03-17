@@ -43,6 +43,8 @@ public class BuildSlot : MonoBehaviour
 
         GameObject go = Instantiate(buildingData.objPrefab, objParent);
 
+        buildUI.slotObejctList.Add(go);
+
         if (go.TryGetComponent(out BasePreview preview))
         {
             preview.enabled = false;
