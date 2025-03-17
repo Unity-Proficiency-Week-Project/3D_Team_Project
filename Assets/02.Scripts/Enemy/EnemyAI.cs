@@ -54,11 +54,11 @@ public class EnemyAI : MonoBehaviour
         type = data.enemyType;
 
 
-        if (type == EnemyType.Far)
-        {
-            projectilePrefab = data.projectilePrefab;
-            projectilePrefab.GetComponent<Projectile>().startPos = firePoint.position;
-        }
+        //if (type == EnemyType.Far)
+        //{
+        //    projectilePrefab = data.projectilePrefab;
+        //    //projectilePrefab.GetComponent<Projectile>().startPos = firePoint.position;
+        //}
 
         if (agent == null)
             Debug.Log("agent == null!!!!");
@@ -272,11 +272,12 @@ public class EnemyAI : MonoBehaviour
         if (data.projectilePrefab == null || data.enemyType != EnemyType.Far) return; //투사체 프리팹이 없거나, 원거리 타입이 아니라면 반환
         if (firePoint == null) return;
 
-        projectilePrefab = Instantiate(data.projectilePrefab, firePoint.position, Quaternion.identity);
-        Rigidbody rb = data.projectilePrefab.GetComponent<Rigidbody>();
-        Vector3 dir = PlayerManager.Instance.Player.transform.position - firePoint.position;
+        GameObject projectilePrefabInstantiate = Instantiate(data.projectilePrefab, firePoint.position, Quaternion.identity);
+        Rigidbody rb = projectilePrefabInstantiate.GetComponent<Rigidbody>();
+        Vector3 dir = (PlayerManager.Instance.Player.transform.position - firePoint.position).normalized;
 
-        projectilePrefab.GetComponent<Projectile>().SetDirection(dir);
+        projectilePrefabInstantiate.GetComponent<Projectile>().startPos = firePoint.position;
+        projectilePrefabInstantiate.GetComponent<Projectile>().SetDirection(dir);
 
         rb.velocity = dir * data.projectileSpeed;
     }
