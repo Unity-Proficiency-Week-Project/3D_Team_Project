@@ -2,22 +2,33 @@
 
 public class BuildObjectCreator : MonoBehaviour
 {
-    [SerializeField] private GameObject buildPrefab;
+    [SerializeField] private BuildingData buildingData;
     [SerializeField] private LayerMask buildableLayer;
 
     private LayerMask previewOriginLayer;
     private GameObject previewObj;
 
+    private BuildUI buildUi;
+
+    public UIInventory inventory;
+
+
+    private void Start()
+    {
+        inventory = FindObjectOfType<UIInventory>(true);
+        buildUi = FindObjectOfType<BuildUI>(true);
+    }
+
     private void Update()
     {
-        // Input 함수들 나중에 InputAction으로 수정 예정
-
-        if (Input.GetKeyDown(KeyCode.F) && previewObj == null)
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            CreatePreviewObject(buildPrefab);
+            CreatePreviewObject(buildingData);
         }
 
-        if (previewObj != null)
+            // Input 함수들 나중에 InputAction으로 수정 예정
+
+            if (previewObj != null)
         {
             if (Input.GetKeyDown(KeyCode.Escape) && previewObj != null)
             {
@@ -30,18 +41,27 @@ public class BuildObjectCreator : MonoBehaviour
                 PlaceObject();
             }
         }
+
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            buildUi.ChangeUIActive();
+            CancelPreview();
+        }
     }
 
     /// <summary>
     /// 프리뷰 오브젝트 생성 함수
     /// </summary>
     /// <param name="obj">생성할 오브젝트 프리팹1</param>
-    public void CreatePreviewObject(GameObject obj)
+    public void CreatePreviewObject(BuildingData data)
     {
         if (previewObj != null)
             Destroy(previewObj);
 
-        previewObj = Instantiate(obj);
+        buildingData = data;
+
+        previewObj = Instantiate(data.objPrefab);
 
         previewOriginLayer = previewObj.layer;
 
@@ -73,17 +93,41 @@ public class BuildObjectCreator : MonoBehaviour
         Destroy(go.GetComponent<BasePreview>());
         go.transform.position = previewObj.transform.position;
 
-        go.GetComponent<MeshRenderer>().material.color = Color.white;
+        MeshRenderer renderer = go.GetComponent<MeshRenderer>();
 
-        MeshRenderer[] meshes = go.GetComponentsInChildren<MeshRenderer>();
+        if (renderer != null)
+            renderer.material.color = Color.white;
 
-        if(meshes != null)
+        MeshRenderer[] renderers = go.GetComponentsInChildren<MeshRenderer>();
+
+        if (renderers != null)
         {
-            foreach (var mesh in meshes)
+            foreach (var mesh in renderers)
             {
                 mesh.material.color = Color.white;
             }
         }
+
+        Collider[] colliders = go.GetComponentsInChildren<Collider>();
+
+        if (colliders != null)
+        {
+            foreach (var collider in colliders)
+            {
+                collider.enabled = true;
+            }
+        }
+
+        if(go.name.Contains("House") && go.TryGetComponent(out Collider col))
+        {
+            Destroy(col);
+        }
+
+        //foreach (var ingredient in buildingData.ingredients)
+        //{
+        //    inventory.RemoveItem(ingredient.itemData, ingredient.quantity);
+        //}
+
         go.layer = previewOriginLayer;
     }
 }
