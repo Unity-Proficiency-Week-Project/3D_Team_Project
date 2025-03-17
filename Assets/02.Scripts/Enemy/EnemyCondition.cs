@@ -8,6 +8,7 @@ public class EnemyCondition : Condition
     private Slider Healthbarslider;
     private Camera _camera;
 
+    
     public Action DamageFlash;
 
     private void Start()

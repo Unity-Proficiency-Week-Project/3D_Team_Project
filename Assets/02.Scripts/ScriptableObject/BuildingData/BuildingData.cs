@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static CraftRecipe;
 
 [CreateAssetMenu(fileName = "Build Data", menuName = "New Build Data")]
 public class BuildingData : ScriptableObject
