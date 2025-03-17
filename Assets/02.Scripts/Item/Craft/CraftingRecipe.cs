@@ -32,4 +32,3 @@ public class CraftRecipeList : ScriptableObject
         return null;
     }
 }
-

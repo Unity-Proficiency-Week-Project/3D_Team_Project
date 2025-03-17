@@ -1485,7 +1485,7 @@ GameObject:
   - component: {fileID: 4525247775489798333}
   m_Layer: 10
   m_Name: Dog
-  m_TagString: Untagged
+  m_TagString: Damage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1566,7 +1566,7 @@ MonoBehaviour:
   maxVal: 10
   startVal: 10
   slider: {fileID: 227972508513209549}
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: cb007a7df40ffc145811880bf98ca148, type: 2}
 --- !u!195 &368599742075820770
 NavMeshAgent:
   m_ObjectHideFlags: 0

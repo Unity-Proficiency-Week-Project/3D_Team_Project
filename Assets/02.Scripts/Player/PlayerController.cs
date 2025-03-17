@@ -44,9 +44,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rigidbody;
     public Action inventory;
     public Action craft;
-    
+
     private bool isInventoryOpen = false;
     private bool isCraftOpen = false;
+
 
 
     private void Awake()

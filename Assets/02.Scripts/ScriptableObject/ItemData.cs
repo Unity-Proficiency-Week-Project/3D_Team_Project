@@ -45,5 +45,6 @@ public class ItemData : ScriptableObject
     public GameObject equipPrefab;
 
     [Header("Crafting")]
-    public List<CraftRecipeList> craftingRecipes;
+    public List<CraftRecipe> craftRecipes;
+
 }

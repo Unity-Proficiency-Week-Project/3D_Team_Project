@@ -7,7 +7,8 @@ public enum AIState
     Idle,
     Wandering,
     Chasing,
-    Attacking
+    Attacking,
+    Fleeing
 }
 
 public class EnemyAI : MonoBehaviour
@@ -76,6 +77,9 @@ public class EnemyAI : MonoBehaviour
             case AIState.Attacking:
                 AttackingUpdate();
                 break;
+            case AIState.Fleeing:
+                FleeingUpdate();
+                break;
         }
 
         AnimationSpeedMultiplier();
@@ -99,10 +103,16 @@ public class EnemyAI : MonoBehaviour
 
             animator.speed = 1.0f + (normalizedSpeed * 0.2f); //애니메이션이 walk일때는 1.0배속, run일때 최대 1.2배속
         }
-        else //멈춤, 공격 상태일때
+        else if (aiState == AIState.Idle || aiState == AIState.Attacking)//멈춤, 공격 상태일때
         {
             animator.SetFloat("MoveSpeed", 0); //멈춤
             agent.isStopped = true;
+            animator.speed = data.animationMoveSpeed;
+        }
+        else if (aiState == AIState.Fleeing)
+        {
+            animator.SetFloat("MoveSpeed", 1);
+            agent.isStopped = false;
             animator.speed = data.animationMoveSpeed;
         }
 
@@ -134,6 +144,10 @@ public class EnemyAI : MonoBehaviour
                 agent.speed = 0f;
                 agent.isStopped = true;
                 break;
+            case AIState.Fleeing:
+                agent.speed = data.runSpeed;
+                agent.isStopped = false;
+                break;
         }
     }
 
@@ -144,15 +158,21 @@ public class EnemyAI : MonoBehaviour
             SetState(AIState.Idle);
             Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
         }
+
         if (playerDistance < data.detectDistance)
         {
-            SetState(AIState.Chasing);
+            if (type == EnemyType.Timid)
+                SetState(AIState.Fleeing);
+            else
+                SetState(AIState.Chasing);
         }
-        if (playerDistance < data.attackDistance)
+
+        if (playerDistance < data.attackDistance && type != EnemyType.Timid)
         {
             SetState(AIState.Attacking);
         }
     }
+
 
     void WanderToNewLocation()
     {
@@ -207,8 +227,40 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    void FleeingUpdate()
+    {
+        if (aiState != AIState.Fleeing) return;
+
+        if (agent.remainingDistance > agent.stoppingDistance) return;
+
+
+        if (playerDistance < data.detectDistance) //감지범위 안으로 플레이어가 들어오면 임의의 좌표로 도망감
+        {
+            agent.isStopped = false;
+            Vector3 fleedir = (transform.position - PlayerManager.Instance.Player.transform.position).normalized;
+
+            Vector3 fleeTargetPos = transform.position + fleedir * data.fleeDistance;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(fleeTargetPos, out hit, data.fleeDistance, NavMesh.AllAreas))
+            {
+                fleeTargetPos = hit.position;
+            }
+
+            Quaternion targetRot = Quaternion.LookRotation(fleedir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * data.rotSpeed);
+
+            agent.SetDestination(fleeTargetPos);
+        }
+        else
+        {
+            SetState(AIState.Wandering);
+        }
+    }
+
     void AttackingUpdate()
     {
+        if (aiState != AIState.Attacking) return;
+
         if (playerDistance < data.attackDistance && IsPlayerInFieldOfView()) //공격범위 안에 있고 시야각 안에 있을 때 공격
         {
             agent.isStopped = true;
