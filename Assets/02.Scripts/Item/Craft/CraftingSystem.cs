@@ -17,20 +17,19 @@ public class CraftingSystem : MonoBehaviour
     private Player player;
     private void Awake()
     {
+        craftingWindow.SetActive(false);
+
+    }
+    private void Start()
+    {
         player = PlayerManager.Instance.Player;
         playerInput = player.GetComponent<PlayerInput>();
-
-        player.controller.craft += Toggle;
         craftingAction = playerInput.actions["Craft"];
         craftingAction.performed += ToggleCraftingUI;
         craftingAction.Enable();
-        craftingWindow.SetActive(false);
-    }
+        player.controller.craft += Toggle;
 
-    private void OnEnable()
-    {
-        craftingAction.performed += ToggleCraftingUI;
-        craftingAction.Enable();
+
     }
 
     private void OnDisable()
