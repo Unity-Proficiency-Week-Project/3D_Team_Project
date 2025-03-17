@@ -20,6 +20,6 @@ MonoBehaviour:
   - itemData: {fileID: 11400000, guid: 84e882b841e144c3abf4117f78817470, type: 2}
     quantity: 3
   objPrefab: {fileID: 1912797867832279880, guid: dce62e52d868bcb48ae25422982a9a0d, type: 3}
-  uiPosOffset: {x: 13, y: 21, z: -31.5}
-  uiRotOffset: {x: 0, y: 80, z: 0}
+  uiPosOffset: {x: 2.18, y: -3, z: -31.5}
+  uiRotOffset: {x: -50, y: -13, z: 0}
   uiScaleOffset: {x: 45, y: 45, z: 45}
