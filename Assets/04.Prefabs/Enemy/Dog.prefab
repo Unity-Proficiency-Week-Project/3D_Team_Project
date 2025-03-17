@@ -1566,7 +1566,11 @@ MonoBehaviour:
   maxVal: 10
   startVal: 10
   slider: {fileID: 227972508513209549}
-  data: {fileID: 11400000, guid: cb007a7df40ffc145811880bf98ca148, type: 2}
+  droppableItems:
+  - {fileID: 11400000, guid: 4c5a47a8617c14e8e94a9c563b072013, type: 2}
+  - {fileID: 11400000, guid: 84e882b841e144c3abf4117f78817470, type: 2}
+  - {fileID: 11400000, guid: 9698ee94948c94bf5b60756472fd69e3, type: 2}
+  - {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
 --- !u!195 &368599742075820770
 NavMeshAgent:
   m_ObjectHideFlags: 0
