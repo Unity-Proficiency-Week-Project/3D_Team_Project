@@ -1,17 +1,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Crafting Recipe", menuName = "Crafting Recipe")]
-    public class CraftingRecipe : ScriptableObject
+[System.Serializable]
+public class CraftRecipe
 {
-    [System.Serializable]
-    public struct Ingredient // 재료 및 수량
-    {
-        public ItemData itemData;
-        public int quantity;
-    }
-    
+    public ItemData outputItem;
     public List<Ingredient> ingredients = new List<Ingredient>();
-    public ItemData resultItem;
-    public int resultAmount = 1;
+}
+
+[System.Serializable]
+public class Ingredient
+{
+    public ItemData item;
+    public int quantity;
+}
+
+[CreateAssetMenu(fileName = "CraftRecipeList", menuName = "Crafting/Recipe List")]
+public class CraftRecipeList : ScriptableObject
+{
+    public List<CraftRecipe> recipes = new List<CraftRecipe>();
+
+    public CraftRecipe FindRecipe(ItemData outputItem)
+    {
+        foreach (var recipe in recipes)
+        {
+            if (recipe.outputItem == outputItem)
+            {
+                return recipe;
+            }
+        }
+        return null;
+    }
 }

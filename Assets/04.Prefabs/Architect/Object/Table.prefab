@@ -118,3 +118,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6ad96e4e9e34174695d20dc9c35d679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFloorPivot: 1

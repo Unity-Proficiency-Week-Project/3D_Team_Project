@@ -6,7 +6,7 @@ public enum EnemyType
 {
     Close, //근거리
     Far, //원거리
-    //범위 공격..?
+    Timid //공격X
 }
 
 [CreateAssetMenu(fileName = "Enemy", menuName = "New Enemy")]
@@ -27,6 +27,8 @@ public class EnemyData : ScriptableObject
     public float attackRate; //공격속도
     public float attackDistance; //공격범위
     public float detectDistance; //감지범위
+    public float fleeDistance; //도망범위
+    public float rotSpeed;
 
     [Header("Animation")]
     public float animationMoveSpeed; //애니메이션 속도, enemy의 이동속도에 따라 조절 가능

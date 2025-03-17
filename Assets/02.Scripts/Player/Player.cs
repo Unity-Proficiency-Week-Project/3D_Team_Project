@@ -7,9 +7,10 @@ public class Player : MonoBehaviour
     public PlayerCondition condition;
     public PlayerTemperature temp;
     public Equipment equip;
+    public UIInventory inventory;  // UIInventory 추가
 
     public ItemData itemData;
-    public Action addItem;
+    public Action<ItemData> addItem;
     public CrossHairUI crosshair;
 
     public Transform dropPosition;
@@ -24,5 +25,7 @@ public class Player : MonoBehaviour
         condition = GetComponent<PlayerCondition>();
         temp = GetComponent<PlayerTemperature>();
         equip = GetComponent<Equipment>();
+        inventory = FindObjectOfType<UIInventory>();  // UIInventory 할당
+
     }
 }

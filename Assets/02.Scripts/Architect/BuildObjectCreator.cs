@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BuildObjectCreator : MonoBehaviour
 {
@@ -17,37 +18,6 @@ public class BuildObjectCreator : MonoBehaviour
     {
         inventory = FindObjectOfType<UIInventory>(true);
         buildUi = FindObjectOfType<BuildUI>(true);
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            CreatePreviewObject(buildingData);
-        }
-
-            // Input 함수들 나중에 InputAction으로 수정 예정
-
-            if (previewObj != null)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape) && previewObj != null)
-            {
-                CancelPreview();
-            }
-
-
-            if (Input.GetKeyDown(KeyCode.V) && previewObj.GetComponent<BasePreview>().CanBuild())
-            {
-                PlaceObject();
-            }
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            buildUi.ChangeUIActive();
-            CancelPreview();
-        }
     }
 
     /// <summary>
@@ -77,6 +47,7 @@ public class BuildObjectCreator : MonoBehaviour
         {
             Destroy(previewObj);
             previewObj = null;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -129,5 +100,30 @@ public class BuildObjectCreator : MonoBehaviour
         //}
 
         go.layer = previewOriginLayer;
+    }
+    
+    public void OnBuildUIInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            buildUi.ChangeUIActive();
+            CancelPreview();
+        }
+    }
+
+    public void OnBuildInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && previewObj != null)
+        {
+            PlaceObject();
+        }
+    }
+
+    public void OnBuildCancelInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && previewObj != null)
+        {
+            CancelPreview();
+        }
     }
 }
