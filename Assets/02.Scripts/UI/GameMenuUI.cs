@@ -108,7 +108,7 @@ public class GameMenuUI : MonoBehaviour
         {
             BGMManager.Instance.environmentBgm.volume = value;
             BGMManager.Instance.enemyBgm.volume = value;
-            previousVolume = value; // 이전 볼륨 값 업데이트
+            previousVolume = value;
         }
     }
 
@@ -120,39 +120,41 @@ public class GameMenuUI : MonoBehaviour
 
     private void ShowConfirmUI(string message, string confirmText, Action action)
     {
-        confirmAction = action; // 확인 버튼에 실행할 동작 저장
-        noticeText.text = message; // 메시지 설정
-        confirmButtonText.text = confirmText; // 확인 버튼 텍스트 설정
+        confirmAction = action;
+        noticeText.text = message;
+        confirmButtonText.text = confirmText;
 
-        confirmUI.SetActive(true); // 확인창 활성화
+        confirmUI.SetActive(true);
 
-        DisableAllButtons(); // 다른 버튼 비활성화
+        DisableAllButtons();
 
         confirmButton.onClick.RemoveAllListeners();
         confirmButton.onClick.AddListener(() =>
         {
-            confirmAction?.Invoke(); // 저장된 동작 실행
+            confirmAction?.Invoke(); 
             HideConfirmUI();
         });
     }
 
     private void HideConfirmUI()
     {
-        confirmUI.SetActive(false); // 확인창 비활성화
-        EnableAllButtons(); // 다른 버튼 활성화
+        confirmUI.SetActive(false);
+        EnableAllButtons();
     }
 
     public void ShowGameOverUI()
     {
         gameOverUI.SetActive(true);
-        Time.timeScale = 0f; // 게임 정지
+        PlayerManager.Instance.Player.controller.canLook = false;
+        Cursor.lockState = CursorLockMode.None;
+
+        Time.timeScale = 0f;
     }
 
     private void OnConfirmMainMenu()
     {
         Debug.Log("메인 메뉴로 이동합니다.");
         Time.timeScale = 1f;
-        // SceneManager.LoadScene("MainMenu");
     }
 
     private void OnConfirmExit()
