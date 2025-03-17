@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class PauseUI : MonoBehaviour
+public class GameMenuUI : MonoBehaviour
 {
-    [Header("Pause UI Main")]
     [SerializeField] private GameObject pauseUI;
+
+    [Header("Pause UI Main")]
+    [SerializeField] private GameObject mainUI;
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button volumeSettingButton;
     [SerializeField] private Button mainMenuButton;
@@ -24,8 +26,13 @@ public class PauseUI : MonoBehaviour
     [SerializeField] private GameObject confirmUI;
     [SerializeField] private TextMeshProUGUI noticeText;
     [SerializeField] private Button confirmButton;
-    [SerializeField] private TextMeshProUGUI confrimButtonText;
+    [SerializeField] private TextMeshProUGUI confirmButtonText;
     [SerializeField] private Button cancelButton;
+
+    [Header("GameOver UI")]
+    [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private Button gameOver_mainMenuButton;
+    [SerializeField] private Button gameOver_exitButton;
 
     [Header("Build Object Creator")]
     [SerializeField] private BuildObjectCreator creator;
@@ -39,7 +46,7 @@ public class PauseUI : MonoBehaviour
     {
         resumeButton.onClick.AddListener(OnClickResumeButton);
         volumeSettingButton.onClick.AddListener(OnClickVolumeSettingButton);
-        mainMenuButton.onClick.AddListener(() => ShowConfirmUI("메인 메뉴로 이동하시겠습니까?", "메인 메뉴",OnConfirmMainMenu));
+        mainMenuButton.onClick.AddListener(() => ShowConfirmUI("메인 메뉴로 이동하시겠습니까?", "메인 메뉴", OnConfirmMainMenu));
         exitButton.onClick.AddListener(() => ShowConfirmUI("게임을 종료하시겠습니까?", "게임 종료", OnConfirmExit));
 
         muteButton.onClick.AddListener(OnClickMuteButton);
@@ -49,16 +56,31 @@ public class PauseUI : MonoBehaviour
 
         volumeSlider.onValueChanged.AddListener(SetVolume);
 
-        volumeSlider.value = BGMManager.Instance.enemyBgm.volume;
+        gameOver_mainMenuButton.onClick.AddListener(() => ShowConfirmUI("메인 메뉴로 이동하시겠습니까?", "메인 메뉴", OnConfirmMainMenu));
+        gameOver_exitButton.onClick.AddListener(() => ShowConfirmUI("게임을 종료하시겠습니까?", "게임 종료", OnConfirmExit));
+
         volumeSlider.value = BGMManager.Instance.environmentBgm.volume;
     }
-
     public void OnPauseUI()
     {
-        gameObject.SetActive(true);
+        pauseUI.SetActive(true);
         PlayerManager.Instance.Player.controller.canLook = false;
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
+    }
+
+    private void OnClickResumeButton()
+    {
+        PlayerManager.Instance.Player.controller.canLook = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
+        pauseUI.SetActive(false);
+    }
+
+    private void OnClickVolumeSettingButton()
+    {
+        mainUI.SetActive(false);
+        volumeSettingUI.SetActive(true);
     }
 
     private void OnClickMuteButton()
@@ -67,15 +89,15 @@ public class PauseUI : MonoBehaviour
 
         if (isMuted)
         {
-            previousVolume = BGMManager.Instance.enemyBgm.volume;
-            BGMManager.Instance.enemyBgm.volume = 0f;
+            previousVolume = BGMManager.Instance.environmentBgm.volume;
             BGMManager.Instance.environmentBgm.volume = 0f;
+            BGMManager.Instance.enemyBgm.volume = 0f;
             muteCheckImage.enabled = true;
         }
         else
         {
-            BGMManager.Instance.enemyBgm.volume = previousVolume;
             BGMManager.Instance.environmentBgm.volume = previousVolume;
+            BGMManager.Instance.enemyBgm.volume = previousVolume;
             muteCheckImage.enabled = false;
         }
     }
@@ -84,67 +106,53 @@ public class PauseUI : MonoBehaviour
     {
         if (!isMuted)
         {
-            BGMManager.Instance.enemyBgm.volume = value;
             BGMManager.Instance.environmentBgm.volume = value;
+            BGMManager.Instance.enemyBgm.volume = value;
+            previousVolume = value; // 이전 볼륨 값 업데이트
         }
-        previousVolume = value;
     }
 
     private void OnClickReturnButton()
     {
-        pauseUI.SetActive(true);
+        mainUI.SetActive(true);
         volumeSettingUI.SetActive(false);
-    }
-
-    private void OnClickResumeButton()
-    {
-        PlayerManager.Instance.Player.controller.canLook = true;
-        Cursor.lockState = CursorLockMode.Locked;
-        Time.timeScale = 1f;
-        gameObject.SetActive(false);
-    }
-
-    private void OnClickVolumeSettingButton()
-    {
-        pauseUI.SetActive(false);
-        volumeSettingUI.SetActive(true);
     }
 
     private void ShowConfirmUI(string message, string confirmText, Action action)
     {
-        confirmAction = action;
-        noticeText.text = message;
-        confrimButtonText.text = confirmText;
+        confirmAction = action; // 확인 버튼에 실행할 동작 저장
+        noticeText.text = message; // 메시지 설정
+        confirmButtonText.text = confirmText; // 확인 버튼 텍스트 설정
 
-        confirmUI.SetActive(true);
+        confirmUI.SetActive(true); // 확인창 활성화
 
-        resumeButton.interactable = false;
-        volumeSettingButton.interactable = false;
-        mainMenuButton.interactable = false;
-        exitButton.interactable = false;
+        DisableAllButtons(); // 다른 버튼 비활성화
 
         confirmButton.onClick.RemoveAllListeners();
         confirmButton.onClick.AddListener(() =>
         {
-            confirmAction?.Invoke();
+            confirmAction?.Invoke(); // 저장된 동작 실행
             HideConfirmUI();
         });
     }
 
     private void HideConfirmUI()
     {
-        confirmUI.SetActive(false);
-        pauseUI.SetActive(true);
+        confirmUI.SetActive(false); // 확인창 비활성화
+        EnableAllButtons(); // 다른 버튼 활성화
+    }
 
-        resumeButton.interactable = true;
-        volumeSettingButton.interactable = true;
-        mainMenuButton.interactable = true;
-        exitButton.interactable = true;
+    public void ShowGameOverUI()
+    {
+        gameOverUI.SetActive(true);
+        Time.timeScale = 0f; // 게임 정지
     }
 
     private void OnConfirmMainMenu()
     {
         Debug.Log("메인 메뉴로 이동합니다.");
+        Time.timeScale = 1f;
+        // SceneManager.LoadScene("MainMenu");
     }
 
     private void OnConfirmExit()
@@ -152,8 +160,35 @@ public class PauseUI : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.Quit();
+   Application.Quit();
 #endif
+    }
+
+    private void DisableAllButtons()
+    {
+        resumeButton.interactable = false;
+        volumeSettingButton.interactable = false;
+        mainMenuButton.interactable = false;
+        exitButton.interactable = false;
+
+        if (gameOverUI.activeSelf)
+        {
+            gameOver_mainMenuButton.interactable = false;
+            gameOver_exitButton.interactable = false;
+        }
+    }
+    private void EnableAllButtons()
+    {
+        resumeButton.interactable = true;
+        volumeSettingButton.interactable = true;
+        mainMenuButton.interactable = true;
+        exitButton.interactable = true;
+
+        if (gameOverUI.activeSelf)
+        {
+            gameOver_mainMenuButton.interactable = true;
+            gameOver_exitButton.interactable = true;
+        }
     }
 
     public void OnPauseUIInput(InputAction.CallbackContext context)
