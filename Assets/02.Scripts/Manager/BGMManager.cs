@@ -21,10 +21,12 @@ public class BGMManager : MonoBehaviour
 
     [Header("Settings")]
     public float enemyDetectionRadius = 20f; // 적 감지 거리
+    public float bgmFadeDuration = 1.5f; // 페이드 인/아웃 시간
 
     private Transform player;
     private bool isEnemyNearby = false;
     private WeatherManager.WeatherType currentWeather;
+    private int enemyLayerMask;
 
     private void Awake()
     {
@@ -35,9 +37,23 @@ public class BGMManager : MonoBehaviour
     private void Start()
     {
         player = PlayerManager.Instance.Player.transform;
+        enemyLayerMask = LayerMask.GetMask("Enemy");
+        if (environmentBgm == null || enemyBgm == null)
+        {
+            Debug.LogError("BGMManager: AudioSource가 설정되지 않았습니다!");
+            return;
+        }
+
+        environmentBgm.loop = true;
+        enemyBgm.loop = true;
+        environmentBgm.volume = 1f;
+        enemyBgm.volume = 1f;
+
         WeatherManager.Instance.OnWeatherChanged += UpdateWeatherBGM;
         UpdateWeatherBGM();
+
         StartCoroutine(CheckForEnemies());
+
     }
 
     private void UpdateWeatherBGM()
@@ -49,8 +65,7 @@ public class BGMManager : MonoBehaviour
 
         if (environmentBgm.clip != newBGM)
         {
-            environmentBgm.clip = newBGM;
-            environmentBgm.Play();
+            StartCoroutine(FadeInNewBGM(environmentBgm, newBGM));
         }
     }
     private AudioClip GetWeatherBGM(WeatherManager.WeatherType weather)
@@ -68,17 +83,8 @@ public class BGMManager : MonoBehaviour
     {
         while (true)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(player.position, enemyDetectionRadius);
-            bool enemyFound = false;
-
-            foreach (var collider in hitColliders)
-            {
-                if (collider.CompareTag("Enemy"))
-                {
-                    enemyFound = true;
-                    break;
-                }
-            }
+            Collider[] hitColliders = Physics.OverlapSphere(player.position, enemyDetectionRadius, enemyLayerMask);
+            bool enemyFound = hitColliders.Length > 0;
 
             if (enemyFound && !isEnemyNearby)
             {
@@ -96,15 +102,65 @@ public class BGMManager : MonoBehaviour
     private void PlayEnemyBGM()
     {
         isEnemyNearby = true;
-        environmentBgm.Pause();
-        enemyBgm.clip = enemyBGM;
-        enemyBgm.Play();
+        StartCoroutine(FadeOutAndSwitch(environmentBgm, enemyBgm, enemyBGM));
     }
 
     private void StopEnemyBGM()
     {
         isEnemyNearby = false;
-        enemyBgm.Stop();
-        environmentBgm.Play();
+        StartCoroutine(FadeOutAndSwitch(enemyBgm, environmentBgm, GetWeatherBGM(currentWeather)));
+    }
+
+
+    private IEnumerator FadeOutAndSwitch(AudioSource from, AudioSource to, AudioClip newClip)
+    {
+        if (from.isPlaying)
+        {
+            yield return FadeOut(from);
+            from.Stop();
+        }
+
+        to.clip = newClip;
+        to.Play();
+        yield return FadeIn(to);
+    }
+
+    private IEnumerator FadeInNewBGM(AudioSource source, AudioClip newClip)
+    {
+        if (source.isPlaying)
+        {
+            yield return FadeOut(source);
+            source.Stop();
+        }
+
+        source.clip = newClip;
+        source.Play();
+        yield return FadeIn(source);
+    }
+
+    private IEnumerator FadeOut(AudioSource source)
+    {
+        float startVolume = source.volume;
+        for (float t = 0; t < bgmFadeDuration; t += Time.deltaTime)
+        {
+            source.volume = Mathf.Lerp(startVolume, 0, t / bgmFadeDuration);
+            yield return null;
+        }
+        source.volume = 0;
+    }
+
+    private IEnumerator FadeIn(AudioSource source)
+    {
+        float targetVolume = 1f;
+        source.volume = 0;
+        for (float t = 0; t < bgmFadeDuration; t += Time.deltaTime)
+        {
+            source.volume = Mathf.Lerp(0, targetVolume, t / bgmFadeDuration);
+            yield return null;
+        }
+        source.volume = targetVolume;
     }
 }
+
+
+
