@@ -17,9 +17,14 @@ public class BuildObjectCreator : MonoBehaviour
 
     private void Update()
     {
-        // Input 함수들 나중에 InputAction으로 수정 예정
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            CreatePreviewObject(buildingData);
+        }
 
-        if (previewObj != null)
+            // Input 함수들 나중에 InputAction으로 수정 예정
+
+            if (previewObj != null)
         {
             if (Input.GetKeyDown(KeyCode.Escape) && previewObj != null)
             {
@@ -112,6 +117,11 @@ public class BuildObjectCreator : MonoBehaviour
         {
             Destroy(col);
         }
+
+        //foreach (var ingredient in buildingData.ingredients)
+        //{
+        //    inventory.RemoveItem(ingredient.itemData, ingredient.quantity);
+        //}
 
         go.layer = previewOriginLayer;
     }
