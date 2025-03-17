@@ -121,9 +121,14 @@ public class BuildObjectCreator : MonoBehaviour
 
     public void OnBuildCancelInput(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && previewObj != null)
+        if (context.phase == InputActionPhase.Started)
         {
-            CancelPreview();
+            if (previewObj != null)
+            {
+                CancelPreview();
+            }
         }
     }
+
+    public bool IsPrevieObject() => previewObj == null;
 }
