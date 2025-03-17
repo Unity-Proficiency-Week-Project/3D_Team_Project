@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,7 +37,7 @@ public class BuildSlot : MonoBehaviour
     {
         if (buildingData == null)
         {
-            Debug.LogError($"BuildData¸¦ Ã£Áö ¸øÇß½À´Ï´Ù. From : {name}");
+            Debug.LogError($"{name}ë²ˆ ìŠ¬ë¡¯ì—ì„œ BuildDataë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
             return;
         }
 
@@ -61,7 +61,14 @@ public class BuildSlot : MonoBehaviour
         {
             for (int i = 0; i < buildingData.ingredients.Count; i++)
             {
-                ingredientsText.text += $"{buildingData.ingredients[i].itemData.displayName} : {buildingData.ingredients[i].quantity}";
+                var ingredient = buildingData.ingredients[i];
+                int currentQuantity = GetItemQuantity(ingredient.itemData);
+
+                string color = currentQuantity >= ingredient.quantity ? "green" : "red";
+
+                ingredientsText.text +=
+                    $"{ingredient.itemData.displayName} " +
+                    $"<color={color}>{currentQuantity}</color>/{ingredient.quantity}";
 
                 if (i != buildingData.ingredients.Count - 1)
                 {
@@ -71,13 +78,20 @@ public class BuildSlot : MonoBehaviour
         }
     }
 
+    private int GetItemQuantity(ItemData item)
+    {
+        ItemSlot slot = creator.inventory.slots.Find(x => x.itemData != null && x.itemData.displayName == item.displayName);
+
+        return slot != null ? slot.quantity : 0;
+    }
+
     private void OnClickBuildButton()
     {
         //foreach (var ingredient in buildingData.ingredients)
         //{
         //    if (!creator.inventory.HasItem(ingredient.itemData, ingredient.quantity))
         //        return;
-        //}  UI Å×½ºÆ®¸¦ À§ÇØ ¼ÒÁö ¾ÆÀÌÅÛ °Ë»ç ºñÈ°¼ºÈ­
+        //}  UI í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•´ ì†Œì§€ ì•„ì´í…œ ê²€ì‚¬ ë¹„í™œì„±í™”
 
         creator.CreatePreviewObject(buildingData);
         buildUI.ChangeUIActive();

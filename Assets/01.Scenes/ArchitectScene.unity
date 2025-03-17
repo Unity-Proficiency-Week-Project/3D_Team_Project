@@ -1992,6 +1992,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b337fcc3d3e767e43b94c98607373922, type: 2}
   - {fileID: 11400000, guid: 39dbb0ee7cb5c46458690db88374de80, type: 2}
   - {fileID: 11400000, guid: 727cb26b7c143044c809824d852b821d, type: 2}
+  - {fileID: 11400000, guid: a400a0b8af6b64646a4e27dca796f853, type: 2}
+  - {fileID: 11400000, guid: a05992a4796fdcc4a8efc3321f815b28, type: 2}
   slotParent: {fileID: 1880661110}
   slotPrefab: {fileID: 3389781246169939248, guid: 7c766bcc465db804696781719218cf76, type: 3}
 --- !u!1001 &229148511

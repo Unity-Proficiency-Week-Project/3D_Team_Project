@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b36be7ee690ecc54098676c76009e5d7, type: 3}
+  m_Name: CompletedHouse
+  m_EditorClassIdentifier: 
+  displayName: "\uC644\uC131\uD615 \uC9D1"
+  description: "\uC678\uAD00\uC774 \uC644\uC131\uB418\uC5B4 \uC788\uB294 \uC9D1 \uAC74\uCD95\uBB3C\uC785\uB2C8\uB2E4."
+  ingredients:
+  - itemData: {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
+    quantity: 40
+  - itemData: {fileID: 11400000, guid: 84e882b841e144c3abf4117f78817470, type: 2}
+    quantity: 10
+  objPrefab: {fileID: 1235321167906811777, guid: 7dbfe5a677d65a94a93b309fb4ad7f2d, type: 3}
+  uiPosOffset: {x: 0, y: 0, z: 0}
+  uiRotOffset: {x: 0, y: 0, z: 0}
+  uiScaleOffset: {x: 25, y: 25, z: 1}
