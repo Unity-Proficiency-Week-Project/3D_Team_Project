@@ -8,71 +8,72 @@ using UnityEngine.InputSystem;
 public class CraftingSystem : MonoBehaviour
 {
     public GameObject craftingWindow;
-    public List<CraftingRecipe> recipes;
-    
+    public List<CraftRecipeList> recipes; // 레시피 목록
     public UIInventory inventory;
 
-    [Header("UI Components")]
-    public TextMeshProUGUI recipeResultText;
-    public TextMeshProUGUI feedbackText;
-    
     private PlayerInput playerInput;
     private InputAction craftingAction;
 
     private Player player;
     private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
         player = PlayerManager.Instance.Player;
-        playerInput = new PlayerInput();
-        //craftingAction = playerInput.;
+        playerInput = player.GetComponent<PlayerInput>();
+
+        player.controller.craft += Toggle;
+        craftingAction = playerInput.actions["Craft"];
+        craftingAction.performed += ToggleCraftingUI;
+        craftingAction.Enable();
+        craftingWindow.SetActive(false);
     }
 
     private void OnEnable()
     {
-        //craftingAction.performed += ToggleCraftingUI;
+        craftingAction.performed += ToggleCraftingUI;
         craftingAction.Enable();
     }
 
     private void OnDisable()
     {
-        //craftingAction.performed -= ToggleCraftingUI;
+        craftingAction.performed -= ToggleCraftingUI;
         craftingAction.Disable();
     }
 
-    private void toggleCraftingUI(InputAction.CallbackContext context)
-    {
-        craftingWindow.SetActive(!craftingWindow.activeSelf);
-    }
-
-    public void CraftItem(CraftingRecipe recipe)
+    public void CraftItem(CraftRecipe recipe) 
     {
         foreach (var ingredient in recipe.ingredients)
         {
-            if (!inventory.HasItem(ingredient.itemData, ingredient.quantity))
+            if (!inventory.HasItem(ingredient.item, ingredient.quantity)) 
             {
-                feedbackText.text = "재료가 부족합니다.";
                 return;
             }
         }
 
         foreach (var ingredient in recipe.ingredients)
         {
-            inventory.RemoveItem(ingredient.itemData, ingredient.quantity);
+            inventory.RemoveItem(ingredient.item, ingredient.quantity); 
         }
 
-        for (int i = 0; i < recipe.resultAmount; i++)
-        {
-            //PlayerManager.Instance.Player.addItem?.Invoke(recipe.resultItem);
-        }
+        player.addItem?.Invoke(recipe.outputItem); // recipe.outputItem으로 변경
 
-        feedbackText.text = $"{recipe.resultItem.displayName} 제작 완료";
         inventory.UpdateUI();
     }
+    
+    private bool isCraftingUIActive = false;
 
-    public void ShowRecipe(CraftingRecipe recipe)
+    private void ToggleCraftingUI(InputAction.CallbackContext context)
     {
-        recipeResultText.text = $"{recipe.resultItem.displayName} x {recipe.resultAmount}";
+        if (inventory.gameObject.activeSelf) return;
+
+        isCraftingUIActive = !isCraftingUIActive;
+        craftingWindow.SetActive(isCraftingUIActive);
+    }
+    public void Toggle()
+    {
+        craftingWindow.SetActive(!IsOpen());
+    }
+    public bool IsOpen()
+    {
+        return craftingWindow.activeInHierarchy;
     }
 }
-
