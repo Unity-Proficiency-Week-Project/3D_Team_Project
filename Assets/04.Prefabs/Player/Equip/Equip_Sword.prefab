@@ -47,10 +47,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRate: 0.8
-  attackDistance: 0.8
-  doesGatherResources: 1
-  doesDealDamage: 0
-  Atk: 1
+  attackDistance: 1
+  doesGatherResources: 0
+  doesDealDamage: 1
+  Atk: 10
   Def: 0
 --- !u!95 &-9097532069491861793
 Animator:
@@ -62,7 +62,7 @@ Animator:
   m_GameObject: {fileID: 6325031817110532917}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 568326dbeb27b284ea67fb8f921642f2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
