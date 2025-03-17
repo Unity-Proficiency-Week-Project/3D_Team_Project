@@ -23,33 +23,33 @@ public class BuildObjectCreator : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            CreatePreviewObject(buildingData);
-        }
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    CreatePreviewObject(buildingData);
+        //}
 
-            // Input 함수들 나중에 InputAction으로 수정 예정
+        //    // Input 함수들 나중에 InputAction으로 수정 예정
 
-            if (previewObj != null)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape) && previewObj != null)
-            {
-                CancelPreview();
-            }
-
-
-            if (Input.GetKeyDown(KeyCode.V) && previewObj.GetComponent<BasePreview>().CanBuild())
-            {
-                PlaceObject();
-            }
-        }
+        //    if (previewObj != null)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.Escape) && previewObj != null)
+        //    {
+        //        CancelPreview();
+        //    }
 
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            buildUi.ChangeUIActive();
-            CancelPreview();
-        }
+        //    if (Input.GetKeyDown(KeyCode.V) && previewObj.GetComponent<BasePreview>().CanBuild())
+        //    {
+        //        PlaceObject();
+        //    }
+        //}
+
+
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    buildUi.ChangeUIActive();
+        //    CancelPreview();
+        //}
     }
 
     /// <summary>

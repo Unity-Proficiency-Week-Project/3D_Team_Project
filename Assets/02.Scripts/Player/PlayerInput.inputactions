@@ -76,6 +76,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OnBuildUI",
+                    "type": "Button",
+                    "id": "7d173d32-4957-45a6-9078-a765d1bdb58f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PlaceBuilding",
+                    "type": "Button",
+                    "id": "c6a77f85-37b7-474d-b86a-69bac894f776",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CancelBuilding",
+                    "type": "Button",
+                    "id": "1adec303-2668-48b8-8f56-cbad751a177c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -208,6 +235,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Special Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f225869c-d05e-4ff0-872b-80d791dc89c0",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OnBuildUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d75bdaa-acbf-4320-8461-678361eca3d5",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PlaceBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "99dd0c76-1faa-4439-819f-da313dbac562",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CancelBuilding",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
