@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public PlayerTemperature temp;
 
     public ItemData itemData;
-    public Action addItem;
+    public Action<ItemData> addItem;
     public CrossHairUI crosshair;
 
     public Transform dropPosition;

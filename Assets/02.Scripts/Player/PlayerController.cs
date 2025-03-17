@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
     public bool canLook = true;
     private Rigidbody _rigidbody;
     public Action inventory;
-
+    public Action craft;
 
     private void Awake()
     {
@@ -254,5 +254,12 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
     }
-
+    public void OnCraftButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started)
+        {
+            craft?.Invoke();
+            ToggleCursor();
+        }
+    }
 }
