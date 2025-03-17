@@ -30,7 +30,7 @@ public class EnemyAI : MonoBehaviour
     private float playerDistance; //플레이어와의 거리
     public float fieldOfView = 60f;//시야각
     [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject projectilePrefab;
+    public GameObject projectilePrefab;
 
     public EnemyData data;
     private Animator animator;
@@ -51,6 +51,17 @@ public class EnemyAI : MonoBehaviour
         enemyCondition.DamageFlash = () => { StartCoroutine(DamageFlash()); };
         SetState(AIState.Wandering);
         path = new NavMeshPath();
+        type = data.enemyType;
+
+        if(type == EnemyType.Far)
+        projectilePrefab = data.projectilePrefab;
+
+        if (agent == null)
+            Debug.Log("agent == null!!!!");
+        
+        if(!agent.isOnNavMesh)
+            Debug.LogError($"{gameObject.name} NavMesh에 배치되지 않음!");
+        
     }
 
     void Update()
@@ -80,8 +91,8 @@ public class EnemyAI : MonoBehaviour
 
         animator.speed = 1.0f;
 
-        if (type == EnemyType.Close) //근거리타입
-        {
+        //if (type == EnemyType.Close) //근거리타입
+        //{
             if (aiState == AIState.Wandering || aiState == AIState.Chasing) //방황, 추적 상태일때 
             {
                 float targetSpeed = agent.velocity.magnitude;
@@ -100,11 +111,11 @@ public class EnemyAI : MonoBehaviour
                 animator.SetFloat("MoveSpeed", 0); //멈춤
                 animator.speed = data.animationMoveSpeed;
             }
-        }
-        if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
-        {
-            animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
-        }
+        //}
+        //if (type == EnemyType.Far) // 원거리일때, 공격중이라면 1.2배속, 나머지 1배속
+        //{
+        //    animator.speed = (aiState == AIState.Attacking) ? data.animationMoveSpeed : 1.0f;
+        //}
 
         if (animator.speed < 0.1f) //애니메이션 속도가 현저히 낮아질 경우 1배속으로 방어처리
         {
