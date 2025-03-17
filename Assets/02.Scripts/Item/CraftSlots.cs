@@ -86,7 +86,7 @@ public class CraftSlots : MonoBehaviour
     {
         for (int i = 0; i < recipeSlots.Count; i++)
         {
-            if (i < recipeList.recipes.Count)
+            if (i < recipeList.recipes.Count && recipeList.recipes[i] != null)
             {
                 recipeSlots[i].itemData = recipeList.recipes[i].outputItem;
                 recipeSlots[i].quantity = 1;
