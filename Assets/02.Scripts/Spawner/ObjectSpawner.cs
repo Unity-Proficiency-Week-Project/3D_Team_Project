@@ -18,6 +18,8 @@ public class ObjectSpawner : MonoBehaviour
     public float respawnInterval = 3f;
     public float spawnCheckRadius = 2.0f;
 
+    [Header("Spawn Points")]
+    public List<Transform> spawnPoints;
     private List<GameObject> activeEnemies = new List<GameObject>();
     private List<GameObject> activeResources = new List<GameObject>();
 
@@ -51,13 +53,23 @@ public class ObjectSpawner : MonoBehaviour
                 }
                 else
                 {
-                    randomPosition = GetRandomPosition();
+                    randomPosition = GetRandomCubeSpawnPosition();
                 }
 
                 if (!IsPositionOccupied(randomPosition))
                 {
                     GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
                     GameObject spawnedObject = Instantiate(prefab, randomPosition, Quaternion.identity);
+
+                    if (requiredNav)
+                    {
+                        // NavMeshAgent 초기화
+                        NavMeshAgent agent = spawnedObject.GetComponent<NavMeshAgent>();
+                        if (agent != null)
+                        {
+                            agent.Warp(randomPosition); // NavMesh 위에서 정확한 위치 설정
+                        }
+                    }
                     activeList.Add(spawnedObject); // 리스트에 추가
                     placed = true;
                 }
@@ -69,24 +81,35 @@ public class ObjectSpawner : MonoBehaviour
         }
     }
 
-    private Vector3 GetRandomPosition()
+    private Vector3 GetRandomCubeSpawnPosition()
     {
-        float x = Random.Range(spawnArea.min.x, spawnArea.max.x);
-        float z = Random.Range(spawnArea.min.z, spawnArea.max.z);
-        float y = spawnArea.min.y; // 지형 높이를 기준으로 배치
+        if (spawnPoints.Count == 0)
+        {
+            Debug.LogError("스폰 가능한 큐브가 없습니다!");
+            return Vector3.zero;
+        }
 
-        return new Vector3(x, y, z);
+        Transform randomCube = spawnPoints[Random.Range(0, spawnPoints.Count)];
+        Vector3 spawnPosition = randomCube.position;
+        spawnPosition.y += 1.0f; // 큐브 위로 약간 올려서 배치
+
+        return spawnPosition;
     }
 
     private bool GetRandomNavMeshPosition(out Vector3 result)
     {
+        if (spawnPoints.Count == 0)
+        {
+            Debug.LogError("❌ 스폰 가능한 큐브가 없습니다!");
+            result = Vector3.zero;
+            return false;
+        }
+
         for (int i = 0; i < 10; i++) // 최대 10번 시도
         {
-            Vector3 randomPosition = new Vector3(
-                Random.Range(spawnArea.min.x, spawnArea.max.x),
-                spawnArea.center.y, // Y 좌표를 고정
-                Random.Range(spawnArea.min.z, spawnArea.max.z)
-            );
+            Transform randomCube = spawnPoints[Random.Range(0, spawnPoints.Count)];
+            Vector3 randomPosition = randomCube.position;
+            randomPosition.y += 1.0f; // ✅ 큐브 위로 올려서 배치
 
             if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, spawnCheckRadius, NavMesh.AllAreas))
             {
@@ -127,6 +150,4 @@ public class ObjectSpawner : MonoBehaviour
             SpawnObjects(prefabs, missingCount, activeList, requiredNav);
         }
     }
-
-
 }
