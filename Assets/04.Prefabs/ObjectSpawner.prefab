@@ -68,6 +68,8 @@ MonoBehaviour:
     m_Extent: {x: 100, y: 1, z: 100}
   objectLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   minDistance: 3
   respawnInterval: 3
+  spawnCheckRadius: 2
+  spawnPoints: []

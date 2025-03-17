@@ -52989,6 +52989,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5891657406153713091, guid: 0c316fac12fd7fc4eb4e0322f002d9b2, type: 3}
+      propertyPath: objectLayer.m_Bits
+      value: 5120
+      objectReference: {fileID: 0}
+    - target: {fileID: 5891657406153713091, guid: 0c316fac12fd7fc4eb4e0322f002d9b2, type: 3}
       propertyPath: spawnPoints.Array.size
       value: 1
       objectReference: {fileID: 0}
