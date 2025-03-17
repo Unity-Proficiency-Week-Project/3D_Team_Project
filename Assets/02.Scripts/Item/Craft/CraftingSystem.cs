@@ -11,17 +11,13 @@ public class CraftingSystem : MonoBehaviour
     public List<CraftRecipeList> recipes; // 레시피 목록
     public UIInventory inventory;
 
-    private PlayerInput playerInput;
     private InputAction craftingAction;
-
-    private Player player;
+    public Player player;
     private void Awake()
-    {
+    {    
         player = PlayerManager.Instance.Player;
-        playerInput = player.GetComponent<PlayerInput>();
-
+        
         player.controller.craft += Toggle;
-        craftingAction = playerInput.actions["Craft"];
         craftingAction.performed += ToggleCraftingUI;
         craftingAction.Enable();
         craftingWindow.SetActive(false);
@@ -54,7 +50,7 @@ public class CraftingSystem : MonoBehaviour
             inventory.RemoveItem(ingredient.item, ingredient.quantity); 
         }
 
-        player.addItem?.Invoke(recipe.outputItem); // recipe.outputItem으로 변경
+        player.addItem?.Invoke(recipe.outputItem); 
 
         inventory.UpdateUI();
     }

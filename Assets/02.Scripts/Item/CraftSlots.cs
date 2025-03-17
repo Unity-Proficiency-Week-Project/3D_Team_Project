@@ -5,21 +5,23 @@ using UnityEngine.UI;
 
 public class CraftSlots : MonoBehaviour
 {
-    public List<ItemSlot> craftSlots = new List<ItemSlot>();
-    public GameObject craftWindow;
+    [Header("Backpack")]
+    public List<ItemSlot> backPacks = new List<ItemSlot>();
+    public GameObject backpacks;
     public Transform slotPanel;
-    public UIInventory inventory;
+    [Header("Recipe")]
     public CraftRecipeList recipeList; // 제작 레시피 목록
     public Transform recipeSlotPanel; // 레시피 슬롯 패널
     public List<ItemSlot> recipeSlots = new List<ItemSlot>();
+    [Header("Create")]
     public Transform createSlotPanel; // 제작 슬롯 패널
     public List<ItemSlot> createSlots = new List<ItemSlot>();
     public Button createButton;
-    
+    [HideInInspector]
+    public UIInventory inventory;
     void Start()
     {
-        craftWindow.SetActive(true);
-        craftSlots.Clear();
+        backPacks.Clear();
         recipeSlots.Clear();
         createSlots.Clear();
 
@@ -29,7 +31,7 @@ public class CraftSlots : MonoBehaviour
             ItemSlot slot = slotPanel.GetChild(i).GetComponent<ItemSlot>();
             slot.index = i;
             slot.Clear();
-            craftSlots.Add(slot);
+            backPacks.Add(slot);
         }
 
         // 레시피 슬롯 초기화
@@ -66,17 +68,17 @@ public class CraftSlots : MonoBehaviour
     // 인벤토리 아이템을 백팩 슬롯에 동기화
     public void SyncInventory()
     {
-        for (int i = 0; i < craftSlots.Count; i++)
+        for (int i = 0; i < backPacks.Count; i++)
         {
             if (i < inventory.slots.Count && inventory.slots[i].itemData != null)
             {
-                craftSlots[i].itemData = inventory.slots[i].itemData;
-                craftSlots[i].quantity = inventory.slots[i].quantity;
-                craftSlots[i].Set();
+                backPacks[i].itemData = inventory.slots[i].itemData;
+                backPacks[i].quantity = inventory.slots[i].quantity;
+                backPacks[i].Set();
             }
             else
             {
-                craftSlots[i].Clear();
+                backPacks[i].Clear();
             }
         }
     }
@@ -151,23 +153,23 @@ public class CraftSlots : MonoBehaviour
     {
         for (int i = 0; i < inventory.slots.Count; i++)
         {
-            // UIInventory의 슬롯이 비어있지 않으면 craftSlots에 추가
+            // UIInventory의 슬롯이 비어있지 않으면 backPacks에 추가
             if (inventory.slots[i].itemData != null)
             {
-                // craftSlots에 아이템을 추가
-                if (i < craftSlots.Count) // craftSlots가 UIInventory보다 적을 경우를 처리
+                // backPacks에 아이템을 추가
+                if (i < backPacks.Count) // backPacks가 UIInventory보다 적을 경우를 처리
                 {
-                    craftSlots[i].itemData = inventory.slots[i].itemData;
-                    craftSlots[i].quantity = inventory.slots[i].quantity;
-                    craftSlots[i].Set(); // UI 업데이트
+                    backPacks[i].itemData = inventory.slots[i].itemData;
+                    backPacks[i].quantity = inventory.slots[i].quantity;
+                    backPacks[i].Set(); // UI 업데이트
                 }
             }
             else
             {
-                // 비어있으면 CraftSlots 슬롯을 클리어
-                if (i < craftSlots.Count)
+                // 비어있으면 backPacks 슬롯을 클리어
+                if (i < backPacks.Count)
                 {
-                    craftSlots[i].Clear();
+                    backPacks[i].Clear();
                 }
             }
         }
