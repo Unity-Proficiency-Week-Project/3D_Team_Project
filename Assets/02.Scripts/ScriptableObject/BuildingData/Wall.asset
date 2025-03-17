@@ -17,7 +17,7 @@ MonoBehaviour:
     \uAD6C\uC870\uBB3C\uC785\uB2C8\uB2E4."
   ingredients:
   - itemData: {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
-    quantity: 2
+    quantity: 3
   objPrefab: {fileID: 5153939647786489949, guid: 038678a556d1d9f46a560816759c98e4, type: 3}
   uiPosOffset: {x: 0, y: -45, z: 0}
   uiRotOffset: {x: 0, y: 0, z: 0}

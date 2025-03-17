@@ -90,15 +90,7 @@ public class WallPreview : BasePreview
 
                                 else if (nearPivot.name.Contains("Up"))
                                 {
-                                    if (transform.name.Contains("Roof"))
-                                    {
-                                        transform.rotation = hitInfo.collider.transform.rotation;
-                                        transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.up * 2.75f) + (hitInfo.collider.transform.forward);
-                                    }
-
-                                    else
-                                        transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.up * 2.001f);
-                                    Debug.Log(transform.position);
+                                    transform.position = hitInfo.collider.transform.position + (hitInfo.collider.transform.up * 2.001f);
                                 }
 
                                 else if (nearPivot.name.Contains("Right"))
@@ -118,8 +110,6 @@ public class WallPreview : BasePreview
 
                                 if (CheckForObstacles())
                                 {
-                                    Debug.Log("장애물 겹침 없음");
-
                                     // 회전값을 같게 만들어줌
                                     transform.rotation = nearPivot.rotation;
 
@@ -132,7 +122,6 @@ public class WallPreview : BasePreview
                                 }
                                 else
                                 {
-                                    Debug.Log("장애물 겹침");
                                     canBuild = false;
                                 }
                             }
