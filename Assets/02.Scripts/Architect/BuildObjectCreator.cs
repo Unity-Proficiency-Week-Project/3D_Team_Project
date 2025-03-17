@@ -8,11 +8,15 @@ public class BuildObjectCreator : MonoBehaviour
     private LayerMask previewOriginLayer;
     private GameObject previewObj;
 
+    private BuildUI buildUi;
+
     public UIInventory inventory;
+
 
     private void Start()
     {
         inventory = FindObjectOfType<UIInventory>(true);
+        buildUi = FindObjectOfType<BuildUI>(true);
     }
 
     private void Update()
@@ -41,7 +45,8 @@ public class BuildObjectCreator : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            FindObjectOfType<BuildUI>(true).ChangeUIActive();
+            buildUi.ChangeUIActive();
+            CancelPreview();
         }
     }
 

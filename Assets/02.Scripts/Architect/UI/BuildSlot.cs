@@ -37,7 +37,7 @@ public class BuildSlot : MonoBehaviour
     {
         if (buildingData == null)
         {
-            Debug.LogError($"{name}번 슬롯에서 BuildData를 찾지 못했습니다.");
+            Debug.LogError($"{gameObject.name} 슬롯에서 BuildData를 찾지 못했습니다.");
             return;
         }
 
