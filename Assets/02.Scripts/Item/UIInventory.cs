@@ -127,6 +127,7 @@ public class UIInventory : MonoBehaviour
             if (slot.itemData != null)
             {
                 slot.Set();
+                
                 InitButton();
             }
             else
@@ -211,11 +212,10 @@ public class UIInventory : MonoBehaviour
                     actionButtonText.text = "해제";
                     currentAction = () => UnEquip(index);
                 }
-                actionButton.SetActive(true); // 👉 버튼 활성화
+                actionButton.SetActive(true);
                 break;
 
             default:
-                // 🛠️ 아이템 타입이 Consumable/Equipable이 아니면 버튼 숨김
                 actionButtonText.text = string.Empty;
                 currentAction = null;
                 actionButton.SetActive(false);
@@ -332,16 +332,12 @@ public class UIInventory : MonoBehaviour
             inventory.AddItem(obj as ItemData);
             Debug.Log($"레시피 선택됨: {obj.name}");
         
-            // 🚀 선택 후, 인벤토리를 열어주는 기능 추가
             if (!inventory.IsOpen())
             {
                 inventory.Toggle();
             }
         }
-        else
-        {
-            Debug.LogWarning("UIInventory가 씬에 없습니다!");
-        }
+
     }
 
 }

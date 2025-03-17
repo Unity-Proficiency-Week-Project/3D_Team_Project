@@ -8,23 +8,19 @@ using UnityEngine.InputSystem;
 public class CraftingSystem : MonoBehaviour
 {
     public GameObject craftingWindow;
-    public List<CraftingRecipe> recipes;
+    public List<CraftRecipeList> recipes; // 레시피 목록
     public UIInventory inventory;
-    
 
-    [Header("UI Components")]
-    public TextMeshProUGUI recipeResultText;
-    public TextMeshProUGUI feedbackText;
-    
     private PlayerInput playerInput;
     private InputAction craftingAction;
 
     private Player player;
     private void Awake()
     {
-        player = FindObjectOfType<Player>();  // 플레이어 찾기
-        playerInput = player.GetComponent<PlayerInput>();  // PlayerInput 가져오기
-    
+        player = PlayerManager.Instance.Player;
+        playerInput = player.GetComponent<PlayerInput>();
+
+        player.controller.craft += Toggle;
         craftingAction = playerInput.actions["Craft"];
         craftingAction.performed += ToggleCraftingUI;
         craftingAction.Enable();
@@ -43,35 +39,26 @@ public class CraftingSystem : MonoBehaviour
         craftingAction.Disable();
     }
 
-    public void CraftItem(CraftingRecipe recipe)
+    public void CraftItem(CraftRecipe recipe) 
     {
         foreach (var ingredient in recipe.ingredients)
         {
-            if (!inventory.HasItem(ingredient.itemData, ingredient.quantity))
+            if (!inventory.HasItem(ingredient.item, ingredient.quantity)) 
             {
-                feedbackText.text = "재료가 부족합니다.";
                 return;
             }
         }
 
         foreach (var ingredient in recipe.ingredients)
         {
-            inventory.RemoveItem(ingredient.itemData, ingredient.quantity);
+            inventory.RemoveItem(ingredient.item, ingredient.quantity); 
         }
 
-        for (int i = 0; i < recipe.resultAmount; i++)
-        {
-            player.addItem?.Invoke(recipe.resultItem);
-        }
+        player.addItem?.Invoke(recipe.outputItem); // recipe.outputItem으로 변경
 
-        feedbackText.text = $"{recipe.resultItem.displayName} 제작 완료";
         inventory.UpdateUI();
     }
-
-    public void ShowRecipe(CraftingRecipe recipe)
-    {
-        recipeResultText.text = $"{recipe.resultItem.displayName} x {recipe.resultAmount}";
-    }
+    
     private bool isCraftingUIActive = false;
 
     private void ToggleCraftingUI(InputAction.CallbackContext context)
@@ -81,5 +68,12 @@ public class CraftingSystem : MonoBehaviour
         isCraftingUIActive = !isCraftingUIActive;
         craftingWindow.SetActive(isCraftingUIActive);
     }
+    public void Toggle()
+    {
+        craftingWindow.SetActive(!IsOpen());
+    }
+    public bool IsOpen()
+    {
+        return craftingWindow.activeInHierarchy;
+    }
 }
-
