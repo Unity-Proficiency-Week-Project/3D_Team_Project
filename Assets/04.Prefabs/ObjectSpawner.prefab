@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6877989222494422380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2392646987230320165}
+  - component: {fileID: 5891657406153713091}
+  m_Layer: 0
+  m_Name: ObjectSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2392646987230320165
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6877989222494422380}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -224.15828, y: 2.395033, z: 4.8070607}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5891657406153713091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6877989222494422380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e258002cba495b4b9288414cab0b3f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefabs:
+  - {fileID: 939425020757731955, guid: 6d69d96fa5c9cf34883694e80088d31f, type: 3}
+  - {fileID: 383410232264028843, guid: 1fe089488c436824bb992a6f5560cd8e, type: 3}
+  - {fileID: 7991755582258063242, guid: 7b266d3166790dd49b428629dc1ed8ca, type: 3}
+  - {fileID: 241740074150771451, guid: d30dba78dfcd271479625fa4c1b68647, type: 3}
+  - {fileID: 8428959028004781009, guid: ffcb266148fe93d4fa6febdba649f3d3, type: 3}
+  - {fileID: 40281463389942786, guid: b731251ca0bacbb40874d86b40c2d41f, type: 3}
+  - {fileID: 4361814430386324090, guid: 6d72c54770657494caa452dfa49a036b, type: 3}
+  resourcePrefabs:
+  - {fileID: 1345998121104222, guid: 63484e64e1e3ace44b1e2b492e975284, type: 3}
+  - {fileID: 1909098221679596, guid: 8bd448fa710644f4bb396a8dd75c7998, type: 3}
+  - {fileID: 1067266342525884, guid: 374d86833f34db641a78e84465608e21, type: 3}
+  - {fileID: 1589459417301568, guid: a24a206edf6e7844db8888c937e63f67, type: 3}
+  - {fileID: 1248450560055870, guid: a3d895666c01a594bb106eeaa6cfa653, type: 3}
+  - {fileID: 1717343506590202, guid: 43e172e9261888f4394dcac92f978e52, type: 3}
+  - {fileID: 1171885564323044, guid: 35c912c6bbf975247b350a38bd159c14, type: 3}
+  - {fileID: 1250077882161900, guid: 8e6d5a221fd4a2f4f97bd66625637f60, type: 3}
+  maxEnemy: 6
+  maxResource: 15
+  spawnArea:
+    m_Center: {x: -146.7, y: 117.89, z: -128.7}
+    m_Extent: {x: 100, y: 1, z: 100}
+  objectLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  minDistance: 3
+  respawnInterval: 3
