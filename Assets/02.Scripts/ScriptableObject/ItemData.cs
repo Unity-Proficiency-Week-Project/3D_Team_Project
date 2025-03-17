@@ -46,4 +46,5 @@ public class ItemData : ScriptableObject
 
     [Header("Crafting")]
     public List<CraftRecipe> craftRecipes;
+
 }
