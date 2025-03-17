@@ -79,6 +79,7 @@ public class PlayerController : MonoBehaviour
             CameraLook();
         }
     }
+
     /// <summary>
     /// 카메라 화면
     /// </summary>
@@ -87,6 +88,8 @@ public class PlayerController : MonoBehaviour
     {
         mouseDelta = context.ReadValue<Vector2>();
     }
+
+
     /// <summary>
     /// WASD 이동 확인
     /// </summary>

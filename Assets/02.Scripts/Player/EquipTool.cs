@@ -47,20 +47,20 @@ public class EquipTool : Equip
         RaycastHit hit;
 
         int enemyLayerMask = LayerMask.GetMask("Enemy");
-        //int resourceLayerMask = LayerMask.GetMask("Resource");
-        //int combinedLayerMask = enemyLayerMask | resourceLayerMask;
+        int resourceLayerMask = LayerMask.GetMask("Resource");
+        int combinedLayerMask = enemyLayerMask | resourceLayerMask;
         if (Physics.Raycast(ray, out hit, attackDistance, enemyLayerMask))
         {
             Debug.Log("사정거리 내 감지 성공: " + hit.collider.gameObject.name);
 
-            /*if (doesGatherResources && hit.collider.gameObject.layer == LayerMask.NameToLayer("Resource"))
+            if (doesGatherResources && hit.collider.gameObject.layer == LayerMask.NameToLayer("Resource"))
             {
                 if (hit.collider.TryGetComponent(out Resource resource))
                 {
                     Debug.Log("자원 채집 실행");
                     resource.Gather(hit.point, hit.normal);
                 }
-            }*/
+            }
 
             if (doesDealDamage && hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
