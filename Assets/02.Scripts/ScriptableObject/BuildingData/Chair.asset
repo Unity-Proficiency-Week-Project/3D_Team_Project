@@ -15,7 +15,7 @@ MonoBehaviour:
   displayName: "\uC758\uC790"
   description: "\uC7A5\uC2DD\uC6A9 \uC758\uC790\uC785\uB2C8\uB2E4. "
   ingredients:
-  - itemData: {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
+  - item: {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
     quantity: 1
   objPrefab: {fileID: 1383140152660275822, guid: 7a157b32103793148863e06fbf36aeae, type: 3}
   uiPosOffset: {x: 8.5, y: 0, z: -19}
