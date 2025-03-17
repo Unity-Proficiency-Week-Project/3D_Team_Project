@@ -16,9 +16,9 @@ MonoBehaviour:
   description: "\uBCBD \uC704\uC5D0 \uC124\uCE58 \uD560 \uC218 \uC788\uB294 \uC9C0\uBD95(\uC624\uB978\uCABD)
     \uC785\uB2C8\uB2E4."
   ingredients:
-  - itemData: {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
+  - item: {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
     quantity: 4
-  - itemData: {fileID: 11400000, guid: 84e882b841e144c3abf4117f78817470, type: 2}
+  - item: {fileID: 11400000, guid: 84e882b841e144c3abf4117f78817470, type: 2}
     quantity: 2
   objPrefab: {fileID: 4073732293923989891, guid: 13d96f7334ffdc2499331b2345078ebe, type: 3}
   uiPosOffset: {x: 0, y: 0, z: 0}
