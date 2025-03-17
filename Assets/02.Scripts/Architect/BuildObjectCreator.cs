@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class BuildObjectCreator : MonoBehaviour
 {
@@ -77,6 +79,7 @@ public class BuildObjectCreator : MonoBehaviour
         {
             Destroy(previewObj);
             previewObj = null;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -129,5 +132,30 @@ public class BuildObjectCreator : MonoBehaviour
         //}
 
         go.layer = previewOriginLayer;
+    }
+    
+    public void OnBuildUIInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            buildUi.ChangeUIActive();
+            CancelPreview();
+        }
+    }
+
+    public void OnBuildInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && previewObj != null)
+        {
+            PlaceObject();
+        }
+    }
+
+    public void OnBuildCancelInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && previewObj != null)
+        {
+            CancelPreview();
+        }
     }
 }
