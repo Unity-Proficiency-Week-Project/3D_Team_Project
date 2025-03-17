@@ -3,20 +3,8 @@ using UnityEngine;
 
 public class ObjectPreview : BasePreview
 {
-    protected override void Update()
-    {
-        base.Update();
-    }
-
     public override IEnumerator CanBuildCheckCoroutine()
     {
-        MeshRenderer renderer = GetComponent<MeshRenderer>();
-        if (renderer == null)
-        {
-            Debug.LogError("MeshRenderer가 없습니다");
-            yield break;
-        }
-
         gameObject.layer = 0;
 
         RaycastHit hitInfo;
@@ -29,18 +17,14 @@ public class ObjectPreview : BasePreview
             yield break;
         }
 
-        float objectHeight = objectCollider.bounds.size.y;
-
-        float yOffset = objectHeight / 2f; 
-
         while (gameObject.activeSelf)
         {
             if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 1f, buildableLayer))
             {
                 if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                 {
-                    transform.position = new Vector3(transform.position.x, hitInfo.point.y + yOffset, transform.position.z);
-                    onGround = true; 
+                    transform.position = new Vector3(transform.position.x, hitInfo.point.y + objectCollider.bounds.extents.y, transform.position.z);
+                    onGround = true;
                 }
                 else
                 {
@@ -68,7 +52,6 @@ public class ObjectPreview : BasePreview
 
     void OnDrawGizmos()
     {
-        MeshRenderer renderer = GetComponent<MeshRenderer>();
         Collider collider = GetComponent<Collider>();
         if (collider != null)
         {

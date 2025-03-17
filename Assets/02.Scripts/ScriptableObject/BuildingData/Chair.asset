@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b36be7ee690ecc54098676c76009e5d7, type: 3}
+  m_Name: Chair
+  m_EditorClassIdentifier: 
+  displayName: "\uC758\uC790"
+  description: "\uC7A5\uC2DD\uC6A9 \uC758\uC790\uC785\uB2C8\uB2E4. "
+  ingredients:
+  - itemData: {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
+    quantity: 1
+  objPrefab: {fileID: 1383140152660275822, guid: 7a157b32103793148863e06fbf36aeae, type: 3}
+  uiPosOffset: {x: 8.5, y: 0, z: -19}
+  uiRotOffset: {x: 0, y: 0, z: 0}
+  uiScaleOffset: {x: 50, y: 50, z: 50}

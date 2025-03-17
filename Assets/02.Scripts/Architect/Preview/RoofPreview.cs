@@ -1,24 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class RoofPreview : BasePreview
 {
     private bool isSnap;
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-    }
-
-    public override void UpdatePreview()
-    {
-        base.UpdatePreview();
-    }
+    [SerializeField] private Transform frontPivot;
+    [SerializeField] private Transform backPivot;
 
     public override IEnumerator CanBuildCheckCoroutine()
     {
@@ -42,8 +31,46 @@ public class RoofPreview : BasePreview
 
         while (gameObject.activeSelf)
         {
+            Debug.DrawRay(frontPivot.position, frontPivot.TransformDirection(Vector3.back), Color.cyan, 2f);
+            Debug.DrawRay(backPivot.position, backPivot.TransformDirection(Vector3.forward), Color.cyan, 2f);
+
             if (CheckForObstacles())
             {
+                if (Physics.Raycast(backPivot.position, backPivot.TransformDirection(Vector3.back), out hitInfo, 2f, buildableLayer))
+                {
+                    if(hitInfo.collider.name.Contains("Roof"))
+                    {
+                        Vector3 forwardPos = hitInfo.transform.TransformDirection(Vector3.forward) * 2f;
+
+                        transform.rotation = hitInfo.transform.rotation;
+                        transform.position = hitInfo.transform.position + forwardPos;
+
+                        canBuild = true;
+                        isSnap = true;
+
+                        yield return null;
+                        continue;
+                    }
+                }
+
+                if (Physics.Raycast(frontPivot.position, frontPivot.TransformDirection(Vector3.forward), out hitInfo, 2f, buildableLayer))
+                {
+                    if (hitInfo.collider.name.Contains("Roof"))
+                    {
+                        Vector3 backPos = hitInfo.transform.TransformDirection(Vector3.back) * 2f;
+
+                        transform.rotation = hitInfo.transform.rotation;
+                        transform.position = hitInfo.transform.position + backPos;
+
+                        canBuild = true;
+                        isSnap = true;
+
+                        yield return null;
+                        continue;
+                    }
+                }
+
+
                 if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 2f, buildableLayer))
                 {
                     if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("BuildObject") && hitInfo.collider.name.Contains("Wall"))
