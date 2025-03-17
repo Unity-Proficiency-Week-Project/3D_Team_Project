@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 4845304550707021775}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -2}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -125,7 +125,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6977649500732814286}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -224.78154, y: 4.1399994, z: 48.187332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -199,6 +199,7 @@ MonoBehaviour:
   controller: {fileID: 0}
   condition: {fileID: 0}
   temp: {fileID: 0}
+  equip: {fileID: 0}
   itemData: {fileID: 0}
   crosshair: {fileID: 0}
   dropPosition: {fileID: 3707135789368408593}
@@ -244,7 +245,19 @@ MonoBehaviour:
     m_ActionId: f2a9f32e-f159-4803-bbfd-b6e357c5de9f
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4023405505028363508}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnActionInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 84914144-feaf-4deb-88d4-017b9607c4ba
     m_ActionName: Player/Use Item[/Mouse/leftButton]
   - m_PersistentCalls:
@@ -382,6 +395,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiCondition: {fileID: 0}
   baseAtk: 10
+  baseAtkSpeed: 1
+  baseStaminaCost: 2
   baseDef: 0
   noHungerHealthDecay: 5
   NoThristHealthDecay: 5
@@ -420,10 +435,10 @@ MonoBehaviour:
   maxCheckDistance: 3
   layerMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   curInteractGameObj: {fileID: 0}
   promptText: {fileID: 0}
-  camera: {fileID: 8515214444749977817}
+  camera: {fileID: 0}
   crosshair: {fileID: 0}
 --- !u!114 &8167759819486983946
 MonoBehaviour:
@@ -497,7 +512,7 @@ Transform:
   m_GameObject: {fileID: 8925015496726702044}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -529,7 +544,7 @@ Transform:
   m_GameObject: {fileID: 9027657442524682823}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -2}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
