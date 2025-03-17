@@ -53,13 +53,6 @@ public class EnemyAI : MonoBehaviour
         path = new NavMeshPath();
         type = data.enemyType;
 
-
-        //if (type == EnemyType.Far)
-        //{
-        //    projectilePrefab = data.projectilePrefab;
-        //    //projectilePrefab.GetComponent<Projectile>().startPos = firePoint.position;
-        //}
-
         if (agent == null)
             Debug.Log("agent == null!!!!");
 
@@ -94,6 +87,7 @@ public class EnemyAI : MonoBehaviour
 
         if (aiState == AIState.Wandering || aiState == AIState.Chasing) //방황, 추적 상태일때 
         {
+            agent.isStopped = false;
             float targetSpeed = agent.velocity.magnitude;
             moveSpeed = Mathf.Lerp(moveSpeed, targetSpeed, Time.deltaTime * 10f);
 
@@ -108,6 +102,7 @@ public class EnemyAI : MonoBehaviour
         else //멈춤, 공격 상태일때
         {
             animator.SetFloat("MoveSpeed", 0); //멈춤
+            agent.isStopped = true;
             animator.speed = data.animationMoveSpeed;
         }
 
@@ -230,6 +225,7 @@ public class EnemyAI : MonoBehaviour
                 else if (type == EnemyType.Far)
                 {
                     ShootProjectile();
+                    animator.SetTrigger("Attack");
                     Debug.Log($"플레이어에게 공격을 입혔습니다. {data.damage}");
                 }
             }
