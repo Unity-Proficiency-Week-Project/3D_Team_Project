@@ -17,6 +17,8 @@ public class BuildSlot : MonoBehaviour
     private BuildObjectCreator creator;
     private BuildUI buildUI;
 
+    private bool isInitialized = false;
+
     private void Start()
     {
         nameText.text = string.Empty;
@@ -29,6 +31,12 @@ public class BuildSlot : MonoBehaviour
         buildUI = FindObjectOfType<BuildUI>();
 
         SetSlot();
+    }
+
+    private void OnEnable()
+    {
+        if(isInitialized)
+            UpdateQuantityText();
     }
 
     public void SetData(BuildingData data) => buildingData = data;
@@ -57,6 +65,13 @@ public class BuildSlot : MonoBehaviour
         nameText.text = buildingData.displayName;
         descriptionText.text = buildingData.description;
 
+        UpdateQuantityText();
+
+        isInitialized = true;
+    }
+
+    private void UpdateQuantityText()
+    {
         ingredientsText.text = string.Empty;
 
         if (buildingData.ingredients != null)
