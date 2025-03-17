@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ObjectPreview : BasePreview
 {
+    [SerializeField] private bool isFloorPivot;
+
     public override IEnumerator CanBuildCheckCoroutine()
     {
         gameObject.layer = 0;
@@ -23,7 +25,10 @@ public class ObjectPreview : BasePreview
             {
                 if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                 {
-                    transform.position = new Vector3(transform.position.x, hitInfo.point.y + objectCollider.bounds.extents.y, transform.position.z);
+                    if (isFloorPivot)
+                        transform.position = new Vector3(transform.position.x, hitInfo.point.y, transform.position.z);
+                    else
+                        transform.position = new Vector3(transform.position.x, hitInfo.point.y + objectCollider.bounds.extents.y, transform.position.z);
                     onGround = true;
                 }
                 else
@@ -33,10 +38,10 @@ public class ObjectPreview : BasePreview
             }
             else
             {
-                onGround = false; 
+                onGround = false;
             }
 
-            if (onGround && CheckForObstacles()) 
+            if (onGround && CheckForObstacles())
             {
                 canBuild = true;
             }
