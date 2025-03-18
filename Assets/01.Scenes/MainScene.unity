@@ -11765,7 +11765,7 @@ MonoBehaviour:
   slots: []
   inventoryWindow: {fileID: 1210737789}
   slotPanel: {fileID: 102063415}
-  dropPosition: {fileID: 0}
+  dropPosition: {fileID: 667710782}
   selectedItemIndex: 0
   selectedItemName: {fileID: 1332977575}
   selectedItemDescription: {fileID: 209402605}
@@ -11774,7 +11774,6 @@ MonoBehaviour:
   actionButton: {fileID: 2008453054}
   actionButtonText: {fileID: 1206401350}
   dropButton: {fileID: 913697200}
-  curEquipIndex: 0
 --- !u!114 &277171308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21623,6 +21622,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 663204815}
   m_CullTransparentMesh: 1
+--- !u!4 &667710782 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3707135789368408593, guid: d4f091f287f1b4c439f492d9863e859e, type: 3}
+  m_PrefabInstance: {fileID: 1595260108}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &673853697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26522,8 +26526,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 296, y: -7}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 296, y: -33}
+  m_SizeDelta: {x: 245, y: 66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &913697202
 MonoBehaviour:
@@ -26568,7 +26572,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 913697203}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 277171307}
+        m_TargetAssemblyTypeName: UIInventory, Assembly-CSharp
+        m_MethodName: OnDropButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &913697203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33305,10 +33321,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: "\uBC84\uB9AC\uAE30"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 24c8f863f04274fcf9f27a13a2a8a0ce, type: 2}
+  m_sharedMaterial: {fileID: 951081247595729821, guid: 24c8f863f04274fcf9f27a13a2a8a0ce, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -33338,7 +33354,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -37872,7 +37888,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -42647,7 +42663,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4010853404171167478, guid: a7c109601ef5f4d77bb1c3102a2553d6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2043140975}
   m_SourcePrefab: {fileID: 100100000, guid: a7c109601ef5f4d77bb1c3102a2553d6, type: 3}
 --- !u!1 &1386889225
 GameObject:
@@ -55754,8 +55773,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 296, y: 51}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 296, y: 42.999985}
+  m_SizeDelta: {x: 245, y: 66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2008453056
 MonoBehaviour:
@@ -56282,6 +56301,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043058861}
   m_CullTransparentMesh: 1
+--- !u!1 &2043140970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4010853404171167478, guid: a7c109601ef5f4d77bb1c3102a2553d6, type: 3}
+  m_PrefabInstance: {fileID: 1378582140}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2043140975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2043140970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5935ff9b993f984f82ad9bd108bbe1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRate: 0
+  attackDistance: 0
+  doesGatherResources: 0
+  doesDealDamage: 0
+  Atk: 0
+  Def: 0
 --- !u!1001 &2044771530
 PrefabInstance:
   m_ObjectHideFlags: 0
