@@ -19,6 +19,11 @@ public class QuestUI : MonoBehaviour
         QuestManager.OnQuestListUpdated -= UpdateQuestList;
     }
 
+    public void OffWindow()
+    {
+        questListWindow.SetActive(false);
+    }
+
     private void UpdateQuestList(List<Quest> quests)
     {
         foreach (Transform child in questListContent)
