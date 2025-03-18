@@ -88,19 +88,29 @@ public class ObjectSpawner : MonoBehaviour
             Debug.LogError("스폰 가능한 큐브가 없습니다!");
             return Vector3.zero;
         }
+        Transform randomCube;
+        for (int i = 0; i < 10; i++) // 최대 10번 시도
+        {
+            randomCube = spawnPoints[Random.Range(0, spawnPoints.Count)];
+            Vector3 randomOffset = new Vector3(Random.Range(-randomCube.localScale.x / 2, randomCube.localScale.x / 2), // X축 랜덤 오프셋
+                                                randomCube.position.y + 1f,  // Y축은 바닥에 박히지 않도록 기본 값 유지
+                                                Random.Range(-randomCube.localScale.z / 2, randomCube.localScale.z / 2)  // Z축 랜덤 오프셋
+                                               );
+            Vector3 randomPosition = randomCube.position + randomOffset; // 최종 랜덤 위치
 
-        Transform randomCube = spawnPoints[Random.Range(0, spawnPoints.Count)];
-        Vector3 spawnPosition = randomCube.position;
-        spawnPosition.y += 1.0f; // 큐브 위로 약간 올려서 배치
-
-        return spawnPosition;
+            if (!IsPositionOccupied(randomPosition))
+            {
+                return randomPosition;
+            }
+        }
+        return Vector3.zero;
     }
 
     private bool GetRandomNavMeshPosition(out Vector3 result)
     {
         if (spawnPoints.Count == 0)
         {
-            Debug.LogError("❌ 스폰 가능한 큐브가 없습니다!");
+            Debug.LogError("스폰 가능한 큐브가 없습니다!");
             result = Vector3.zero;
             return false;
         }
@@ -108,8 +118,12 @@ public class ObjectSpawner : MonoBehaviour
         for (int i = 0; i < 10; i++) // 최대 10번 시도
         {
             Transform randomCube = spawnPoints[Random.Range(0, spawnPoints.Count)];
-            Vector3 randomPosition = randomCube.position;
-            randomPosition.y += 1.0f; // ✅ 큐브 위로 올려서 배치
+            Vector3 randomOffset = new Vector3(Random.Range(-randomCube.localScale.x / 2, randomCube.localScale.x / 2), // X축 랜덤 오프셋
+                                                randomCube.position.y + 1f,  // Y축은 바닥에 박히지 않도록 기본 값 유지
+                                                Random.Range(-randomCube.localScale.z / 2, randomCube.localScale.z / 2)  // Z축 랜덤 오프셋
+                                               );
+            Vector3 randomPosition = randomCube.position + randomOffset; // 최종 랜덤 위치
+
 
             if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, spawnCheckRadius, NavMesh.AllAreas))
             {
