@@ -112,11 +112,11 @@ public class BuildSlot : MonoBehaviour
 
     private void OnClickBuildButton()
     {
-        //foreach (var ingredient in buildingData.ingredients)
-        //{
-        //    if (!creator.inventory.HasItem(ingredient.itemData, ingredient.quantity))
-        //        return;
-        //}  UI 테스트를 위해 소지 아이템 검사 비활성화
+        foreach (var ingredient in buildingData.ingredients)
+        {
+            if (!creator.inventory.HasItem(ingredient.item, ingredient.quantity))
+                return;
+        }
 
         creator.CreatePreviewObject(buildingData);
         buildUI.ChangeUIActive();
