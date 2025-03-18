@@ -91,13 +91,16 @@ public class UIInventory : MonoBehaviour
 
     public void AddItem(ItemData item)
     {
-        if (item.Stackable)
+        ItemData data = player.itemData;
+
+        if (data.Stackable)
         {
-            ItemSlot slot = GetItemStack(item);
+            ItemSlot slot = GetItemStack(data);
             if (slot != null)
             {
                 slot.quantity++;
                 UpdateUI();
+                player.itemData = null;
                 return;
             }
         }
@@ -106,13 +109,15 @@ public class UIInventory : MonoBehaviour
 
         if (emptySlot != null)
         {
-            emptySlot.itemData = item;
+            emptySlot.itemData = data;
             emptySlot.quantity = 1;
             UpdateUI();
+            player.itemData = null;
             return;
         }
 
-        ThrowItem(item);
+        ThrowItem(data);
+        player.itemData = null;
     }
 
     public void UpdateUI()

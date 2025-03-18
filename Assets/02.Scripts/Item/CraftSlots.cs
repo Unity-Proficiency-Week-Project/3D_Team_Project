@@ -19,8 +19,8 @@ public class CraftSlots : MonoBehaviour
     public List<ItemSlot> createSlots = new List<ItemSlot>();
     public GameObject createSlotPrefab; // 제작 슬롯 프리팹
     public Button createButton;
-    public TextMeshProUGUI createRecipeText_1;
-    public TextMeshProUGUI createRecipeText_2;
+    public TextMeshProUGUI createRecipeText1;
+    public TextMeshProUGUI createRecipeText2;
 
 
     [HideInInspector]
@@ -79,27 +79,55 @@ public class CraftSlots : MonoBehaviour
             CraftRecipe recipe = recipeList.FindRecipe(slot.itemData);
             if (recipe != null)
             {
-                // 결과물 표시
-                if (createSlots.Count == 0)
-                {
-                    GameObject createSlotObj = Instantiate(createSlotPrefab, createSlotPanel);
-                    ItemSlot createSlot = createSlotObj.GetComponent<ItemSlot>();
-                    createSlots.Add(createSlot);
-                }
-                createSlots[0].itemData = recipe.outputItem;
-                createSlots[0].quantity = 1;
-                createSlots[0].Set();
+                createSlots.Clear();
 
-                // 재료 표시
+                createRecipeText1.text = string.Empty;
+                createRecipeText2.text = string.Empty;
+                
+                
+                // 결과물 표시 (선택한 제작 아이템)
+                GameObject createSlotObj = Instantiate(createSlotPrefab, createSlotPanel);
+                ItemSlot createSlot = createSlotObj.GetComponent<ItemSlot>();
+
+                createSlot.itemData = recipe.outputItem;
+                createSlot.Set();
+                createSlots.Add(createSlot);
+                
+                // 재료 표시(최대 2개)
+                for (int i = 0; i < recipe.ingredients.Count; i++)
+                {
+                    var ingredient = recipe.ingredients[i];
+                    CreateIngredientSlot(ingredient.item, ingredient.quantity);
+
+                    switch (i)
+                    {
+                        case 0:
+                            createRecipeText1.text = $"{ingredient.item.displayName} : {ingredient.quantity}"; break;
+                        case 1:
+                            createRecipeText2.text = $"{ingredient.item.displayName} : {ingredient.quantity}"; break;
+                    }
+                }
+                /* 3개 이상 재료 필요시에 재료 생성 코드를 바꾸면 됨
+                 
+                public Transform ingredientTextPrefab;
+                public GameObject ingredientTextPanel;
+                 
+                foreach (Transform child in ingredientTextPanel)
+                {
+                    Destroy(child.gameObject);
+                }
+
                 foreach (var ingredient in recipe.ingredients)
                 {
-                    CreateIngredientSlot(ingredient.item, ingredient.quantity);
+                    GameObject textobj = Instantiate(ingredientTextPrefab, ingredientTextPanel);
+                    TextMeshProUGUI text = textobj.GetComponent<TextMeshProUGUI>();
+                    text.text = $"{ingredient.item.displayName} : {ingredient.quantity}";
                 }
-                
+                */
             }
         }
     }
-
+    
     void CraftItem()
     {
         if (createSlots.Count > 0 && createSlots[0].itemData != null)
@@ -156,8 +184,5 @@ public class CraftSlots : MonoBehaviour
         
         newSlot.itemData = item;
         newSlot.Set();
-
-        createRecipeText_1.text = $"{item.displayName} : {quantity}";
-        createRecipeText_2.text = $"{item.displayName} : {quantity}";
     }
 }
