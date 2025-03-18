@@ -89,7 +89,7 @@ public class BuildObjectCreator : MonoBehaviour
             }
         }
 
-        if(go.name.Contains("House") && go.TryGetComponent(out Collider col))
+        if (go.name.Contains("House") && go.TryGetComponent(out Collider col))
         {
             Destroy(col);
         }
@@ -101,7 +101,7 @@ public class BuildObjectCreator : MonoBehaviour
 
         go.layer = previewOriginLayer;
     }
-    
+
     public void OnBuildUIInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -113,9 +113,10 @@ public class BuildObjectCreator : MonoBehaviour
 
     public void OnBuildInput(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && previewObj != null)
+        if (context.phase == InputActionPhase.Started && previewObj != null && previewObj.TryGetComponent(out BasePreview preview))
         {
-            PlaceObject();
+            if (preview.CanBuild())
+                PlaceObject();
         }
     }
 
