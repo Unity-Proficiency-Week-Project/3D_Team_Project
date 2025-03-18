@@ -55,6 +55,7 @@ public class QuestManager : MonoBehaviour
         if (!activeQuests.Contains(quest))
         {
             activeQuests.Add(quest);
+            availableQuests.Remove(quest);
             quest.isAccepted = true;
             UpdateQuestUI();
         }
@@ -81,8 +82,9 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    private void UpdateQuestUI()
+    public void UpdateQuestUI()
     {
+        Debug.Log("퀘스트 UI 최신화");
         // 모든 퀘스트(수락 가능 + 진행 중)를 UI에 표시
         List<Quest> allQuests = new List<Quest>(availableQuests);
         allQuests.AddRange(activeQuests);
@@ -101,9 +103,9 @@ public class QuestManager : MonoBehaviour
                 {
                     quest.isCompleted = true;
                 }
+                
             }
         }
-
         UpdateQuestUI();
     }
 }

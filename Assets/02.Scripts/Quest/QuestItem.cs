@@ -72,9 +72,4 @@ public class QuestItem : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    public void RefreshUI()
-    {
-        UpdateUI();
-    }
 }

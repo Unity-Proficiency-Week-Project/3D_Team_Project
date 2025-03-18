@@ -92,10 +92,12 @@ public class PlayerController : MonoBehaviour
     /// <param name="context"></param>
     public void OnSelectQ(InputAction.CallbackContext context)
     {
+        QuestManager.Instance.UpdateQuestUI();
         if (context.phase == InputActionPhase.Started)
         {
             isQuestOpen = !isQuestOpen;
             questWindow.SetActive(isQuestOpen);
+            
             UpdateCursorState();
         }
     }
