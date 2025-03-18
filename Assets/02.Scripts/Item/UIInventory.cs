@@ -91,11 +91,9 @@ public class UIInventory : MonoBehaviour
 
     public void AddItem(ItemData item)
     {
-        ItemData data = player.itemData;
-
-        if (data.Stackable)
+        if (item.Stackable)
         {
-            ItemSlot slot = GetItemStack(data);
+            ItemSlot slot = GetItemStack(item);
             if (slot != null)
             {
                 slot.quantity++;
@@ -110,18 +108,16 @@ public class UIInventory : MonoBehaviour
         ItemSlot emptySlot = GetEmptySlot();
 
         if (emptySlot != null)
-        {
-            emptySlot.itemData = data;
+        {   
+            emptySlot.itemData = item;
             emptySlot.quantity = 1;
             UpdateUI();
             player.itemData = null;
-
             QuestManager.Instance.UpdateQuestProgress(QuestGoalType.GatherResource, item.name, 1);
             return;
         }
 
-        ThrowItem(data);
-        player.itemData = null;
+        ThrowItem(item);
     }
 
     public void UpdateUI()
