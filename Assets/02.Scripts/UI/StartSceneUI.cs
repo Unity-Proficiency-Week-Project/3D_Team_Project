@@ -23,7 +23,7 @@ public class StartSceneUI : MonoBehaviour
 
     private void OnClickStartButton()
     {
-        loadingScreen.LoadScene("MainScene");
+        loadingScreen.LoadScene(Scene.MainScene);
     }
 
     private void OnClickHelpButton()

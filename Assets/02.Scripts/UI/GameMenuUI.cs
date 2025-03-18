@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameMenuUI : MonoBehaviour
 {
@@ -155,7 +156,7 @@ public class GameMenuUI : MonoBehaviour
 
     private void OnConfirmMainMenu()
     {
-        Debug.Log("메인 메뉴로 이동합니다.");
+        SceneManager.LoadScene((int)Scene.StartScene);
         Time.timeScale = 1f;
     }
 
