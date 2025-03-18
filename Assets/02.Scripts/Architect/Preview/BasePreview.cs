@@ -20,6 +20,7 @@ public abstract class BasePreview : MonoBehaviour
 
         Collider[] colliders = GetComponentsInChildren<Collider>();
 
+        // 장애물 체크를 위하여 가장 위에 존재하는 콜라이더를 제외한 자식 콜라이더 모두 비활성화
         foreach (Collider collider in colliders)
         {
             if (collider.transform == transform)
@@ -58,12 +59,16 @@ public abstract class BasePreview : MonoBehaviour
     /// </summary>
     public virtual void UpdatePreview()
     {
+        // 프리뷰 오브젝트의 위치를 카메라 위치 기준으로 유지
         transform.position = cameraContainer.position + (cameraContainer.forward * 4.5f) + (cameraContainer.up * 2f);
 
+        // 카메라의 Y 회전값 가져오기
         Quaternion cameraYRotation = Quaternion.Euler(0, cameraContainer.eulerAngles.y, 0);
 
+        // 오브젝트의 회전값을 카메라 Y 회전값 * 설정된 회전값으로 변경
         transform.rotation = cameraYRotation * originRotation;
 
+        // 현재 배치 가능 여부에 따라 머티리얼 색상 변경
         if (mesh != null)
             mesh.material.color = canBuild ? Color.green : Color.red;
 
@@ -95,18 +100,29 @@ public abstract class BasePreview : MonoBehaviour
         Collider objCollider = GetComponent<Collider>();
         if (objCollider == null) return false;
 
+        // 오브젝트의 콜라이더 크기
         Vector3 boxCenter = objCollider.bounds.center;
-        Vector3 boxSize = new Vector3(objCollider.bounds.size.x * 0.8f, objCollider.bounds.size.y, objCollider.bounds.size.z * 0.8f);
+        Vector3 boxSize = new Vector3(
+            objCollider.bounds.size.x * 0.9f, 
+            objCollider.bounds.size.y, 
+            objCollider.bounds.size.z * 0.9f
+            );
 
+        // 현재 설정한 박스 사이즈 안에 존재하는 콜라이더가 있는지 검사
         Collider[] colliders = Physics.OverlapBox(boxCenter, boxSize / 2f, transform.rotation);
 
+        // 겹친 오브젝트들을 검사 후 장애물 겹침 여부 검사
         foreach (Collider collider in colliders)
         {
-            if (collider.gameObject == gameObject || gameObject.name.Contains("Roof") && (collider.name.Contains("Wall") || collider.name.Contains("Roof"))) continue;
+            if (collider.gameObject == gameObject || 
+                gameObject.name.Contains("Roof") && 
+                (collider.name.Contains("Wall") ||
+                collider.name.Contains("Roof"))) continue;
 
             if (collider.transform.parent == gameObject) continue;
 
-            if (collider.gameObject.layer == LayerMask.NameToLayer("BuildObject") || collider.gameObject.layer == LayerMask.NameToLayer("Default"))
+            if (collider.gameObject.layer == LayerMask.NameToLayer("BuildObject") || 
+                collider.gameObject.layer == LayerMask.NameToLayer("Default"))
             {
                 return false; // 장애물 있음
             }
