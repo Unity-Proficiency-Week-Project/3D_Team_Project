@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 public class CraftingSystem : MonoBehaviour
 {
     public GameObject craftingWindow;
-    public List<CraftRecipeList> recipes; // 레시피 목록
     public UIInventory inventory;
 
     private PlayerInput playerInput;

@@ -50,4 +50,9 @@ public class ItemSlot : MonoBehaviour
     {
         inventory.SelectItem(index);
     }
+
+    public void OnCraftButton()
+    {
+            
+    }
 }
