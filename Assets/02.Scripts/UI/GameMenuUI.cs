@@ -90,7 +90,7 @@ public class GameMenuUI : MonoBehaviour
         mainUI.SetActive(false);
         volumeSettingUI.SetActive(true);
 
-        volumeSlider.value = BGMManager.Instance.environmentBgm.volume;
+        volumeSlider.value = BGMManager.Instance.GetCurrentVolume();
     }
 
     private void OnClickMuteButton()
