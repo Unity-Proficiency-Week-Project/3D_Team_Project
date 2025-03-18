@@ -365,6 +365,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 937034a5-3019-444e-b0d8-dcc3ce6d9a01
     m_ActionName: Player/Pause[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4023405505028363508}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnSelectQ
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7fee1cfa-5215-4279-b25b-c04b04cb4786
+    m_ActionName: Player/Quest[/Keyboard/q]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -402,6 +418,7 @@ MonoBehaviour:
   maxXLook: 85
   lookSensitivity: 0.1
   canLook: 1
+  questWindow: {fileID: 0}
 --- !u!114 &3856034166152876354
 MonoBehaviour:
   m_ObjectHideFlags: 0
