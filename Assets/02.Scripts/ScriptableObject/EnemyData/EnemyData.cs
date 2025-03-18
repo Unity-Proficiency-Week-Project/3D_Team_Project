@@ -17,7 +17,6 @@ public class EnemyData : ScriptableObject
     public string discription;
     public EnemyType enemyType;
     //public Sprite Icon;
-    public GameObject[] dropOnDeath; //나중에 처치했을 때 여러개 떨구고 싶다면 배열로 선언해주기
 
     [Header("Stats")]
     public float health;

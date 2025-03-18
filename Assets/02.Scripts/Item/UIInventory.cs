@@ -98,6 +98,9 @@ public class UIInventory : MonoBehaviour
             {
                 slot.quantity++;
                 UpdateUI();
+                player.itemData = null;
+
+                QuestManager.Instance.UpdateQuestProgress(QuestGoalType.GatherResource, item.name, 1);
                 return;
             }
         }
@@ -109,6 +112,8 @@ public class UIInventory : MonoBehaviour
             emptySlot.itemData = item;
             emptySlot.quantity = 1;
             UpdateUI();
+            player.itemData = null;
+            QuestManager.Instance.UpdateQuestProgress(QuestGoalType.GatherResource, item.name, 1);
             return;
         }
 

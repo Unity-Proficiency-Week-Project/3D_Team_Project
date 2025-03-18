@@ -44,11 +44,14 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rigidbody;
     public Action inventory;
     public Action craft;
+    public Action questUI;
 
     private bool isInventoryOpen = false;
     private bool isCraftOpen = false;
+    private bool isQuestOpen = false;
 
-
+    [Header("UI References")]
+    public GameObject questWindow;
 
     private void Awake()
     {
@@ -61,6 +64,9 @@ public class PlayerController : MonoBehaviour
         condition = PlayerManager.Instance.Player.condition;
         defaultSpeed = moveSpeed;
         Cursor.lockState = CursorLockMode.Locked;
+
+        if (questWindow != null)
+            questWindow.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -76,6 +82,23 @@ public class PlayerController : MonoBehaviour
         if (canLook)
         {
             CameraLook();
+        }
+    }
+
+
+    /// <summary>
+    /// Q 키 입력 시 퀘스트 UI 토글
+    /// </summary>
+    /// <param name="context"></param>
+    public void OnSelectQ(InputAction.CallbackContext context)
+    {
+        QuestManager.Instance.UpdateQuestUI();
+        if (context.phase == InputActionPhase.Started)
+        {
+            isQuestOpen = !isQuestOpen;
+            questWindow.SetActive(isQuestOpen);
+            
+            UpdateCursorState();
         }
     }
 
@@ -264,7 +287,7 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateCursorState()
     {
-        if (!isInventoryOpen && !isCraftOpen)
+        if (!isInventoryOpen && !isCraftOpen && !isQuestOpen)
         {
             Cursor.lockState = CursorLockMode.Locked;
             canLook = true;

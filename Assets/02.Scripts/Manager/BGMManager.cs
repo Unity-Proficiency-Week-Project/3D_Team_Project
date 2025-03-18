@@ -28,6 +28,9 @@ public class BGMManager : MonoBehaviour
     private WeatherManager.WeatherType currentWeather;
     private int enemyLayerMask;
 
+    private float previousVolume;
+    private bool isMuted = false;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -48,6 +51,7 @@ public class BGMManager : MonoBehaviour
         enemyBgm.loop = true;
         environmentBgm.volume = 1f;
         enemyBgm.volume = 1f;
+        previousVolume = 1f;
 
         WeatherManager.Instance.OnWeatherChanged += UpdateWeatherBGM;
         UpdateWeatherBGM();
@@ -151,7 +155,7 @@ public class BGMManager : MonoBehaviour
 
     private IEnumerator FadeIn(AudioSource source)
     {
-        float targetVolume = 1f;
+        float targetVolume = previousVolume;
         source.volume = 0;
         for (float t = 0; t < bgmFadeDuration; t += Time.deltaTime)
         {
@@ -160,6 +164,37 @@ public class BGMManager : MonoBehaviour
         }
         source.volume = targetVolume;
     }
+
+    public void SetVolume(float value)
+    {
+        previousVolume = value;
+        if (!isMuted)
+        {
+            environmentBgm.volume = value;
+            enemyBgm.volume = value;
+        }
+    }
+
+    public void ToggleMute()
+    {
+        isMuted = !isMuted;
+
+        if (isMuted)
+        {
+            previousVolume = environmentBgm.volume;
+            environmentBgm.volume = 0f;
+            enemyBgm.volume = 0f;
+        }
+        else
+        {
+            environmentBgm.volume = previousVolume;
+            enemyBgm.volume = previousVolume;
+        }
+    }
+
+    public bool IsMuted() => isMuted;
+
+    public float GetCurrentVolume() => environmentBgm.volume;
 }
 
 

@@ -12,6 +12,8 @@ public class StartSceneUI : MonoBehaviour
 
     [SerializeField] private GameObject helpPannel;
 
+    [SerializeField] private LoadingScreen loadingScreen;
+
     private void Start()
     {
         startButton.onClick.AddListener(OnClickStartButton);
@@ -21,12 +23,12 @@ public class StartSceneUI : MonoBehaviour
 
     private void OnClickStartButton()
     {
-        SceneManager.LoadScene("MainScene");
+        loadingScreen.LoadScene(Scene.MainScene);
     }
 
     private void OnClickHelpButton()
     {
-        helpPannel.SetActive(true);
+        helpPannel.SetActive(!helpPannel.activeSelf);
     }
 
     private void OnClickExitButton()

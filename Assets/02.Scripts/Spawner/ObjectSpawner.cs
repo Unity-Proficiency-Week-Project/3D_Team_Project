@@ -146,7 +146,6 @@ public class ObjectSpawner : MonoBehaviour
         int missingCount = maxCount - activeList.Count;
         if (missingCount > 0)
         {
-            Debug.Log($"리스폰 진행: {missingCount}개 추가 생성 필요!");
             SpawnObjects(prefabs, missingCount, activeList, requiredNav);
         }
     }

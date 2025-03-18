@@ -35,12 +35,14 @@ public class BuildSlot : MonoBehaviour
 
     private void OnEnable()
     {
+        // 활성화 할 때 마다 재료의 갯수들을 업데이트
         if(isInitialized)
             UpdateQuantityText();
     }
 
     public void SetData(BuildingData data) => buildingData = data;
 
+    // 슬롯 세팅
     private void SetSlot()
     {
         if (buildingData == null)
@@ -81,6 +83,7 @@ public class BuildSlot : MonoBehaviour
                 var ingredient = buildingData.ingredients[i];
                 int currentQuantity = GetItemQuantity(ingredient.item);
 
+                // 현재 재료를 가지고 있지 않다면 빨간색 폰트 가지고 있다면 초록색 폰트로 변경
                 string color = currentQuantity >= ingredient.quantity ? "green" : "red";
 
                 ingredientsText.text +=
@@ -95,6 +98,11 @@ public class BuildSlot : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 아이템 보유 갯수 찾기
+    /// </summary>
+    /// <param name="item">아이템 데이터</param>
+    /// <returns>보유갯수 반환</returns>
     private int GetItemQuantity(ItemData item)
     {
         ItemSlot slot = creator.inventory.slots.Find(x => x.itemData != null && x.itemData.displayName == item.displayName);

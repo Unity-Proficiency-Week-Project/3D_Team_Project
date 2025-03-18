@@ -98,7 +98,11 @@
                 {
                     "name": "CancelBuilding",
                     "type": "Button",
-                    "id": "1adec303-2668-48b8-8f56-cbad751a177c"
+                    "id": "1adec303-2668-48b8-8f56-cbad751a177c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Craft",
@@ -113,6 +117,15 @@
                     "name": "Pause",
                     "type": "Button",
                     "id": "937034a5-3019-444e-b0d8-dcc3ce6d9a01",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Quest",
+                    "type": "Button",
+                    "id": "7fee1cfa-5215-4279-b25b-c04b04cb4786",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -281,8 +294,11 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "CancelBuilding"
-                },{
+                    "action": "CancelBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "",
                     "id": "009ba2a9-d725-4191-9ae0-555a929d5ec1",
                     "path": "<Keyboard>/c",
@@ -301,6 +317,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b3829cd-fd17-46a7-8e19-fdca8b284970",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Quest",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,8 +1,9 @@
-using TMPro;
+ï»¿using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameMenuUI : MonoBehaviour
 {
@@ -37,30 +38,38 @@ public class GameMenuUI : MonoBehaviour
     [Header("Build Object Creator")]
     [SerializeField] private BuildObjectCreator creator;
 
-    private bool isMuted = false;
-    private float previousVolume = 1f;
-
     private Action confirmAction;
 
     private void Start()
     {
+        // PauseUI ë²„íŠ¼ ì´ë²¤íŠ¸ ë“±ë¡
         resumeButton.onClick.AddListener(OnClickResumeButton);
         volumeSettingButton.onClick.AddListener(OnClickVolumeSettingButton);
-        mainMenuButton.onClick.AddListener(() => ShowConfirmUI("¸ŞÀÎ ¸Ş´º·Î ÀÌµ¿ÇÏ½Ã°Ú½À´Ï±î?", "¸ŞÀÎ ¸Ş´º", OnConfirmMainMenu));
-        exitButton.onClick.AddListener(() => ShowConfirmUI("°ÔÀÓÀ» Á¾·áÇÏ½Ã°Ú½À´Ï±î?", "°ÔÀÓ Á¾·á", OnConfirmExit));
+        mainMenuButton.onClick.AddListener(() => ShowConfirmUI("ë©”ì¸ ë©”ë‰´ë¡œ ì´ë™í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "ë©”ì¸ ë©”ë‰´", OnConfirmMainMenu));
+        exitButton.onClick.AddListener(() => ShowConfirmUI("ê²Œì„ì„ ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "ê²Œì„ ì¢…ë£Œ", OnConfirmExit));
 
+        // ConfirmUI ë²„íŠ¼ ì´ë²¤íŠ¸ ë“±ë¡
         muteButton.onClick.AddListener(OnClickMuteButton);
         returnButton.onClick.AddListener(OnClickReturnButton);
-
         cancelButton.onClick.AddListener(HideConfirmUI);
 
-        volumeSlider.onValueChanged.AddListener(SetVolume);
+        // VolumeSettingUI ìŠ¬ë¼ì´ë” ì´ë²¤íŠ¸ ë“±ë¡
+        volumeSlider.onValueChanged.AddListener(OnVolumeSliderChanged);
+        muteButton.onClick.AddListener(OnClickMuteButton);
 
-        gameOver_mainMenuButton.onClick.AddListener(() => ShowConfirmUI("¸ŞÀÎ ¸Ş´º·Î ÀÌµ¿ÇÏ½Ã°Ú½À´Ï±î?", "¸ŞÀÎ ¸Ş´º", OnConfirmMainMenu));
-        gameOver_exitButton.onClick.AddListener(() => ShowConfirmUI("°ÔÀÓÀ» Á¾·áÇÏ½Ã°Ú½À´Ï±î?", "°ÔÀÓ Á¾·á", OnConfirmExit));
+        // GameOverUI ë²„íŠ¼ ì´ë²¤íŠ¸ ë“±ë¡
+        gameOver_mainMenuButton.onClick.AddListener(() => ShowConfirmUI("ë©”ì¸ ë©”ë‰´ë¡œ ì´ë™í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "ë©”ì¸ ë©”ë‰´", OnConfirmMainMenu));
+        gameOver_exitButton.onClick.AddListener(() => ShowConfirmUI("ê²Œì„ì„ ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "ê²Œì„ ì¢…ë£Œ", OnConfirmExit));
 
-        volumeSlider.value = BGMManager.Instance.environmentBgm.volume;
+        // ë³¼ë¥¨ ì´ˆê¸°í™”
+        volumeSlider.value = BGMManager.Instance.GetCurrentVolume();
+        muteCheckImage.enabled = BGMManager.Instance.IsMuted();
+
+
+        PlayerManager.Instance.Player.condition.gameMenuUI = this;
     }
+
+    // PauseUI ì‹¤í–‰ í•¨ìˆ˜
     public void OnPauseUI()
     {
         pauseUI.SetActive(true);
@@ -81,35 +90,20 @@ public class GameMenuUI : MonoBehaviour
     {
         mainUI.SetActive(false);
         volumeSettingUI.SetActive(true);
+
+        volumeSlider.value = BGMManager.Instance.environmentBgm.volume;
     }
 
     private void OnClickMuteButton()
     {
-        isMuted = !isMuted;
-
-        if (isMuted)
-        {
-            previousVolume = BGMManager.Instance.environmentBgm.volume;
-            BGMManager.Instance.environmentBgm.volume = 0f;
-            BGMManager.Instance.enemyBgm.volume = 0f;
-            muteCheckImage.enabled = true;
-        }
-        else
-        {
-            BGMManager.Instance.environmentBgm.volume = previousVolume;
-            BGMManager.Instance.enemyBgm.volume = previousVolume;
-            muteCheckImage.enabled = false;
-        }
+        BGMManager.Instance.ToggleMute();
+        muteCheckImage.enabled = BGMManager.Instance.IsMuted();
     }
 
-    public void SetVolume(float value)
+    private void OnVolumeSliderChanged(float value)
     {
-        if (!isMuted)
-        {
-            BGMManager.Instance.environmentBgm.volume = value;
-            BGMManager.Instance.enemyBgm.volume = value;
-            previousVolume = value;
-        }
+        if (!BGMManager.Instance.IsMuted())
+            BGMManager.Instance.SetVolume(value);
     }
 
     private void OnClickReturnButton()
@@ -120,12 +114,14 @@ public class GameMenuUI : MonoBehaviour
 
     private void ShowConfirmUI(string message, string confirmText, Action action)
     {
+        // ê²Œì„ì¢…ë£Œ, ë©”ì¸ë©”ë‰´ì— ë”°ë¼ ì•¡ì…˜ì— í•¨ìˆ˜ ë“±ë¡, noticeText ë° buttonText í…ìŠ¤íŠ¸ ë³€ê²½
         confirmAction = action;
         noticeText.text = message;
         confirmButtonText.text = confirmText;
 
         confirmUI.SetActive(true);
 
+        // ConfirmUI ë²„íŠ¼ ì œì™¸ ëª¨ë“  ë²„íŠ¼ ë¹„í™œì„±í™”
         DisableAllButtons();
 
         confirmButton.onClick.RemoveAllListeners();
@@ -153,7 +149,7 @@ public class GameMenuUI : MonoBehaviour
 
     private void OnConfirmMainMenu()
     {
-        Debug.Log("¸ŞÀÎ ¸Ş´º·Î ÀÌµ¿ÇÕ´Ï´Ù.");
+        SceneManager.LoadScene((int)Scene.StartScene);
         Time.timeScale = 1f;
     }
 
