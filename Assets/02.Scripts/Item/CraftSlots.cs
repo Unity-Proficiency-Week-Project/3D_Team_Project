@@ -1,25 +1,44 @@
-using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CraftSlots : MonoBehaviour
 {
-    public List<ItemSlot> craftSlots = new List<ItemSlot>();
-    public GameObject craftWindow;
+    [Header("Backpack")]
+    public List<ItemSlot> backPacks = new List<ItemSlot>();
     public Transform slotPanel;
-    public UIInventory inventory;
+
+    [Header("Recipe")]
     public CraftRecipeList recipeList; // 제작 레시피 목록
     public Transform recipeSlotPanel; // 레시피 슬롯 패널
     public List<ItemSlot> recipeSlots = new List<ItemSlot>();
+
+    [Header("Create")]
     public Transform createSlotPanel; // 제작 슬롯 패널
     public List<ItemSlot> createSlots = new List<ItemSlot>();
+    public GameObject createSlotPrefab; // 제작 슬롯 프리팹
     public Button createButton;
-    
+    public TextMeshProUGUI createRecipeText1;
+    public TextMeshProUGUI createRecipeText2;
+
+
+    [HideInInspector]
+    public UIInventory inventory;
+
     void Start()
     {
-        craftWindow.SetActive(true);
-        craftSlots.Clear();
+        inventory = FindObjectOfType<UIInventory>(true);
+        InitializeSlots();
+        DisplayRecipes();
+        createButton.onClick.AddListener(CraftItem);
+        
+        SyncInventory();
+    }
+
+    void InitializeSlots()
+    {
+        backPacks.Clear();
         recipeSlots.Clear();
         createSlots.Clear();
 
@@ -27,61 +46,18 @@ public class CraftSlots : MonoBehaviour
         for (int i = 0; i < slotPanel.childCount; i++)
         {
             ItemSlot slot = slotPanel.GetChild(i).GetComponent<ItemSlot>();
-            slot.index = i;
-            slot.Clear();
-            craftSlots.Add(slot);
+            backPacks.Add(slot);
         }
 
         // 레시피 슬롯 초기화
         for (int i = 0; i < recipeSlotPanel.childCount; i++)
         {
             ItemSlot slot = recipeSlotPanel.GetChild(i).GetComponent<ItemSlot>();
-            slot.index = i;
-            slot.Clear();
             recipeSlots.Add(slot);
             slot.button.onClick.AddListener(() => OnRecipeSlotClicked(slot));
         }
-
-        // 제작 슬롯 초기화
-        for (int i = 0; i < createSlotPanel.childCount; i++)
-        {
-            ItemSlot slot = createSlotPanel.GetChild(i).GetComponent<ItemSlot>();
-            slot.index = i;
-            slot.Clear();
-            createSlots.Add(slot);
-        }
-
-        // 레시피 목록 표시
-        DisplayRecipes();
-
-        // 제작 버튼 이벤트 추가
-        createButton.onClick.AddListener(CraftItem);
     }
 
-    private void Update()
-    {
-        TransferItemsFromInventory();
-    }
-
-    // 인벤토리 아이템을 백팩 슬롯에 동기화
-    public void SyncInventory()
-    {
-        for (int i = 0; i < craftSlots.Count; i++)
-        {
-            if (i < inventory.slots.Count && inventory.slots[i].itemData != null)
-            {
-                craftSlots[i].itemData = inventory.slots[i].itemData;
-                craftSlots[i].quantity = inventory.slots[i].quantity;
-                craftSlots[i].Set();
-            }
-            else
-            {
-                craftSlots[i].Clear();
-            }
-        }
-    }
-
-    // 레시피 목록 표시
     void DisplayRecipes()
     {
         for (int i = 0; i < recipeSlots.Count; i++)
@@ -99,21 +75,70 @@ public class CraftSlots : MonoBehaviour
         }
     }
 
-    // 레시피 슬롯 클릭 시 제작 슬롯에 아이템 추가
     void OnRecipeSlotClicked(ItemSlot slot)
     {
         if (slot.itemData != null)
         {
-            createSlots[0].itemData = slot.itemData;
-            createSlots[0].quantity = 1;
-            createSlots[0].Set();
+            CraftRecipe recipe = recipeList.FindRecipe(slot.itemData);
+            if (recipe != null)
+            {
+                foreach (Transform child in createSlotPanel)
+                {
+                    if (child.GetComponent<TextMeshProUGUI>() == null)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                }
+
+                createSlots.Clear();
+
+                createRecipeText1.text = string.Empty;
+                createRecipeText2.text = string.Empty;
+
+
+                // 결과물 표시 (선택한 제작 아이템)
+                GameObject createSlotObj = Instantiate(createSlotPrefab, createSlotPanel);
+                ItemSlot createSlot = createSlotObj.GetComponent<ItemSlot>();
+
+                createSlot.itemData = recipe.outputItem;
+                createSlot.Set();
+                createSlots.Add(createSlot);
+
+                // 재료 표시(최대 2개)
+                for (int i = 0; i < recipe.ingredients.Count; i++)
+                {
+                    var ingredient = recipe.ingredients[i];
+                    switch (i)
+                    {
+                        case 0:
+                            createRecipeText1.text = $"{ingredient.item.displayName} : {ingredient.quantity}"; break;
+                        case 1:
+                            createRecipeText2.text = $"{ingredient.item.displayName} : {ingredient.quantity}"; break;
+                    }
+                }
+            }
         }
     }
+    /* 3개 이상 재료 필요시에 재료 생성 코드를 바꾸면 됨
 
-    // 아이템 제작
+    public Transform ingredientTextPrefab;
+    public GameObject ingredientTextPanel;
+
+    foreach (Transform child in ingredientTextPanel)
+    {
+        Destroy(child.gameObject);
+    }
+
+    foreach (var ingredient in recipe.ingredients)
+    {
+        GameObject textobj = Instantiate(ingredientTextPrefab, ingredientTextPanel);
+        TextMeshProUGUI text = textobj.GetComponent<TextMeshProUGUI>();
+        text.text = $"{ingredient.item.displayName} : {ingredient.quantity}";
+    }
+    */
     void CraftItem()
     {
-        if (createSlots[0].itemData != null)
+        if (createSlots.Count > 0 && createSlots[0].itemData != null)
         {
             CraftRecipe recipe = recipeList.FindRecipe(createSlots[0].itemData);
             if (recipe != null && CanCraft(recipe))
@@ -122,7 +147,6 @@ public class CraftSlots : MonoBehaviour
                 {
                     inventory.RemoveItem(ingredient.item, ingredient.quantity);
                 }
-
                 inventory.AddItem(recipe.outputItem);
                 SyncInventory();
             }
@@ -133,43 +157,35 @@ public class CraftSlots : MonoBehaviour
         }
     }
 
-    // 제작 가능 여부 확인
     bool CanCraft(CraftRecipe recipe)
     {
         foreach (var ingredient in recipe.ingredients)
         {
+            if(ingredient.quantity <= 0 ) continue;
             if (!inventory.HasItem(ingredient.item, ingredient.quantity))
             {
                 return false;
             }
         }
-
         return true;
     }
 
-    public void TransferItemsFromInventory()
+    public void SyncInventory()
     {
-        for (int i = 0; i < inventory.slots.Count; i++)
+        if (inventory == null && inventory.slots == null) return;
+        for (int i = 0; i < backPacks.Count; i++)
         {
-            // UIInventory의 슬롯이 비어있지 않으면 craftSlots에 추가
-            if (inventory.slots[i].itemData != null)
+            if (i < inventory.slots.Count)
             {
-                // craftSlots에 아이템을 추가
-                if (i < craftSlots.Count) // craftSlots가 UIInventory보다 적을 경우를 처리
-                {
-                    craftSlots[i].itemData = inventory.slots[i].itemData;
-                    craftSlots[i].quantity = inventory.slots[i].quantity;
-                    craftSlots[i].Set(); // UI 업데이트
-                }
+                backPacks[i].itemData = inventory.slots[i].itemData;
+                backPacks[i].quantity = inventory.slots[i].quantity;
             }
             else
             {
-                // 비어있으면 CraftSlots 슬롯을 클리어
-                if (i < craftSlots.Count)
-                {
-                    craftSlots[i].Clear();
-                }
+                backPacks[i].itemData = null;
+                backPacks[i].quantity = 0;
             }
+            backPacks[i].Set();
         }
     }
 }

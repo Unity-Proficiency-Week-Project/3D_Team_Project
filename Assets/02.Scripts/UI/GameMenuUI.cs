@@ -38,9 +38,6 @@ public class GameMenuUI : MonoBehaviour
     [Header("Build Object Creator")]
     [SerializeField] private BuildObjectCreator creator;
 
-    private bool isMuted = false;
-    private float previousVolume = 1f;
-
     private Action confirmAction;
 
     private void Start()
@@ -52,18 +49,21 @@ public class GameMenuUI : MonoBehaviour
         exitButton.onClick.AddListener(() => ShowConfirmUI("게임을 종료하시겠습니까?", "게임 종료", OnConfirmExit));
 
         // ConfirmUI 버튼 이벤트 등록
-        muteButton.onClick.AddListener(OnClickMuteButton);
         returnButton.onClick.AddListener(OnClickReturnButton);
         cancelButton.onClick.AddListener(HideConfirmUI);
 
         // VolumeSettingUI 슬라이더 이벤트 등록
-        volumeSlider.onValueChanged.AddListener(SetVolume);
+        volumeSlider.onValueChanged.AddListener(OnVolumeSliderChanged);
+        muteButton.onClick.AddListener(OnClickMuteButton);
 
         // GameOverUI 버튼 이벤트 등록
         gameOver_mainMenuButton.onClick.AddListener(() => ShowConfirmUI("메인 메뉴로 이동하시겠습니까?", "메인 메뉴", OnConfirmMainMenu));
         gameOver_exitButton.onClick.AddListener(() => ShowConfirmUI("게임을 종료하시겠습니까?", "게임 종료", OnConfirmExit));
 
-        volumeSlider.value = BGMManager.Instance.environmentBgm.volume;
+        // 볼륨 초기화
+        volumeSlider.value = BGMManager.Instance.GetCurrentVolume();
+        muteCheckImage.enabled = BGMManager.Instance.IsMuted();
+
 
         PlayerManager.Instance.Player.condition.gameMenuUI = this;
     }
@@ -89,35 +89,20 @@ public class GameMenuUI : MonoBehaviour
     {
         mainUI.SetActive(false);
         volumeSettingUI.SetActive(true);
+
+        volumeSlider.value = BGMManager.Instance.environmentBgm.volume;
     }
 
     private void OnClickMuteButton()
     {
-        isMuted = !isMuted;
-
-        if (isMuted)
-        {
-            previousVolume = BGMManager.Instance.environmentBgm.volume;
-            BGMManager.Instance.environmentBgm.volume = 0f;
-            BGMManager.Instance.enemyBgm.volume = 0f;
-            muteCheckImage.enabled = true;
-        }
-        else
-        {
-            BGMManager.Instance.environmentBgm.volume = previousVolume;
-            BGMManager.Instance.enemyBgm.volume = previousVolume;
-            muteCheckImage.enabled = false;
-        }
+        BGMManager.Instance.ToggleMute();
+        muteCheckImage.enabled = BGMManager.Instance.IsMuted();
     }
 
-    public void SetVolume(float value)
+    private void OnVolumeSliderChanged(float value)
     {
-        if (!isMuted)
-        {
-            BGMManager.Instance.environmentBgm.volume = value;
-            BGMManager.Instance.enemyBgm.volume = value;
-            previousVolume = value;
-        }
+        if (!BGMManager.Instance.IsMuted())
+            BGMManager.Instance.SetVolume(value);
     }
 
     private void OnClickReturnButton()
