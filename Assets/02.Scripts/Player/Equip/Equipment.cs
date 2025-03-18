@@ -30,6 +30,8 @@ public class Equipment : MonoBehaviour
 
     public void Unequip()
     {
+        Debug.Log("Unequip() 호출됨");
+
         if(curEquip != null)
         {
             Destroy(curEquip.gameObject);

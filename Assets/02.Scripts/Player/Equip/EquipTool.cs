@@ -8,7 +8,7 @@ public class EquipTool : Equip
     public float attackRate;
     private bool attacking;
     public float attackDistance;
-
+    
     [Header("Resource")]
     public bool doesGatherResources;
 

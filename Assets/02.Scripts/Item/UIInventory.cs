@@ -23,7 +23,7 @@ public class UIInventory : MonoBehaviour
     public TextMeshProUGUI actionButtonText;
     public GameObject dropButton;
 
-    public int curEquipIndex;
+    private int curEquipIndex;
 
     private UnityAction currentAction;
 
@@ -205,7 +205,7 @@ public class UIInventory : MonoBehaviour
                 if (!slots[index].equipped)
                 {
                     actionButtonText.text = "장착";
-                    currentAction = () => OnEquipButton(index);
+                    currentAction = () => OnEquipButton();
                 }
                 else
                 {
@@ -243,7 +243,7 @@ public class UIInventory : MonoBehaviour
         actionButton.SetActive(false);
     }
 
-    public void OnEquipButton(int index)
+    void OnEquipButton()
     {
         if (slots[curEquipIndex].equipped)
         {
@@ -257,16 +257,18 @@ public class UIInventory : MonoBehaviour
         SelectItem(selectedItemIndex);
     }
 
-    public void UnEquip(int index)
+    void UnEquip(int index)
     {
+        Debug.Log("Unequip() 호출됨");
+
         slots[index].equipped = false;
         PlayerManager.Instance.Player.equip.Unequip();
-
+        UpdateUI();
+        
         if (selectedItemIndex == index)
         {
             SelectItem(selectedItemIndex);
         }
-        UpdateUI();
     }
 
     public void OnDropButton()
