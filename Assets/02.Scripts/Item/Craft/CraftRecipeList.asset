@@ -33,7 +33,7 @@ MonoBehaviour:
       quantity: 1
   - outputItem: {fileID: 11400000, guid: d64adf621c9c449c69ec5b8491dec4ed, type: 2}
     ingredients:
-    - item: {fileID: 11400000, guid: d64adf621c9c449c69ec5b8491dec4ed, type: 2}
+    - item: {fileID: 11400000, guid: 84e882b841e144c3abf4117f78817470, type: 2}
       quantity: 2
     - item: {fileID: 11400000, guid: b24da0784d5bc4e9580b680ed0456377, type: 2}
       quantity: 2

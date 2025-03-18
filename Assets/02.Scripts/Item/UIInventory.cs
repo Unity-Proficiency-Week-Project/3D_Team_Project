@@ -108,7 +108,7 @@ public class UIInventory : MonoBehaviour
         ItemSlot emptySlot = GetEmptySlot();
 
         if (emptySlot != null)
-        {
+        {   
             emptySlot.itemData = item;
             emptySlot.quantity = 1;
             UpdateUI();
