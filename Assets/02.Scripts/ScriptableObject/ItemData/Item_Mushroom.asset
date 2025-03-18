@@ -15,11 +15,12 @@ MonoBehaviour:
   displayName: "\uBC84\uC12F"
   description: "\uBC30\uACE0\uD514\uC744 \uD68C\uBCF5\uC2DC\uCF1C\uC90D\uB2C8\uB2E4."
   itemType: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6fb3efd6fe3d24ddcafe06450c3e95ab, type: 3}
   dropPrefab: {fileID: 5780557026505099585, guid: ab81ec42b8c7d4a5ea81b15f1583129d, type: 3}
   Stackable: 1
   maxStackAmount: 20
   consumables:
   - consumableType: 1
     value: 10
-  craftingRecipes: []
+  equipPrefab: {fileID: 0}
+  craftRecipes: []
