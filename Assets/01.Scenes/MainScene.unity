@@ -1806,7 +1806,7 @@ GameObject:
   - component: {fileID: 90907345}
   - component: {fileID: 90907343}
   - component: {fileID: 90907344}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26357,13 +26357,13 @@ GameObject:
   - component: {fileID: 965422722}
   - component: {fileID: 965422720}
   - component: {fileID: 965422721}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Rain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!198 &965422720
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -29958,7 +29958,8 @@ ParticleSystem:
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    m_Planes: []
+    m_Planes:
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
