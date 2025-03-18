@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameMenuUI : MonoBehaviour
 {
@@ -60,6 +61,8 @@ public class GameMenuUI : MonoBehaviour
         gameOver_exitButton.onClick.AddListener(() => ShowConfirmUI("게임을 종료하시겠습니까?", "게임 종료", OnConfirmExit));
 
         volumeSlider.value = BGMManager.Instance.environmentBgm.volume;
+
+        PlayerManager.Instance.Player.condition.gameMenuUI = this;
     }
     public void OnPauseUI()
     {
@@ -153,7 +156,7 @@ public class GameMenuUI : MonoBehaviour
 
     private void OnConfirmMainMenu()
     {
-        Debug.Log("메인 메뉴로 이동합니다.");
+        SceneManager.LoadScene((int)Scene.StartScene);
         Time.timeScale = 1f;
     }
 
