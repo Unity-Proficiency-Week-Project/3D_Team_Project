@@ -4,7 +4,8 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class Quest : MonoBehaviour
+[CreateAssetMenu(fileName = "NewQuest", menuName = "Quest/Create New Quest")]
+public class Quest : ScriptableObject
 {
     public string questName;
     public string description;

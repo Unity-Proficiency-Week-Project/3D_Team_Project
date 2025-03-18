@@ -200,6 +200,7 @@ MonoBehaviour:
   condition: {fileID: 0}
   temp: {fileID: 0}
   equip: {fileID: 0}
+  inventory: {fileID: 0}
   itemData: {fileID: 0}
   crosshair: {fileID: 0}
   dropPosition: {fileID: 3707135789368408593}
@@ -344,6 +345,26 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 59a8d9ed-3b91-4f83-879f-a9c75e53274a
     m_ActionName: Player/Special Action[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7d173d32-4957-45a6-9078-a765d1bdb58f
+    m_ActionName: Player/OnBuildUI[/Keyboard/t]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c6a77f85-37b7-474d-b86a-69bac894f776
+    m_ActionName: Player/PlaceBuilding[/Keyboard/v]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1adec303-2668-48b8-8f56-cbad751a177c
+    m_ActionName: Player/CancelBuilding[/Keyboard/backspace]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 45518d6d-f84f-424d-9b1a-5be61f7088a2
+    m_ActionName: Player/Craft[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 937034a5-3019-444e-b0d8-dcc3ce6d9a01
+    m_ActionName: Player/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -394,6 +415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiCondition: {fileID: 0}
+  gameMenuUI: {fileID: 0}
   baseAtk: 10
   baseAtkSpeed: 1
   baseStaminaCost: 2
@@ -435,7 +457,7 @@ MonoBehaviour:
   maxCheckDistance: 3
   layerMask:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 4480
   curInteractGameObj: {fileID: 0}
   promptText: {fileID: 0}
   camera: {fileID: 0}
