@@ -28,9 +28,12 @@ public class CraftSlots : MonoBehaviour
 
     void Start()
     {
+        inventory = FindObjectOfType<UIInventory>(true);
         InitializeSlots();
         DisplayRecipes();
         createButton.onClick.AddListener(CraftItem);
+        
+        SyncInventory();
     }
 
     void InitializeSlots()
@@ -79,12 +82,20 @@ public class CraftSlots : MonoBehaviour
             CraftRecipe recipe = recipeList.FindRecipe(slot.itemData);
             if (recipe != null)
             {
+                foreach (Transform child in createSlotPanel)
+                {
+                    if (child.GetComponent<TextMeshProUGUI>() == null)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                }
+
                 createSlots.Clear();
 
                 createRecipeText1.text = string.Empty;
                 createRecipeText2.text = string.Empty;
-                
-                
+
+
                 // 결과물 표시 (선택한 제작 아이템)
                 GameObject createSlotObj = Instantiate(createSlotPrefab, createSlotPanel);
                 ItemSlot createSlot = createSlotObj.GetComponent<ItemSlot>();
@@ -92,13 +103,11 @@ public class CraftSlots : MonoBehaviour
                 createSlot.itemData = recipe.outputItem;
                 createSlot.Set();
                 createSlots.Add(createSlot);
-                
+
                 // 재료 표시(최대 2개)
                 for (int i = 0; i < recipe.ingredients.Count; i++)
                 {
                     var ingredient = recipe.ingredients[i];
-                    CreateIngredientSlot(ingredient.item, ingredient.quantity);
-
                     switch (i)
                     {
                         case 0:
@@ -107,27 +116,26 @@ public class CraftSlots : MonoBehaviour
                             createRecipeText2.text = $"{ingredient.item.displayName} : {ingredient.quantity}"; break;
                     }
                 }
-                /* 3개 이상 재료 필요시에 재료 생성 코드를 바꾸면 됨
-                 
-                public Transform ingredientTextPrefab;
-                public GameObject ingredientTextPanel;
-                 
-                foreach (Transform child in ingredientTextPanel)
-                {
-                    Destroy(child.gameObject);
-                }
-
-                foreach (var ingredient in recipe.ingredients)
-                {
-                    GameObject textobj = Instantiate(ingredientTextPrefab, ingredientTextPanel);
-                    TextMeshProUGUI text = textobj.GetComponent<TextMeshProUGUI>();
-                    text.text = $"{ingredient.item.displayName} : {ingredient.quantity}";
-                }
-                */
             }
         }
     }
-    
+    /* 3개 이상 재료 필요시에 재료 생성 코드를 바꾸면 됨
+
+    public Transform ingredientTextPrefab;
+    public GameObject ingredientTextPanel;
+
+    foreach (Transform child in ingredientTextPanel)
+    {
+        Destroy(child.gameObject);
+    }
+
+    foreach (var ingredient in recipe.ingredients)
+    {
+        GameObject textobj = Instantiate(ingredientTextPrefab, ingredientTextPanel);
+        TextMeshProUGUI text = textobj.GetComponent<TextMeshProUGUI>();
+        text.text = $"{ingredient.item.displayName} : {ingredient.quantity}";
+    }
+    */
     void CraftItem()
     {
         if (createSlots.Count > 0 && createSlots[0].itemData != null)
@@ -153,6 +161,7 @@ public class CraftSlots : MonoBehaviour
     {
         foreach (var ingredient in recipe.ingredients)
         {
+            if(ingredient.quantity <= 0 ) continue;
             if (!inventory.HasItem(ingredient.item, ingredient.quantity))
             {
                 return false;
@@ -163,26 +172,20 @@ public class CraftSlots : MonoBehaviour
 
     public void SyncInventory()
     {
+        if (inventory == null && inventory.slots == null) return;
         for (int i = 0; i < backPacks.Count; i++)
         {
-            if (i < inventory.slots.Count && inventory.slots[i].itemData != null)
+            if (i < inventory.slots.Count)
             {
                 backPacks[i].itemData = inventory.slots[i].itemData;
                 backPacks[i].quantity = inventory.slots[i].quantity;
-                backPacks[i].Set();
             }
             else
             {
-                backPacks[i].Clear();
+                backPacks[i].itemData = null;
+                backPacks[i].quantity = 0;
             }
+            backPacks[i].Set();
         }
-    }
-    void CreateIngredientSlot(ItemData item, int quantity)
-    {
-        GameObject slotObj = Instantiate(createSlotPrefab, createSlotPanel);
-        ItemSlot newSlot = slotObj.GetComponent<ItemSlot>();
-        
-        newSlot.itemData = item;
-        newSlot.Set();
     }
 }
