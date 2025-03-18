@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -57,8 +57,9 @@ public class CraftingSystem : MonoBehaviour
 
         player.addItem?.Invoke(recipe.outputItem);
         inventory.UpdateUI();
+        QuestManager.Instance.UpdateQuestProgress(QuestGoalType.CraftItem, recipe.outputItem.name, 1);
     }
-    
+
     private bool isCraftingUIActive = false;
 
     private void ToggleCraftingUI(InputAction.CallbackContext context)

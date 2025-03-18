@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Door : MonoBehaviour
 {
@@ -15,7 +12,7 @@ public class Door : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J) && canInteraction && doorCoroutine == null)
+        if (Input.GetKeyDown(KeyCode.E) && canInteraction && doorCoroutine == null)
         {
             doorCoroutine = StartCoroutine(DoorInteraction());
         }

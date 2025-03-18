@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class EnemyCondition : Condition
 {
+
+    public EnemyData data;  //ì£½ì—ˆì„ ë•Œ ë“œë¡­ ì•„ì´í…œ
     private Slider Healthbarslider;
     private Camera _camera;
-    // ¾ÆÀÌÅÛ µå¶ø Ç® (Inspector¿¡¼­ ÇÒ´ç)
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ç® (Inspectorï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½)
     [SerializeField] private List<ItemData> droppableItems;
 
     public Action DamageFlash;
@@ -22,7 +24,7 @@ public class EnemyCondition : Condition
     private void LateUpdate()
     {
         Vector3 lookDirection = _camera.transform.forward;
-        lookDirection.y = 0; // ¼öÁ÷ ¹æÇâ º¯È­¸¦ ¸·¾Æ Ã¼·Â¹Ù°¡ µÚÁıÈ÷´Â °É ¹æÁö
+        lookDirection.y = 0; // ìˆ˜ì§ ë°©í–¥ ë³€í™”ë¥¼ ë§‰ì•„ ì²´ë ¥ë°”ê°€ ë’¤ì§‘íˆëŠ” ê±¸ ë°©ì§€
         Healthbarslider.transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 
@@ -38,30 +40,33 @@ public class EnemyCondition : Condition
 
     public void Die()
     {
-        Debug.Log("Àû »ç¸Á!");
-
         List<ItemData> dropList = RandomDropItem();
 
         foreach (ItemData data in dropList)
         {
             if (data.dropPrefab != null)
             {
-                Instantiate(data.dropPrefab, transform.position + Vector3.up * 2, Quaternion.identity); // ¾ÆÀÌÅÛ ÇÁ¸®ÆÕ »ı¼º
+                Instantiate(data.dropPrefab, transform.position + Vector3.up * 2, Quaternion.identity); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
             else Debug.Log(data.dropPrefab == null);
         }
 
+
+        string enemyName = gameObject.name;
+
+        QuestManager.Instance.UpdateQuestProgress(QuestGoalType.KillAnyEnemy, enemyName, 1);
+        QuestManager.Instance.UpdateQuestProgress(QuestGoalType.KillSpecificEnemy, enemyName, 1);
         Destroy(gameObject);
     }
 
     List<ItemData> RandomDropItem()
     {
-        int randomCount = UnityEngine.Random.Range(1, droppableItems.Count); // 1~ÃÖ´ë °³¼ö±îÁö ·£´ı °³¼ö ¼±ÅÃ
-        //Áßº¹Çã¿ë O ÄÚµå
+        int randomCount = UnityEngine.Random.Range(1, droppableItems.Count); // 1~ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ßºï¿½ï¿½ï¿½ï¿½ O ï¿½Úµï¿½
         List<ItemData> list = new List<ItemData>();
         for (int i = 0; i < randomCount; i++)
         {
-            ItemData item = droppableItems[UnityEngine.Random.Range(0, droppableItems.Count)]; // Áßº¹ Çã¿ë ·£´ı ¼±ÅÃ
+            ItemData item = droppableItems[UnityEngine.Random.Range(0, droppableItems.Count)]; // ï¿½ßºï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             list.Add(item);
         }
         return list;
