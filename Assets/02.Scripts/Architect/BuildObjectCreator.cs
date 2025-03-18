@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class BuildObjectCreator : MonoBehaviour
@@ -18,6 +19,13 @@ public class BuildObjectCreator : MonoBehaviour
     {
         inventory = FindObjectOfType<UIInventory>(true);
         buildUi = FindObjectOfType<BuildUI>(true);
+
+        if (inventory == null)
+            Debug.LogError("UIInventory를 찾을 수 없습니다.");
+        
+        if(buildUi == null)
+            Debug.LogError("BuildUI를 찾을 수 없습니다.");
+            
     }
 
     /// <summary>
@@ -96,13 +104,26 @@ public class BuildObjectCreator : MonoBehaviour
             Destroy(col);
         }
 
+        bool _canBuild = true;
+
         // 배치 한 건축물의 재료를 아이템 창에서 감소 시킴
-        //foreach (var ingredient in buildingData.ingredients)
-        //{
-        //    inventory.RemoveItem(ingredient.itemData, ingredient.quantity);
-        //}
+        foreach (var ingredient in buildingData.ingredients)
+        {
+            inventory.RemoveItem(ingredient.item, ingredient.quantity);
+
+            ItemSlot slot = inventory.slots.Find(x => x.itemData != null && x.itemData.displayName == ingredient.item.displayName);
+
+            if (slot == null || slot.quantity < ingredient.quantity)
+                _canBuild = false;
+        }
 
         go.layer = previewOriginLayer;
+
+        if(!_canBuild)
+        {
+            buildingData = null;
+            Destroy(previewObj);
+        }
     }
 
     public void OnBuildUIInput(InputAction.CallbackContext context)
