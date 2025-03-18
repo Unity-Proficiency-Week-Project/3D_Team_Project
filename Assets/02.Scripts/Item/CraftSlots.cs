@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,9 +18,10 @@ public class CraftSlots : MonoBehaviour
     public Transform createSlotPanel; // 제작 슬롯 패널
     public List<ItemSlot> createSlots = new List<ItemSlot>();
     public GameObject createSlotPrefab; // 제작 슬롯 프리팹
-    public Transform ingredientPanel; // 재료 패널
-    public List<ItemSlot> ingredientSlots = new List<ItemSlot>();
     public Button createButton;
+    public TextMeshProUGUI createRecipeText_1;
+    public TextMeshProUGUI createRecipeText_2;
+
 
     [HideInInspector]
     public UIInventory inventory;
@@ -36,7 +38,6 @@ public class CraftSlots : MonoBehaviour
         backPacks.Clear();
         recipeSlots.Clear();
         createSlots.Clear();
-        ingredientSlots.Clear();
 
         // 백팩 슬롯 초기화
         for (int i = 0; i < slotPanel.childCount; i++)
@@ -51,13 +52,6 @@ public class CraftSlots : MonoBehaviour
             ItemSlot slot = recipeSlotPanel.GetChild(i).GetComponent<ItemSlot>();
             recipeSlots.Add(slot);
             slot.button.onClick.AddListener(() => OnRecipeSlotClicked(slot));
-        }
-
-        // 재료 슬롯 초기화
-        for (int i = 0; i < ingredientPanel.childCount; i++)
-        {
-            ItemSlot slot = ingredientPanel.GetChild(i).GetComponent<ItemSlot>();
-            ingredientSlots.Add(slot);
         }
     }
 
@@ -97,19 +91,11 @@ public class CraftSlots : MonoBehaviour
                 createSlots[0].Set();
 
                 // 재료 표시
-                for (int i = 0; i < ingredientSlots.Count; i++)
+                foreach (var ingredient in recipe.ingredients)
                 {
-                    if (i < recipe.ingredients.Count)
-                    {
-                        ingredientSlots[i].itemData = recipe.ingredients[i].item;
-                        ingredientSlots[i].quantity = recipe.ingredients[i].quantity;
-                        ingredientSlots[i].Set();
-                    }
-                    else
-                    {
-                        ingredientSlots[i].Clear();
-                    }
+                    CreateIngredientSlot(ingredient.item, ingredient.quantity);
                 }
+                
             }
         }
     }
@@ -162,5 +148,16 @@ public class CraftSlots : MonoBehaviour
                 backPacks[i].Clear();
             }
         }
+    }
+    void CreateIngredientSlot(ItemData item, int quantity)
+    {
+        GameObject slotObj = Instantiate(createSlotPrefab, createSlotPanel);
+        ItemSlot newSlot = slotObj.GetComponent<ItemSlot>();
+        
+        newSlot.itemData = item;
+        newSlot.Set();
+
+        createRecipeText_1.text = $"{item.displayName} : {quantity}";
+        createRecipeText_2.text = $"{item.displayName} : {quantity}";
     }
 }
