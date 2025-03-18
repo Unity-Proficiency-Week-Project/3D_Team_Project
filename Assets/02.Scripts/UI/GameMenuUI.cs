@@ -49,7 +49,6 @@ public class GameMenuUI : MonoBehaviour
         exitButton.onClick.AddListener(() => ShowConfirmUI("게임을 종료하시겠습니까?", "게임 종료", OnConfirmExit));
 
         // ConfirmUI 버튼 이벤트 등록
-        muteButton.onClick.AddListener(OnClickMuteButton);
         returnButton.onClick.AddListener(OnClickReturnButton);
         cancelButton.onClick.AddListener(HideConfirmUI);
 
