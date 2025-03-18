@@ -58,12 +58,14 @@ public class BuildObjectCreator : MonoBehaviour
     {
         if (previewObj == null) return;
 
-        Debug.Log("배치");
-
+        // 프리뷰 오브젝트와 같은 오브젝트를 배치
         GameObject go = Instantiate(previewObj);
+
+        // 프리뷰 오브젝트에 존재하는 프리뷰 클래스 제거
         Destroy(go.GetComponent<BasePreview>());
         go.transform.position = previewObj.transform.position;
 
+        // 머티리얼 색상 및 콜라이더, 레이어를 원래대로 되돌림
         MeshRenderer renderer = go.GetComponent<MeshRenderer>();
 
         if (renderer != null)
@@ -94,6 +96,7 @@ public class BuildObjectCreator : MonoBehaviour
             Destroy(col);
         }
 
+        // 배치 한 건축물의 재료를 아이템 창에서 감소 시킴
         //foreach (var ingredient in buildingData.ingredients)
         //{
         //    inventory.RemoveItem(ingredient.itemData, ingredient.quantity);

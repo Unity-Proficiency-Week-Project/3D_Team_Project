@@ -2,14 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PivotDirection
-{
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
 public class WallPreview : BasePreview
 {
     protected List<Transform> previewObjPivots;
@@ -27,8 +19,6 @@ public class WallPreview : BasePreview
 
     public override void UpdatePreview()
     {
-        mesh.material.color = canBuild ? Color.green : Color.red;
-
         if (!isSnap || Vector3.Distance(transform.position, PlayerManager.Instance.Player.controller.cameraContainer.position) > 3.5f)
         {
             isSnap = false;
@@ -79,7 +69,7 @@ public class WallPreview : BasePreview
                             // 프리뷰 오브젝트 기준 가장 근처에 있는 피벗을 찾음
                             Transform nearPivot = FindNearPivot(transform.position, hitInfo.collider.gameObject);
 
-
+                            // 가까운 피벗의 방향에 따라 프리뷰 오브젝트 위치 변경
                             if (nearPivot != null)
                             {
                                 if (nearPivot.name.Contains("Down"))
@@ -183,15 +173,16 @@ public class WallPreview : BasePreview
         return nearPivot;
     }
 
+    // 디버그용 Gizmo 생성
     void OnDrawGizmos()
     {
-        MeshRenderer renderer = GetComponent<MeshRenderer>();
         Collider collider = GetComponent<Collider>();
         if (collider != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.matrix = Matrix4x4.TRS(collider.bounds.center, transform.rotation, Vector3.one); // 회전 적용
+            Gizmos.matrix = Matrix4x4.TRS(collider.bounds.center, transform.rotation, Vector3.one); 
             Gizmos.DrawWireCube(Vector3.zero, collider.bounds.size);
         }
     }
+
 }

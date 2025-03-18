@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -45,25 +45,30 @@ public class GameMenuUI : MonoBehaviour
 
     private void Start()
     {
+        // PauseUI ë²„íŠ¼ ì´ë²¤íŠ¸ ë“±ë¡
         resumeButton.onClick.AddListener(OnClickResumeButton);
         volumeSettingButton.onClick.AddListener(OnClickVolumeSettingButton);
-        mainMenuButton.onClick.AddListener(() => ShowConfirmUI("¸ŞÀÎ ¸Ş´º·Î ÀÌµ¿ÇÏ½Ã°Ú½À´Ï±î?", "¸ŞÀÎ ¸Ş´º", OnConfirmMainMenu));
-        exitButton.onClick.AddListener(() => ShowConfirmUI("°ÔÀÓÀ» Á¾·áÇÏ½Ã°Ú½À´Ï±î?", "°ÔÀÓ Á¾·á", OnConfirmExit));
+        mainMenuButton.onClick.AddListener(() => ShowConfirmUI("ë©”ì¸ ë©”ë‰´ë¡œ ì´ë™í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "ë©”ì¸ ë©”ë‰´", OnConfirmMainMenu));
+        exitButton.onClick.AddListener(() => ShowConfirmUI("ê²Œì„ì„ ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "ê²Œì„ ì¢…ë£Œ", OnConfirmExit));
 
+        // ConfirmUI ë²„íŠ¼ ì´ë²¤íŠ¸ ë“±ë¡
         muteButton.onClick.AddListener(OnClickMuteButton);
         returnButton.onClick.AddListener(OnClickReturnButton);
-
         cancelButton.onClick.AddListener(HideConfirmUI);
 
+        // VolumeSettingUI ìŠ¬ë¼ì´ë” ì´ë²¤íŠ¸ ë“±ë¡
         volumeSlider.onValueChanged.AddListener(SetVolume);
 
-        gameOver_mainMenuButton.onClick.AddListener(() => ShowConfirmUI("¸ŞÀÎ ¸Ş´º·Î ÀÌµ¿ÇÏ½Ã°Ú½À´Ï±î?", "¸ŞÀÎ ¸Ş´º", OnConfirmMainMenu));
-        gameOver_exitButton.onClick.AddListener(() => ShowConfirmUI("°ÔÀÓÀ» Á¾·áÇÏ½Ã°Ú½À´Ï±î?", "°ÔÀÓ Á¾·á", OnConfirmExit));
+        // GameOverUI ë²„íŠ¼ ì´ë²¤íŠ¸ ë“±ë¡
+        gameOver_mainMenuButton.onClick.AddListener(() => ShowConfirmUI("ë©”ì¸ ë©”ë‰´ë¡œ ì´ë™í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "ë©”ì¸ ë©”ë‰´", OnConfirmMainMenu));
+        gameOver_exitButton.onClick.AddListener(() => ShowConfirmUI("ê²Œì„ì„ ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?", "ê²Œì„ ì¢…ë£Œ", OnConfirmExit));
 
         volumeSlider.value = BGMManager.Instance.environmentBgm.volume;
 
         PlayerManager.Instance.Player.condition.gameMenuUI = this;
     }
+
+    // PauseUI ì‹¤í–‰ í•¨ìˆ˜
     public void OnPauseUI()
     {
         pauseUI.SetActive(true);
@@ -123,12 +128,14 @@ public class GameMenuUI : MonoBehaviour
 
     private void ShowConfirmUI(string message, string confirmText, Action action)
     {
+        // ê²Œì„ì¢…ë£Œ, ë©”ì¸ë©”ë‰´ì— ë”°ë¼ ì•¡ì…˜ì— í•¨ìˆ˜ ë“±ë¡, noticeText ë° buttonText í…ìŠ¤íŠ¸ ë³€ê²½
         confirmAction = action;
         noticeText.text = message;
         confirmButtonText.text = confirmText;
 
         confirmUI.SetActive(true);
 
+        // ConfirmUI ë²„íŠ¼ ì œì™¸ ëª¨ë“  ë²„íŠ¼ ë¹„í™œì„±í™”
         DisableAllButtons();
 
         confirmButton.onClick.RemoveAllListeners();
