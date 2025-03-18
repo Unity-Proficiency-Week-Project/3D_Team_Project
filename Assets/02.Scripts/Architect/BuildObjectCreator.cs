@@ -130,5 +130,5 @@ public class BuildObjectCreator : MonoBehaviour
         }
     }
 
-    public bool IsPrevieObject() => previewObj == null;
+    public bool IsPreviewObject() => previewObj == null;
 }

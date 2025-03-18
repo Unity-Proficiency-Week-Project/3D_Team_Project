@@ -35,7 +35,7 @@ public class WeatherManager : MonoBehaviour
     {
         while (true)
         {
-            //ChangeWeather();
+            ChangeWeather();
             yield return new WaitForSeconds(weatherChangeInterval);
         }
     }
