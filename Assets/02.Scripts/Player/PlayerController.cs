@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
@@ -306,6 +303,10 @@ public class PlayerController : MonoBehaviour
 
     public void OnActionInput(InputAction.CallbackContext context)
     {
+        if (isInventoryOpen || isCraftOpen || isQuestOpen)
+        {
+            return;
+        }
         if (context.phase == InputActionPhase.Started)
         {
             StartCoroutine(HandleActionInput());
