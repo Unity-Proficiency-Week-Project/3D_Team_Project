@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EnemyCondition : Condition
 {
-    public EnemyData data;  //Á×¾úÀ» ¶§ µå·Ó ¾ÆÀÌÅÛ
+    public EnemyData data;  //ì£½ì—ˆì„ ë•Œ ë“œë¡­ ì•„ì´í…œ
     private Slider Healthbarslider;
     private Camera _camera;
 
@@ -21,7 +21,7 @@ public class EnemyCondition : Condition
     private void LateUpdate()
     {
         Vector3 lookDirection = _camera.transform.forward;
-        lookDirection.y = 0; // ¼öÁ÷ ¹æÇâ º¯È­¸¦ ¸·¾Æ Ã¼·Â¹Ù°¡ µÚÁıÈ÷´Â °É ¹æÁö
+        lookDirection.y = 0; // ìˆ˜ì§ ë°©í–¥ ë³€í™”ë¥¼ ë§‰ì•„ ì²´ë ¥ë°”ê°€ ë’¤ì§‘íˆëŠ” ê±¸ ë°©ì§€
         Healthbarslider.transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 
@@ -37,12 +37,17 @@ public class EnemyCondition : Condition
 
     public void Die()
     {
-        Debug.Log("Àû »ç¸Á!");
+        Debug.Log("ì  ì‚¬ë§!");
         
         for (int i = 0; i < data.dropOnDeath.Length; i++)
         {
             Instantiate(data.dropOnDeath[i], transform.position + Vector3.up * 2, Quaternion.identity);
         }
+
+        string enemyName = gameObject.name;
+
+        QuestManager.Instance.UpdateQuestProgress(QuestGoalType.KillAnyEnemy, enemyName, 1);
+        QuestManager.Instance.UpdateQuestProgress(QuestGoalType.KillSpecificEnemy, enemyName, 1);
         Destroy(gameObject);
     }
 }
