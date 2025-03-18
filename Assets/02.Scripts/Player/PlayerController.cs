@@ -336,23 +336,21 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
+        EquipTool equipTool = PlayerManager.Instance.Player.equip.curEquip as EquipTool;
+
+        if (equipTool == null || equipTool.IsAttacking())
+        {
+            return;
+        }
+
         float attackPower = condition.GetAtk();
         float attackSpeed = condition.GetAtkSpd();
         float staminaCost = condition.GetStamina();
 
         if (condition.IsUsableStamina(staminaCost))
         {
-            condition.UseStamina(staminaCost);
-
-            if (PlayerManager.Instance.Player.equip.curEquip != null)
-            {
-                EquipTool equipTool = PlayerManager.Instance.Player.equip.curEquip as EquipTool;
-                if (equipTool != null)
-                {
-                    equipTool.OnAttackInput();
-                    return;
-                }
-            }
+            condition.UseStamina(staminaCost); // 공격할 때만 스태미나 감소
+            equipTool.OnAttackInput(); // 공격 실행
         }
     }
 
