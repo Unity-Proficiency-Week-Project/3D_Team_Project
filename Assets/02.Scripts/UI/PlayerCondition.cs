@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCondition : MonoBehaviour, IDamageable
 {
     public UICondition uiCondition;
+    public GameMenuUI gameMenuUI;
     Condition health { get { return uiCondition.health; } }
     Condition hunger { get { return uiCondition.hunger; } }
     Condition thirst { get { return uiCondition.thrist; } }
@@ -61,7 +62,7 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     /// </summary>
     public void Die()
     {
-        // TODO: 게임 오버 처리, 리스폰 기능 추가
+        gameMenuUI.ShowGameOverUI();
     }
 
     /// <summary>
