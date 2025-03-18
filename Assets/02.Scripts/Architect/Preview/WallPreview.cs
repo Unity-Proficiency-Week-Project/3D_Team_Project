@@ -82,7 +82,6 @@ public class WallPreview : BasePreview
 
                             if (nearPivot != null)
                             {
-                                Debug.Log(nearPivot.name);
                                 if (nearPivot.name.Contains("Down"))
                                 {
                                     transform.position = hitInfo.collider.transform.position + (-hitInfo.collider.transform.up * 2.001f);
