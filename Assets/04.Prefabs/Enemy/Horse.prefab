@@ -96,6 +96,7 @@ MonoBehaviour:
   maxVal: 10
   startVal: 10
   slider: {fileID: 1169216600298046796}
+  data: {fileID: 0}
   droppableItems:
   - {fileID: 11400000, guid: 4c5a47a8617c14e8e94a9c563b072013, type: 2}
   - {fileID: 11400000, guid: 84e882b841e144c3abf4117f78817470, type: 2}
@@ -142,8 +143,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.4801444, z: 1.3174633}
-  m_Center: {x: 0, y: 0.7624629, z: 0.03385347}
+  m_Size: {x: 0.63638306, y: 1.6127608, z: 1.4060917}
+  m_Center: {x: 0.0113220215, y: 0.8287711, z: 0.07816771}
 --- !u!1 &250088228644044119
 GameObject:
   m_ObjectHideFlags: 0

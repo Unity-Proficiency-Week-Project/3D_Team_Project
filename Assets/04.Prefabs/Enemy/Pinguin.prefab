@@ -75,6 +75,7 @@ MonoBehaviour:
   maxVal: 20
   startVal: 20
   slider: {fileID: 7263965211682176287}
+  data: {fileID: 0}
   droppableItems:
   - {fileID: 11400000, guid: 4c5a47a8617c14e8e94a9c563b072013, type: 2}
   - {fileID: 11400000, guid: 84e882b841e144c3abf4117f78817470, type: 2}
