@@ -163,4 +163,8 @@ BlendTree로 애니메이션 구현 -> 애니메이션 작동이 자연스럽지
 
 느리게 작동 수정 : Threshold 값(파라미터) 우측 애니메이션 속도에 MoveSpeed 파라미터 값을 할당, Idle 상태 : 0.01배속, Walk 상태 : 0.5배속, Run 상태 : 1배속 인것을 확인 -> 해당 값을 수정
 
+![Image](https://github.com/user-attachments/assets/7811389f-75ba-483e-a061-856187f9b0e6)
+
 공격 애니메이션 : 직접 실행하며, 상태에 맞지 않는 애니메이션을 체크하여, EnemyAI.cs에서 agent.isStopped를 조정함, 그리고 애니메이션을 수작업으로 값을 조정하며, 제작하였음.
+
+![Image](https://github.com/user-attachments/assets/f0d0d79e-a154-4744-9abb-d764d0a90243)
