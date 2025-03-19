@@ -7,13 +7,11 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")] public float moveSpeed;
     public float defaultSpeed; //속도 일시적 증가 후 되돌릴 값
-    private bool isSpeedBoosted = false; //속도가 증가했는지 판단하는 값
     private Vector2 curMovementInput; //현재 움직임 벡터
     private bool isMoving = false;
 
     [Header("Jump")] public int currentJumps = 0; //현재 점프 횟수 
     public int maxJumps = 1; //최대 점프 횟수
-    private bool isJumpBoosted = false; //점프 횟수가 늘어났는지 확인
     public float jumpPower = 80f; //점프 거리
     public LayerMask groundLayerMask; //어떤 레이어에 닿았는지 확인 위한 변수
     public float jumpStamina = 5f;
