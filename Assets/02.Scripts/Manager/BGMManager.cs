@@ -49,12 +49,10 @@ public class BGMManager : MonoBehaviour
 
         environmentBgm.loop = true;
         enemyBgm.loop = true;
-        environmentBgm.volume = 1f;
-        enemyBgm.volume = 1f;
-        previousVolume = 1f;
+
+        SetVolume(1f);
 
         WeatherManager.Instance.OnWeatherChanged += UpdateWeatherBGM;
-        UpdateWeatherBGM();
 
         StartCoroutine(CheckForEnemies());
 

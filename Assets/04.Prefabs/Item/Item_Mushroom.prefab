@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5775908799246217324}
   - component: {fileID: 4029922443050634230}
   - component: {fileID: 6621108897470591158}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 518746070069909227}
   - component: {fileID: 3924652501893281237}
   - component: {fileID: 3654242023892526001}
-  m_Layer: 7
+  m_Layer: 13
   m_Name: Item_Mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 4796934316179388176}
   - component: {fileID: 2873595091435185979}
   - component: {fileID: 7935221769198538892}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}

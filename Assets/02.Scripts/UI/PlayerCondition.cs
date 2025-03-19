@@ -17,10 +17,10 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     public float baseStaminaCost = 2f;
     public float baseDef = 0f;
 
-    private float curAtk;
-    private float curAtkSpeed;
-    private float curStaminaCost;
-    private float curDef;
+    public float curAtk;
+    public float curAtkSpeed;
+    public float curStaminaCost;
+    public float curDef;
 
     public float noHungerHealthDecay;
     public float NoThristHealthDecay;

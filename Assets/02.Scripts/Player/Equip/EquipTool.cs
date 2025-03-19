@@ -72,4 +72,9 @@ public class EquipTool : Equip
             }
         }
     }
+    public bool IsAttacking()
+    {
+        return attacking || (animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1);
+    }
 }
+

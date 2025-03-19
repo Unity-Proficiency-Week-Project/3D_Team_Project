@@ -49,7 +49,7 @@ MonoBehaviour:
   attackRate: 0.8
   attackDistance: 1
   doesGatherResources: 1
-  doesDealDamage: 0
+  doesDealDamage: 1
   Atk: 5
   Def: 0
 --- !u!95 &4157333606798289233
