@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1963,8 +1963,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\uC774\uB3D9 : W, A, S, D\n\uC810\uD504 : Space\n\uB300\uC26C : Shift\n\uC778\uBCA4\uD1A0\uB9AC
-    : Tab\n\uC0C1\uD638\uC791\uC6A9 : E\n\uC544\uC774\uD15C \uC0AC\uC6A9 : \uC88C\uD074\uB9AD\n\uAC74\uCD95UI
-    : T\n\uAC74\uCD95 : V\n\uAC74\uCD95 \uCDE8\uC18C : BackSpace\n\uD06C\uB798\uD504\uD2B8
+    : Tab\n\uC0C1\uD638\uC791\uC6A9 : E\n\uC544\uC774\uD15C \uC0AC\uC6A9 : \uC88C\uD074\uB9AD\n\uD018\uC2A4\uD2B8
+    : Q\n\uAC74\uCD95UI : T\n\uAC74\uCD95 : V\n\uAC74\uCD95 \uCDE8\uC18C : BackSpace\n\uD06C\uB798\uD504\uD2B8
     : C\n\uC77C\uC2DC\uC815\uC9C0 : Esc"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24c8f863f04274fcf9f27a13a2a8a0ce, type: 2}
