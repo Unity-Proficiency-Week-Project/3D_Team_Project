@@ -1,5 +1,6 @@
 ﻿using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 public class BuildObjectCreator : MonoBehaviour
@@ -103,6 +104,8 @@ public class BuildObjectCreator : MonoBehaviour
         {
             Destroy(col);
         }
+
+        go.AddComponent<NavMeshObstacle>().carving = true; 
 
         bool _canBuild = true;
 
