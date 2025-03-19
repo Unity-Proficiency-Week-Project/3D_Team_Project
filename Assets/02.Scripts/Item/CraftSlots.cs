@@ -36,6 +36,10 @@ public class CraftSlots : MonoBehaviour
         SyncInventory();
     }
 
+    private void OnEnable()
+    {
+        SyncInventory();
+    }
     void InitializeSlots()
     {
         backPacks.Clear();

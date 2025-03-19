@@ -14,12 +14,12 @@ public class Interaction : MonoBehaviour
     private IInteractable curInteractable;
 
     public TextMeshProUGUI promptText;
-    public Camera camera;
+    public Camera playerCamera;
     public CrossHairUI crosshair;
 
     private void Start()
     {
-        camera = Camera.main;
+        playerCamera = Camera.main;
         crosshair = FindObjectOfType<CrossHairUI>();
     }
 
@@ -39,7 +39,7 @@ public class Interaction : MonoBehaviour
             }
 
 
-            Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
