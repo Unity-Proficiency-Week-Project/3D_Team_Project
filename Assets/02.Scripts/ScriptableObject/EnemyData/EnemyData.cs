@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public enum EnemyType
 {
-    Close, //±Ù°Å¸®
-    Far, //¿ø°Å¸®
-    Timid //°ø°İX
+    Close, //ê·¼ê±°ë¦¬
+    Far, //ì›ê±°ë¦¬
+    Timid //ê³µê²©X
 }
-
+/// <summary>
+/// ì´ í´ë˜ìŠ¤ëŠ” ì  ìºë¦­í„°ì˜ ë‹¤ì–‘í•œ ì†ì„±ì„ ì •ì˜í•˜ì—¬, ê²Œì„ ë‚´ì—ì„œ ì ì˜ í–‰ë™ê³¼ ëŠ¥ë ¥ì„ ì‰½ê²Œ ì„¤ì •í•˜ê³  ê´€ë¦¬í•  ìˆ˜ ìˆë„ë¡ í•©ë‹ˆë‹¤.
+/// </summary>
 [CreateAssetMenu(fileName = "Enemy", menuName = "New Enemy")]
 public class EnemyData : ScriptableObject
 {
@@ -23,17 +23,17 @@ public class EnemyData : ScriptableObject
     public int damage;
     public float walkSpeed;
     public float runSpeed;
-    public float attackRate; //°ø°İ¼Óµµ
-    public float attackDistance; //°ø°İ¹üÀ§
-    public float detectDistance; //°¨Áö¹üÀ§
-    public float fleeDistance; //µµ¸Á¹üÀ§
+    public float attackRate; //ê³µê²©ì†ë„
+    public float attackDistance; //ê³µê²©ë²”ìœ„
+    public float detectDistance; //ê°ì§€ë²”ìœ„
+    public float fleeDistance; //ë„ë§ë²”ìœ„
     public float rotSpeed;
 
     [Header("Animation")]
-    public float animationMoveSpeed; //¾Ö´Ï¸ŞÀÌ¼Ç ¼Óµµ, enemyÀÇ ÀÌµ¿¼Óµµ¿¡ µû¶ó Á¶Àı °¡´É
+    public float animationMoveSpeed; //ì• ë‹ˆë©”ì´ì…˜ ì†ë„, enemyì˜ ì´ë™ì†ë„ì— ë”°ë¼ ì¡°ì ˆ ê°€ëŠ¥
 
-    [Header("Projectile Settings")] //¿ø°Å¸® Å¸ÀÔÀÏ ¶§ 
-    public GameObject projectilePrefab;  // Åõ»çÃ¼ ÇÁ¸®ÆÕ
-    public float projectileSpeed;        // Åõ»çÃ¼ ¼Óµµ
+    [Header("Projectile Settings")] //ì›ê±°ë¦¬ íƒ€ì…ì¼ ë•Œ 
+    public GameObject projectilePrefab;  // íˆ¬ì‚¬ì²´ í”„ë¦¬íŒ¹
+    public float projectileSpeed;        // íˆ¬ì‚¬ì²´ ì†ë„
   
 }

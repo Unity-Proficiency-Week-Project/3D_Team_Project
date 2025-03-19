@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,30 +15,33 @@ public class EnemyAI : MonoBehaviour
 {
     [Header("AI")]
     private NavMeshAgent agent;
-    private AIState aiState; //ÇöÀç AI »óÅÂ
-    private float moveSpeed; //ÇöÀç ÀÌµ¿ ¼Óµµ (data.walkSpeed¿Í data.runSpeed¸¦ ÃÑ°ı)
+    private AIState aiState; //í˜„ì¬ AI ìƒíƒœ
+    private float moveSpeed; //í˜„ì¬ ì´ë™ ì†ë„ (data.walkSpeedì™€ data.runSpeedë¥¼ ì´ê´„)
     private float normalizedSpeed;
 
     [Header("Wandering")]
-    public float minWanderingDistance; //ÃÖ¼Ò ¹æÈ² °Å¸®
-    public float maxWanderingDistance; //ÃÖ´ë ¹æÈ² °Å¸®
-    public float minWanderWaitTime; //ÃÖ¼Ò ¹æÈ² ´ë±â½Ã°£
-    public float maxWanderWaitTime; //ÃÖ´ë ¹æÈ² ´ë±â½Ã°£
+    public float minWanderingDistance; //ìµœì†Œ ë°©í™© ê±°ë¦¬
+    public float maxWanderingDistance; //ìµœëŒ€ ë°©í™© ê±°ë¦¬
+    public float minWanderWaitTime; //ìµœì†Œ ë°©í™© ëŒ€ê¸°ì‹œê°„
+    public float maxWanderWaitTime; //ìµœëŒ€ ë°©í™© ëŒ€ê¸°ì‹œê°„
 
     [Header("Combat")]
     private EnemyType type;
     private float lastAttackTime;
-    private float playerDistance; //ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®
-    public float fieldOfView = 60f;//½Ã¾ß°¢
+    private float playerDistance; //í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬
+    public float fieldOfView = 60f;//ì‹œì•¼ê°
     [SerializeField] private Transform firePoint;
     public GameObject projectilePrefab;
 
     public EnemyData data;
     private Animator animator;
-    private SkinnedMeshRenderer[] meshRenderers; //µ¥¹ÌÁö ¹ŞÀ» ¶§ ÇÃ·¡½Ã È¿°ú ÁÙ¶§ »ç¿ëÇÏ´Â º¯¼ö
+    private SkinnedMeshRenderer[] meshRenderers; //ë°ë¯¸ì§€ ë°›ì„ ë•Œ í”Œë˜ì‹œ íš¨ê³¼ ì¤„ë•Œ ì‚¬ìš©í•˜ëŠ” ë³€ìˆ˜
     private EnemyCondition enemyCondition;
     private NavMeshPath path;
 
+    /// <summary>
+    /// ì»´í¬ë„ŒíŠ¸ë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
+    /// </summary>
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -47,6 +50,9 @@ public class EnemyAI : MonoBehaviour
         enemyCondition = GetComponent<EnemyCondition>();
     }
 
+    /// <summary>
+    /// ì´ˆê¸° ìƒíƒœë¥¼ ì„¤ì •í•˜ê³ , ë„¤ë¹„ê²Œì´ì…˜ ê²½ë¡œë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
+    /// </summary>
     void Start()
     {
         enemyCondition.DamageFlash = () => { StartCoroutine(DamageFlash()); };
@@ -58,9 +64,13 @@ public class EnemyAI : MonoBehaviour
             Debug.Log("agent == null!!!!");
 
         if (!agent.isOnNavMesh)
-            Debug.LogError($"{gameObject.name} NavMesh¿¡ ¹èÄ¡µÇÁö ¾ÊÀ½!");
+            Debug.LogError($"{gameObject.name} NavMeshì— ë°°ì¹˜ë˜ì§€ ì•ŠìŒ!");
     }
 
+    /// <summary>
+    /// AI ìƒíƒœì— ë”°ë¼ ì  ìºë¦­í„°ì˜ í–‰ë™ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
+    /// ìƒíƒœì™€ ì´ë™ì†ë„ì— ë”°ë¼ ì• ë‹ˆë©”ì´ì…˜ ì†ë„ë¥¼ ì¡°ì •í•©ë‹ˆë‹¤.
+    /// </summary>
     void Update()
     {
         playerDistance = Vector3.Distance(transform.position, PlayerManager.Instance.Player.transform.position);
@@ -85,11 +95,14 @@ public class EnemyAI : MonoBehaviour
         AnimationSpeedMultiplier();
     }
 
+    /// <summary>
+    /// ì´ë™ ì†ë„ì— ë”°ë¼ ì• ë‹ˆë©”ì´ì…˜ ì†ë„ë¥¼ ì¡°ì •í•©ë‹ˆë‹¤.
+    /// </summary>
     void AnimationSpeedMultiplier()
     {
         if (animator == null) return;
 
-        if (aiState == AIState.Wandering || aiState == AIState.Chasing) //¹æÈ², ÃßÀû »óÅÂÀÏ¶§ 
+        if (aiState == AIState.Wandering || aiState == AIState.Chasing) //ë°©í™©, ì¶”ì  ìƒíƒœì¼ë•Œ 
         {
             agent.isStopped = false;
             float targetSpeed = agent.velocity.magnitude;
@@ -101,11 +114,11 @@ public class EnemyAI : MonoBehaviour
 
             animator.SetFloat("MoveSpeed", normalizedSpeed);
 
-            animator.speed = 1.0f + (normalizedSpeed * 0.2f); //¾Ö´Ï¸ŞÀÌ¼ÇÀÌ walkÀÏ¶§´Â 1.0¹è¼Ó, runÀÏ¶§ ÃÖ´ë 1.2¹è¼Ó
+            animator.speed = 1.0f + (normalizedSpeed * 0.2f); //ì• ë‹ˆë©”ì´ì…˜ì´ walkì¼ë•ŒëŠ” 1.0ë°°ì†, runì¼ë•Œ ìµœëŒ€ 1.2ë°°ì†
         }
-        else if (aiState == AIState.Idle || aiState == AIState.Attacking)//¸ØÃã, °ø°İ »óÅÂÀÏ¶§
+        else if (aiState == AIState.Idle || aiState == AIState.Attacking)//ë©ˆì¶¤, ê³µê²© ìƒíƒœì¼ë•Œ
         {
-            animator.SetFloat("MoveSpeed", 0); //¸ØÃã
+            animator.SetFloat("MoveSpeed", 0); //ë©ˆì¶¤
             agent.isStopped = true;
             animator.speed = data.animationMoveSpeed;
         }
@@ -116,12 +129,16 @@ public class EnemyAI : MonoBehaviour
             animator.speed = data.animationMoveSpeed;
         }
 
-        if (animator.speed < 0.1f) //¾Ö´Ï¸ŞÀÌ¼Ç ¼Óµµ°¡ ÇöÀúÈ÷ ³·¾ÆÁú °æ¿ì 1¹è¼ÓÀ¸·Î ¹æ¾îÃ³¸®
+        if (animator.speed < 0.1f) //ì• ë‹ˆë©”ì´ì…˜ ì†ë„ê°€ í˜„ì €íˆ ë‚®ì•„ì§ˆ ê²½ìš° 1ë°°ì†ìœ¼ë¡œ ë°©ì–´ì²˜ë¦¬
         {
             animator.speed = 1.0f;
         }
     }
 
+    /// <summary>
+    /// AI ìƒíƒœë¥¼ ì „í™˜í•˜ê³ , ìƒíƒœì— ë”°ë¼ ì†ë„ì™€ ì• ë‹ˆë©”ì´ì…˜ì„ ì„¤ì •í•©ë‹ˆë‹¤.
+    /// </summary>
+    /// <param name="state"></param>
     public void SetState(AIState state)
     {
         aiState = state;
@@ -151,6 +168,9 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Idle ë° Wandering ìƒíƒœì—ì„œì˜ ë™ì‘ì„ ì²˜ë¦¬í•©ë‹ˆë‹¤.
+    /// </summary>
     void PassiveUpdate()
     {
         if (aiState == AIState.Wandering && agent.remainingDistance < agent.stoppingDistance)
@@ -173,7 +193,9 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// ìƒˆë¡œìš´ ë°©í™© ìœ„ì¹˜ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
+    /// </summary>
     void WanderToNewLocation()
     {
         if (aiState != AIState.Idle) return;
@@ -182,6 +204,10 @@ public class EnemyAI : MonoBehaviour
         agent.SetDestination(GetWanderLocation());
     }
 
+    /// <summary>
+    /// ë°©í™©í•  ìœ„ì¹˜ë¥¼ ê³„ì‚°í•©ë‹ˆë‹¤. ë¬´í•œ ë£¨í”„ë¥¼ ë°©ì§€í•˜ê¸° ìœ„í•´ ìµœëŒ€ 30ë²ˆ ì‹œë„í•©ë‹ˆë‹¤.
+    /// </summary>
+    /// <returns></returns>
     Vector3 GetWanderLocation()
     {
         NavMeshHit hit;
@@ -198,35 +224,42 @@ public class EnemyAI : MonoBehaviour
         }
         return hit.position;
     }
+
+    /// <summary>
+    /// Chasing ìƒíƒœì—ì„œì˜ ë™ì‘ì„ ì²˜ë¦¬í•©ë‹ˆë‹¤.
+    /// </summary>
     void ChasingUpdate()
     {
         if (aiState != AIState.Chasing) return;
 
-        if (playerDistance < data.attackDistance) //ÃßÀûÀ» °è¼ÓÇÏ´Ù°¡ °ø°İ¹üÀ§ ¾ÈÀ¸·Î µé¾î¿À¸é °ø°İ
+        if (playerDistance < data.attackDistance) //ì¶”ì ì„ ê³„ì†í•˜ë‹¤ê°€ ê³µê²©ë²”ìœ„ ì•ˆìœ¼ë¡œ ë“¤ì–´ì˜¤ë©´ ê³µê²©
         {
             SetState(AIState.Attacking);
         }
 
-        if (playerDistance < data.detectDistance) //°¨Áö¹üÀ§ ¾È¿¡ ÀÖÀ» ¶§ ÃßÀû
+        if (playerDistance < data.detectDistance) //ê°ì§€ë²”ìœ„ ì•ˆì— ìˆì„ ë•Œ ì¶”ì 
         {
 
-            if (agent.CalculatePath(PlayerManager.Instance.Player.transform.position, path)) //°æ·Î°¡ À¯È¿ÇÏ¸é ÃßÀû
+            if (agent.CalculatePath(PlayerManager.Instance.Player.transform.position, path)) //ê²½ë¡œê°€ ìœ íš¨í•˜ë©´ ì¶”ì 
             {
                 agent.isStopped = false;
                 agent.SetDestination(PlayerManager.Instance.Player.transform.position);
             }
-            else //°æ·Î°¡ À¯È¿ÇÏÁö ¾ÊÀ»°æ¿ì Wandering »óÅÂ ÀüÈ¯
+            else //ê²½ë¡œê°€ ìœ íš¨í•˜ì§€ ì•Šì„ê²½ìš° Wandering ìƒíƒœ ì „í™˜
             {
                 SetState(AIState.Wandering);
             }
         }
-        else //°¨Áö¹üÀ§¸¦ ¹ş¾î³ª¸é Wandering »óÅÂ ÀüÈ¯
+        else //ê°ì§€ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ë©´ Wandering ìƒíƒœ ì „í™˜
         {
             agent.isStopped = false;
             SetState(AIState.Wandering);
         }
     }
 
+    /// <summary>
+    /// Fleeing ìƒíƒœì—ì„œì˜ ë™ì‘ì„ ì²˜ë¦¬í•©ë‹ˆë‹¤.
+    /// </summary>
     void FleeingUpdate()
     {
         if (aiState != AIState.Fleeing) return;
@@ -234,7 +267,7 @@ public class EnemyAI : MonoBehaviour
         if (agent.remainingDistance > agent.stoppingDistance) return;
 
 
-        if (playerDistance < data.detectDistance) //°¨Áö¹üÀ§ ¾ÈÀ¸·Î ÇÃ·¹ÀÌ¾î°¡ µé¾î¿À¸é ÀÓÀÇÀÇ ÁÂÇ¥·Î µµ¸Á°¨
+        if (playerDistance < data.detectDistance) //ê°ì§€ë²”ìœ„ ì•ˆìœ¼ë¡œ í”Œë ˆì´ì–´ê°€ ë“¤ì–´ì˜¤ë©´ ì„ì˜ì˜ ì¢Œí‘œë¡œ ë„ë§ê°
         {
             agent.isStopped = false;
             Vector3 fleedir = (transform.position - PlayerManager.Instance.Player.transform.position).normalized;
@@ -257,48 +290,55 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Attacking ìƒíƒœì—ì„œì˜ ë™ì‘ì„ ì²˜ë¦¬í•©ë‹ˆë‹¤.
+    /// </summary>
     void AttackingUpdate()
     {
         if (aiState != AIState.Attacking) return;
 
-        if (playerDistance < data.attackDistance && IsPlayerInFieldOfView()) //°ø°İ¹üÀ§ ¾È¿¡ ÀÖ°í ½Ã¾ß°¢ ¾È¿¡ ÀÖÀ» ¶§ °ø°İ
+        if (playerDistance < data.attackDistance && IsPlayerInFieldOfView()) //ê³µê²©ë²”ìœ„ ì•ˆì— ìˆê³  ì‹œì•¼ê° ì•ˆì— ìˆì„ ë•Œ ê³µê²©
         {
             agent.isStopped = true;
             if (Time.time - lastAttackTime > data.attackRate)
             {
                 lastAttackTime = Time.time;
-                //±Ù°Å¸® ¿ø°Å¸®¿¡ µû¶ó °ø°İ ´Ù¸£°Ô 
+                //ê·¼ê±°ë¦¬ ì›ê±°ë¦¬ì— ë”°ë¼ ê³µê²© ë‹¤ë¥´ê²Œ 
                 if (type == EnemyType.Close)
                 {
                     PlayerManager.Instance.Player.condition.GetComponent<IDamageable>().TakePhysicalDamage(data.damage);
                     animator.SetTrigger("Attack");
-                    Debug.Log($"ÇÃ·¹ÀÌ¾î¿¡°Ô °ø°İÀ» ÀÔÇû½À´Ï´Ù.");
+                    Debug.Log($"í”Œë ˆì´ì–´ì—ê²Œ ê³µê²©ì„ ì…í˜”ìŠµë‹ˆë‹¤.");
                 }
                 else if (type == EnemyType.Far)
                 {
                     ShootProjectile();
                     animator.SetTrigger("Attack");
-                    Debug.Log($"ÇÃ·¹ÀÌ¾î¿¡°Ô °ø°İÀ» ÀÔÇû½À´Ï´Ù. {data.damage}");
+                    Debug.Log($"í”Œë ˆì´ì–´ì—ê²Œ ê³µê²©ì„ ì…í˜”ìŠµë‹ˆë‹¤. {data.damage}");
                 }
             }
         }
-        else if (playerDistance < data.attackDistance && !IsPlayerInFieldOfView()) // °ø°İ¹üÀ§ ¾È¿¡ ÀÖÁö¸¸ ½Ã¾ß°¢ ¹Û¿¡ ÀÖÀ» ¶§ È¸Àü
+        else if (playerDistance < data.attackDistance && !IsPlayerInFieldOfView()) // ê³µê²©ë²”ìœ„ ì•ˆì— ìˆì§€ë§Œ ì‹œì•¼ê° ë°–ì— ìˆì„ ë•Œ íšŒì „
         {
             Vector3 dir = PlayerManager.Instance.Player.transform.position - transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10f * Time.deltaTime);
         }
-        else if (playerDistance < data.detectDistance) // °¨Áö°Å¸® ¾È¿¡ ÀÖÀ» ¶§ ÃßÀû
+        else if (playerDistance < data.detectDistance) // ê°ì§€ê±°ë¦¬ ì•ˆì— ìˆì„ ë•Œ ì¶”ì 
         {
             agent.isStopped = false;
             SetState(AIState.Chasing);
         }
-        else //°¨Áö°Å¸® ¹Û¿¡ ÀÖÀ» ¶§ 
+        else //ê°ì§€ê±°ë¦¬ ë°–ì— ìˆì„ ë•Œ 
         {
             agent.isStopped = false;
             SetState(AIState.Wandering);
         }
     }
 
+    /// <summary>
+    /// í”Œë ˆì´ì–´ê°€ ì‹œì•¼ê° ë‚´ì— ìˆëŠ”ì§€ í™•ì¸í•©ë‹ˆë‹¤.
+    /// </summary>
+    /// <returns></returns>
     bool IsPlayerInFieldOfView()
     {
         Vector3 directionToPlayer = PlayerManager.Instance.Player.transform.position - transform.position;
@@ -306,6 +346,10 @@ public class EnemyAI : MonoBehaviour
         return angle < fieldOfView * 0.5f;
     }
 
+    /// <summary>
+    /// ë°ë¯¸ì§€ë¥¼ ë°›ì„ ë•Œ í”Œë˜ì‹œ íš¨ê³¼ë¥¼ ì¤ë‹ˆë‹¤.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DamageFlash()
     {
         for (int i = 0; i < meshRenderers.Length; i++)
@@ -315,9 +359,13 @@ public class EnemyAI : MonoBehaviour
         for (int i = 0; i < meshRenderers.Length; i++)
             meshRenderers[i].material.color = Color.white;
     }
-    public void ShootProjectile() //¿ø°Å¸® Å¸ÀÔÀÏ ¶§ °ø°İ
+
+    /// <summary>
+    /// ì›ê±°ë¦¬ íƒ€ì…ì¸ ì ì´ ê³µê²© ì‹œ ë°œì‚¬ì²´ë¥¼ ë°œì‚¬í•©ë‹ˆë‹¤.
+    /// </summary>
+    public void ShootProjectile() //ì›ê±°ë¦¬ íƒ€ì…ì¼ ë•Œ ê³µê²©
     {
-        if (data.projectilePrefab == null || data.enemyType != EnemyType.Far) return; //Åõ»çÃ¼ ÇÁ¸®ÆÕÀÌ ¾ø°Å³ª, ¿ø°Å¸® Å¸ÀÔÀÌ ¾Æ´Ï¶ó¸é ¹İÈ¯
+        if (data.projectilePrefab == null || data.enemyType != EnemyType.Far) return; //íˆ¬ì‚¬ì²´ í”„ë¦¬íŒ¹ì´ ì—†ê±°ë‚˜, ì›ê±°ë¦¬ íƒ€ì…ì´ ì•„ë‹ˆë¼ë©´ ë°˜í™˜
         if (firePoint == null) return;
 
         GameObject projectilePrefabInstantiate = Instantiate(data.projectilePrefab, firePoint.position, Quaternion.identity);
